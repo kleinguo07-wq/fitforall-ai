@@ -56,6 +56,27 @@ function renderSpec(){const rows=[['两种屏保','保留最多 9 张图片；�
 function resize(){const wrap=$('.device-wrap'),area=$('.stage-area');if(!wrap||!area||view!=='device')return;const maxH=Math.max(560,window.innerHeight-192),w=Math.min(466,Math.max(240,area.clientWidth-55),maxH*9/16);wrap.style.width=w+'px';wrap.style.height=((w-14)*960/540+14)+'px';D.style.transform=`scale(${(w-14)/540})`}
 document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>showView(b.dataset.view));document.querySelectorAll('[data-scenario]').forEach(b=>b.onclick=()=>{if(b.dataset.scenario==='milestones'){choose(null,'milestones')}else navigate(b.dataset.scenario)});$('#speed').onchange=e=>{speed=+e.target.value;const v=D.querySelector('video');if(v)v.playbackRate=Math.min(16,speed);toast(`模拟时间速度 ×${speed}${v?'；真实视频最高 ×16':''}`)};$('#advance').onclick=()=>{for(let i=0;i<10;i++)tick(1,true);updateInspector()};$('#finish').onclick=()=>screen==='exercise'?finish('normal'):toast('请先进入运动进行中页面');$('#next-day').onclick=()=>{dayOffset++;log('业务日期已前进一天（模拟）');if(screen==='milestones'||screen==='report')render();toast('已模拟下一天，下次运动可增加一天')};$('#replay').onclick=()=>{if(!lastReport){toast('请先完成一次运动');return}const result=C.settle(records,lastReport.record,config.threshold);records=result.records;persist();userId=lastReport.record.userId;navigate('report');log('重放同一 sessionId，累计保持不变')};$('#fail-video').onclick=()=>screen==='video'?failMedia():toast('请先进入视频屏保');$('#empty').onclick=()=>{screen='video';emptyOverride=true;activePool=[];preview=null;render();log('模拟内容池为空')};$('#reset').onclick=()=>{if(!confirm('清除本地模拟运动记录并恢复演示配置？'))return;records=[];registered.delete('new');persist();lastReport=null;config=structuredClone(C.defaults);dayOffset=0;$('#person').value='chen';$('#identity').value='success';navigate('video');toast('模拟数据已重置')};D.addEventListener('pointerdown',()=>idle=0);D.addEventListener('keydown',()=>idle=0);window.addEventListener('resize',resize);document.addEventListener('visibilitychange',()=>{const v=D.querySelector('video');if(v){if(document.hidden)v.pause();else if(view==='device')v.play().catch(()=>{})}});
 let lastTick=performance.now();setInterval(()=>{const currentTime=performance.now(),dt=Math.min(.5,(currentTime-lastTick)/1000);lastTick=currentTime;tick(dt*speed);if(!document.hidden&&view==='device'){idle+=dt;if((screen==='home'||screen==='report')&&idle>=config.idle){navigate(config.mode);log('无操作超时，已清理当前个人会话并回屏保')}}},100);
+// Pointer gestures complement the explicit previous/next controls.
+let swipe=null,suppressSwipeClickUntil=0;
+D.addEventListener('pointerdown',e=>{
+ if(screen!=='video'||!preview||activePool.length<2||!e.isPrimary||e.button!==0||e.target.closest('button,a,input,select'))return;
+ swipe={id:e.pointerId,x:e.clientX,y:e.clientY,epoch:mediaEpoch};
+ D.setPointerCapture(e.pointerId);
+});
+D.addEventListener('pointerup',e=>{
+ if(!swipe||e.pointerId!==swipe.id)return;
+ const start=swipe;swipe=null;
+ if(D.hasPointerCapture(e.pointerId))D.releasePointerCapture(e.pointerId);
+ const dx=e.clientX-start.x,dy=e.clientY-start.y;
+ const threshold=Math.max(32,D.getBoundingClientRect().width*.12);
+ if(screen==='video'&&mediaEpoch===start.epoch&&Math.abs(dx)>=threshold&&Math.abs(dx)>Math.abs(dy)*1.5){
+  suppressSwipeClickUntil=performance.now()+400;nextItem(dx<0?1:-1);
+ }
+});
+D.addEventListener('pointercancel',()=>swipe=null);
+D.addEventListener('lostpointercapture',()=>swipe=null);
+D.addEventListener('click',e=>{if(performance.now()<suppressSwipeClickUntil){e.preventDefault();e.stopImmediatePropagation()}},true);
+
 // Read-only review state is also used by deterministic browser checks.
 window.reviewState=()=>({screen,view,userId,course:chosen?.id,previewCourse:current()?.id,previewTime,cycles,elapsed,recordCount:records.length,records:structuredClone(records),totals:C.totals(records,userId),lastReport:structuredClone(lastReport),config:structuredClone(config)});
 $('#identity').onchange=()=>{if(screen==='guide')scheduleFace()};$('#person').onchange=()=>{if(screen==='guide')scheduleFace()};
