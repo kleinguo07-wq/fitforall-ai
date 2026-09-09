@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict');
+const C=require('../core.js');
+const r={id:'a',userId:'chen',seconds:11,kcal:2,reason:'early',timestamp:Date.parse('2026-09-09T08:00:00Z')};
+assert.equal(C.eligible({...r,seconds:10},10),false);
+assert.equal(C.eligible(r,10),true);
+assert.equal(C.eligible({...r,seconds:0,reason:'normal'},10),true);
+for(const change of [{userId:null},{id:null},{seconds:NaN},{kcal:-1},{reason:'unknown'},{timestamp:NaN}])assert.equal(C.eligible({...r,...change},10),false);
+let a=C.settle([],r,10);assert.equal(a.added,true);
+a=C.settle(a.records,r,10);assert.equal(a.added,false);assert.equal(a.records.length,1);
+a=C.settle(a.records,{...r,id:'b'},10);assert.deepEqual(C.totals(a.records,'chen'),{days:1,kcal:4,seconds:22});
+a=C.settle(a.records,{...r,id:'c',timestamp:r.timestamp+86400000},10);assert.equal(C.totals(a.records,'chen').days,2);assert.equal(C.totals(a.records,'wang').days,0);
+assert.notEqual(C.day(Date.parse('2026-09-09T15:59:59Z')),C.day(Date.parse('2026-09-09T16:00:00Z')));
+const c=C.catalog.find(c=>c.id==='baduan');assert.deepEqual(C.slice(c,[60,90]),{start:60,end:90,repeats:1});assert.equal(C.slice(c,[60,360],()=>0).start,60);assert.equal(C.slice(c,[60,360],()=>1).end,360);
+for(const range of [[60,89],[-1,60],[0,721]])assert.throws(()=>C.slice(c,range));
+assert.deepEqual(C.pool({...C.defaults,poolMode:'fixed',fixed:['jump','baduan']}).map(c=>c.id),['jump','baduan']);
+assert.equal(C.pool({...C.defaults,poolMode:'fixed',fixed:[]}).length,0);
+console.log('PASS: completion boundaries, invalid records, idempotency, days, identity isolation, preview ranges, ordered pool');
