@@ -49,5 +49,8 @@
 .context-requirements li{position:relative;font-size:12px;line-height:1.65;padding:10px 0 10px 17px;border-top:1px solid #f0f3f7}
 .context-requirements li:first-child{border-top:0}
 .context-requirements li::before{content:"";position:absolute;left:1px;top:17px;width:6px;height:6px;border-radius:50%;background:#35b991}
+.screen.image-screen{padding:0;gap:0;overflow:hidden;background:#091d7c}
+.image-screensaver-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none}
+.image-screen>.dots{position:absolute;left:0;right:0;bottom:18px;z-index:1}
 @media(max-width:1150px){.stage-area.requirements-open .context-requirements{width:210px}.stage-area.requirements-open .stage-canvas{gap:12px}}
 @media(max-width:850px){.stage-meta{align-items:center}.stage-meta-actions{gap:6px}.requirements-entry{padding:6px 8px}.stage-area.requirements-open .stage-canvas{flex-direction:column;align-items:center}.stage-area.requirements-open .context-requirements{width:min(438px,100%);margin-top:16px}}
