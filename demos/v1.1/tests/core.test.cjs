@@ -14,4 +14,5 @@ const c=C.catalog.find(c=>c.id==='baduan');assert.deepEqual(C.slice(c,[60,90]),{
 for(const range of [[60,89],[-1,60],[0,721]])assert.throws(()=>C.slice(c,range));
 assert.deepEqual(C.pool({...C.defaults,poolMode:'fixed',fixed:['jump','baduan']}).map(c=>c.id),['jump','baduan']);
 assert.equal(C.pool({...C.defaults,poolMode:'fixed',fixed:[]}).length,0);
+assert.deepEqual(C.pool({...C.defaults,poolMode:'recommended',audience:'senior'}).map(c=>c.name),['提踵','单侧外摆腿','前侧平举','徒手推天','坐姿收腹提膝','坐姿身体侧屈','八段锦','八段锦完整版','八式太极拳','五禽戏']);
 console.log('PASS: completion boundaries, invalid records, idempotency, days, identity isolation, preview ranges, ordered pool');
