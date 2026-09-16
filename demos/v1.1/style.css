@@ -34,3 +34,33 @@
 @media(max-width:900px){.legacy-admin-side{width:190px}.legacy-admin-main{margin-left:190px}.legacy-actions{left:190px}.legacy-admin-side button{padding:0 20px}.legacy-content-list,.legacy-form-grid,.legacy-two-columns{grid-template-columns:1fr}.legacy-upload-row{grid-template-columns:1fr}.legacy-upload-row>span{padding:0}.legacy-admin-top{font-size:14px}.legacy-greeting{display:none}}
 .legacy-page-heading button{position:fixed;z-index:4;right:20px;top:82px}
 .legacy-content-groups{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:20px}.legacy-content-group h4{font-size:16px;margin:0;padding:0 0 11px;border-bottom:1px solid #e3eaf3;color:#30435e}.legacy-content-name{min-height:48px;border-bottom:1px solid #edf1f6;display:flex;align-items:center;gap:12px;font-size:14px}.legacy-content-name .legacy-pass{font-size:15px}@media(max-width:900px){.legacy-content-groups{grid-template-columns:1fr}}
+
+/* The requirements stay in the review page and open beside the device. */
+.stage-meta-actions{display:flex;align-items:center;gap:10px}
+.requirements-entry{background:#fff;border:1px solid #d5dfec;border-radius:7px;color:#3971cc;font-size:11px;padding:7px 10px;white-space:nowrap}
+.workspace.requirements-open{grid-template-columns:minmax(420px,1fr) minmax(380px,460px)}
+.workspace.requirements-open .inspector{display:none}
+.requirements-panel{display:none;background:#fff;border-left:1px solid #e3e8f1;max-height:calc(100vh - 100px);overflow-y:auto;padding:0 28px 42px}
+.workspace.requirements-open .requirements-panel{display:block}
+.requirements-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;background:#fff;padding:25px 0 18px;border-bottom:1px solid #e8edf4}
+.requirements-head h2{font-size:20px;margin:8px 0 0}
+.requirements-head button{width:34px;height:34px;border-radius:50%;background:#edf3fb;color:#53677f;font-size:24px;line-height:1}
+.requirements-content{color:#44536a;font-size:13px;line-height:1.75;padding-top:8px}
+.requirements-content h1{color:#223149;font-size:24px;line-height:1.35;margin:24px 0 12px}
+.requirements-content h2{color:#263750;font-size:19px;line-height:1.45;margin:30px 0 10px;padding-top:4px;border-top:1px solid #e8edf4}
+.requirements-content h3{color:#31445f;font-size:15px;line-height:1.5;margin:22px 0 8px}
+.requirements-content p{margin:9px 0}
+.requirements-content ul,.requirements-content ol{margin:8px 0;padding-left:22px}
+.requirements-content li{margin:5px 0}
+.requirements-content blockquote{margin:12px 0;padding:8px 13px;border-left:3px solid #77a2e9;background:#f5f8fd;color:#61728a}
+.requirements-content code{background:#eef3f9;border-radius:4px;padding:2px 5px;font-size:12px}
+.requirements-content pre{overflow:auto;background:#17243a;color:#e9f2ff;border-radius:8px;padding:14px;line-height:1.55}
+.requirements-content pre code{background:transparent;padding:0;color:inherit}
+.requirements-content .requirements-table-wrap{overflow-x:auto;margin:14px 0}
+.requirements-content table{width:100%;border-collapse:collapse;min-width:360px;font-size:12px}
+.requirements-content th,.requirements-content td{border:1px solid #dfe6f0;padding:8px 9px;text-align:left;vertical-align:top}
+.requirements-content th{background:#f1f5fa;color:#40536f}
+.requirements-content a{color:#2769d8}
+.requirements-loading{color:#8794a7;padding:20px 0}
+@media(max-width:1150px){.workspace.requirements-open{grid-template-columns:minmax(360px,1fr) minmax(330px,400px)}.requirements-panel{padding:0 20px 34px}}
+@media(max-width:850px){.stage-meta{align-items:center}.stage-meta-actions{gap:6px}.requirements-entry{padding:6px 8px}.workspace.requirements-open{grid-template-columns:1fr}.requirements-panel{max-height:none;border-left:0;border-top:1px solid #e3e8f1}.workspace.requirements-open .stage-area{display:flex}}
