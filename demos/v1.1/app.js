@@ -86,12 +86,13 @@ function renderExistingAdmin(){
  </div>`;
  bindExistingAdmin();
 }
+function rerenderExistingAdminAtScroll(focusSelector){const shell=$('.legacy-admin-shell'),scrollTop=shell?.scrollTop||0;renderExistingAdmin();const nextShell=$('.legacy-admin-shell');if(nextShell)nextShell.scrollTop=scrollTop;if(focusSelector){const target=D.ownerDocument.querySelector(focusSelector);if(target)target.focus({preventScroll:true})}}
 function bindExistingAdmin(){
  $('#leave-admin').onclick=$('#legacy-cancel').onclick=()=>showView('device');
  document.querySelectorAll('[data-screen-type]').forEach(b=>b.onclick=()=>{const type=b.dataset.screenType;if(type==='video'||type==='image'){draft.mode=type;renderExistingAdmin();return}toast(`${b.textContent.trim()}为现有功能，本轮仅展示入口`)});
- const pool=$('#legacy-pool-mode'),audience=$('#legacy-audience');if(pool)pool.onchange=e=>{draft.poolMode=e.target.value;renderExistingAdmin()};if(audience)audience.onchange=e=>{draft.audience=e.target.value;renderExistingAdmin()};
- document.querySelectorAll('[data-legacy-pool]').forEach(b=>b.onchange=()=>{draft.fixed=b.checked?[...draft.fixed,b.dataset.legacyPool]:draft.fixed.filter(id=>id!==b.dataset.legacyPool);renderExistingAdmin()});
- for(const dir of ['up','down'])document.querySelectorAll(`[data-legacy-${dir}]`).forEach(b=>b.onclick=()=>{const id=b.dataset[`legacy${dir[0].toUpperCase()+dir.slice(1)}`],i=draft.fixed.indexOf(id),j=i+(dir==='up'?-1:1);if(j>=0&&j<draft.fixed.length)[draft.fixed[i],draft.fixed[j]]=[draft.fixed[j],draft.fixed[i]];renderExistingAdmin()});
+ const pool=$('#legacy-pool-mode'),audience=$('#legacy-audience');if(pool)pool.onchange=e=>{draft.poolMode=e.target.value;rerenderExistingAdminAtScroll('#legacy-pool-mode')};if(audience)audience.onchange=e=>{draft.audience=e.target.value;rerenderExistingAdminAtScroll('#legacy-audience')};
+ document.querySelectorAll('[data-legacy-pool]').forEach(b=>b.onchange=()=>{const id=b.dataset.legacyPool;draft.fixed=b.checked?[...draft.fixed,id]:draft.fixed.filter(item=>item!==id);rerenderExistingAdminAtScroll(`[data-legacy-pool="${id}"]`)});
+ for(const dir of ['up','down'])document.querySelectorAll(`[data-legacy-${dir}]`).forEach(b=>b.onclick=()=>{const id=b.dataset[`legacy${dir[0].toUpperCase()+dir.slice(1)}`],i=draft.fixed.indexOf(id),j=i+(dir==='up'?-1:1);if(j>=0&&j<draft.fixed.length)[draft.fixed[i],draft.fixed[j]]=[draft.fixed[j],draft.fixed[i]];rerenderExistingAdminAtScroll(`[data-legacy-${dir}="${id}"]`)});
  const images=$('#legacy-images-upload');if(images)images.onchange=e=>{const files=[...e.target.files];if(files.length>9){$('#admin-error').textContent='最多上传 9 张图片，当前选择超过上限。';return}if(files.some(f=>!['image/jpeg','image/png'].includes(f.type)||f.size>10*1024*1024)){$('#admin-error').textContent='请上传小于 10M 的 JPG 或 PNG 图片。';return}imageURLs=files.map(f=>URL.createObjectURL(f));draft.images=[...imageURLs];renderExistingAdmin()};
  const clear=$('#legacy-clear-images');if(clear)clear.onclick=()=>{draft.images=[];renderExistingAdmin()};
  $('#save-config').onclick=saveConfig;
