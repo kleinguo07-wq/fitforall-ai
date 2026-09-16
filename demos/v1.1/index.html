@@ -4,7 +4,7 @@
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width,initial-scale=1">
  <title>FitForAll AI · v1.1 产品评审</title>
- <link rel="stylesheet" href="style.css?v=requirements-panel-1">
+ <link rel="stylesheet" href="style.css?v=context-notes-1">
 </head>
 <body>
  <aside class="sidebar">
@@ -25,9 +25,16 @@
    <div class="stage-area">
     <div class="stage-meta">
      <span>设备端 <b>9:16</b></span>
-     <span class="stage-meta-actions"><span id="screen-label">视频屏保</span><button id="open-requirements" class="requirements-entry" aria-expanded="false" aria-controls="requirements-panel">查看需求文档</button></span>
+     <span class="stage-meta-actions"><span id="screen-label">视频屏保</span><button id="open-requirements" class="requirements-entry" aria-expanded="false" aria-controls="context-requirements">查看本页需求</button></span>
     </div>
-    <div class="device-wrap"><div class="device" id="device"></div></div>
+    <div class="stage-canvas">
+     <div class="device-wrap"><div class="device" id="device"></div></div>
+     <aside id="context-requirements" class="context-requirements" aria-hidden="true">
+      <header><span>本页需求</span><button id="close-requirements" aria-label="关闭本页需求">×</button></header>
+      <h2 id="context-requirements-title"></h2>
+      <ul id="context-requirements-list"></ul>
+     </aside>
+    </div>
     <div class="stage-foot"><span class="dot"></span> 竖屏触控预览 <span>所有身份与成绩均为模拟</span></div>
    </div>
    <aside class="inspector">
@@ -39,16 +46,12 @@
     <div class="assumption"><b>演示参数</b><p>提前退出 &gt;10 秒计入；累计档位为示例。正式视频及预览参数由平台内容系统配置。</p></div>
     <button id="reset" class="reset">重置全部演示数据</button>
    </aside>
-   <aside id="requirements-panel" class="requirements-panel" aria-hidden="true">
-    <header class="requirements-head"><div><span class="eyebrow">PRODUCT NOTES</span><h2>v1.1 需求评审稿</h2></div><button id="close-requirements" aria-label="关闭需求文档">×</button></header>
-    <div id="requirements-content" class="requirements-content"><p class="requirements-loading">正在载入需求文档…</p></div>
-   </aside>
   </section>
   <section id="admin-view" class="hidden"></section>
   <section id="spec-view" class="hidden"></section>
  </main>
  <div id="toast" role="status"></div>
  <script src="core.js?v=senior-pool-1"></script>
- <script src="app.js?v=requirements-panel-1"></script>
+ <script src="app.js?v=context-notes-1"></script>
 </body>
 </html>

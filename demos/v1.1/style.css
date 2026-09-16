@@ -35,32 +35,19 @@
 .legacy-page-heading button{position:fixed;z-index:4;right:20px;top:82px}
 .legacy-content-groups{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:20px}.legacy-content-group h4{font-size:16px;margin:0;padding:0 0 11px;border-bottom:1px solid #e3eaf3;color:#30435e}.legacy-content-name{min-height:48px;border-bottom:1px solid #edf1f6;display:flex;align-items:center;gap:12px;font-size:14px}.legacy-content-name .legacy-pass{font-size:15px}@media(max-width:900px){.legacy-content-groups{grid-template-columns:1fr}}
 
-/* The requirements stay in the review page and open beside the device. */
+/* Current-screen notes live directly on the device review canvas. */
 .stage-meta-actions{display:flex;align-items:center;gap:10px}
 .requirements-entry{background:#fff;border:1px solid #d5dfec;border-radius:7px;color:#3971cc;font-size:11px;padding:7px 10px;white-space:nowrap}
-.workspace.requirements-open{grid-template-columns:minmax(420px,1fr) minmax(380px,460px)}
-.workspace.requirements-open .inspector{display:none}
-.requirements-panel{display:none;background:#fff;border-left:1px solid #e3e8f1;max-height:calc(100vh - 100px);overflow-y:auto;padding:0 28px 42px}
-.workspace.requirements-open .requirements-panel{display:block}
-.requirements-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;background:#fff;padding:25px 0 18px;border-bottom:1px solid #e8edf4}
-.requirements-head h2{font-size:20px;margin:8px 0 0}
-.requirements-head button{width:34px;height:34px;border-radius:50%;background:#edf3fb;color:#53677f;font-size:24px;line-height:1}
-.requirements-content{color:#44536a;font-size:13px;line-height:1.75;padding-top:8px}
-.requirements-content h1{color:#223149;font-size:24px;line-height:1.35;margin:24px 0 12px}
-.requirements-content h2{color:#263750;font-size:19px;line-height:1.45;margin:30px 0 10px;padding-top:4px;border-top:1px solid #e8edf4}
-.requirements-content h3{color:#31445f;font-size:15px;line-height:1.5;margin:22px 0 8px}
-.requirements-content p{margin:9px 0}
-.requirements-content ul,.requirements-content ol{margin:8px 0;padding-left:22px}
-.requirements-content li{margin:5px 0}
-.requirements-content blockquote{margin:12px 0;padding:8px 13px;border-left:3px solid #77a2e9;background:#f5f8fd;color:#61728a}
-.requirements-content code{background:#eef3f9;border-radius:4px;padding:2px 5px;font-size:12px}
-.requirements-content pre{overflow:auto;background:#17243a;color:#e9f2ff;border-radius:8px;padding:14px;line-height:1.55}
-.requirements-content pre code{background:transparent;padding:0;color:inherit}
-.requirements-content .requirements-table-wrap{overflow-x:auto;margin:14px 0}
-.requirements-content table{width:100%;border-collapse:collapse;min-width:360px;font-size:12px}
-.requirements-content th,.requirements-content td{border:1px solid #dfe6f0;padding:8px 9px;text-align:left;vertical-align:top}
-.requirements-content th{background:#f1f5fa;color:#40536f}
-.requirements-content a{color:#2769d8}
-.requirements-loading{color:#8794a7;padding:20px 0}
-@media(max-width:1150px){.workspace.requirements-open{grid-template-columns:minmax(360px,1fr) minmax(330px,400px)}.requirements-panel{padding:0 20px 34px}}
-@media(max-width:850px){.stage-meta{align-items:center}.stage-meta-actions{gap:6px}.requirements-entry{padding:6px 8px}.workspace.requirements-open{grid-template-columns:1fr}.requirements-panel{max-height:none;border-left:0;border-top:1px solid #e3e8f1}.workspace.requirements-open .stage-area{display:flex}}
+.stage-canvas{display:flex;align-items:flex-start;justify-content:center;gap:0;width:100%;min-height:0}
+.context-requirements{display:none;width:0;opacity:0;background:#fff;border:1px solid #dce5f0;border-radius:14px;box-shadow:0 16px 36px #304a721c;padding:18px;color:#526278;align-self:flex-start;margin-top:20px;transition:opacity .16s ease}
+.stage-area.requirements-open .stage-canvas{gap:18px}
+.stage-area.requirements-open .context-requirements{display:block;width:238px;opacity:1}
+.context-requirements header{display:flex;align-items:center;justify-content:space-between;color:#7f8da2;font-size:11px;font-weight:700;letter-spacing:1px;border-bottom:1px solid #edf1f6;padding-bottom:12px}
+.context-requirements header button{width:27px;height:27px;border-radius:50%;background:#eef3fa;color:#63758d;font-size:18px;line-height:1}
+.context-requirements h2{font-size:18px;color:#263750;margin:16px 0 12px}
+.context-requirements ul{margin:0;padding:0;list-style:none}
+.context-requirements li{position:relative;font-size:12px;line-height:1.65;padding:10px 0 10px 17px;border-top:1px solid #f0f3f7}
+.context-requirements li:first-child{border-top:0}
+.context-requirements li::before{content:"";position:absolute;left:1px;top:17px;width:6px;height:6px;border-radius:50%;background:#35b991}
+@media(max-width:1150px){.stage-area.requirements-open .context-requirements{width:210px}.stage-area.requirements-open .stage-canvas{gap:12px}}
+@media(max-width:850px){.stage-meta{align-items:center}.stage-meta-actions{gap:6px}.requirements-entry{padding:6px 8px}.stage-area.requirements-open .stage-canvas{flex-direction:column;align-items:center}.stage-area.requirements-open .context-requirements{width:min(438px,100%);margin-top:16px}}
