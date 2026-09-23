@@ -1,7 +1,7 @@
 (function(root){
 'use strict';
 const catalog=[
-{id:'warm',name:'舒展热身操',type:'ai',duration:180,kcal:8,preview:[15,120],audiences:['senior','adult','youth'],warm:true,screen:false,color:'mint',tag:'热身候选 · 平台配置'},
+{id:'warm',name:'舒缓热身操',type:'ai',duration:180,kcal:8,preview:[15,120],audiences:['senior','adult','youth'],warm:true,screen:false,color:'mint',tag:'签到热身 · 平台固定'},
 {id:'heel-raise',name:'提踵',type:'single',duration:30,kcal:3,preview:[0,10],audiences:['senior'],warm:false,color:'blue',tag:'体能'},
 {id:'side-leg-swing',name:'单侧外摆腿',type:'single',duration:30,kcal:3,preview:[0,10],audiences:['senior'],warm:false,color:'mint',tag:'体能'},
 {id:'front-raise',name:'前侧平举',type:'single',duration:30,kcal:2,preview:[0,10],audiences:['senior'],warm:false,color:'lavender',tag:'体能'},
