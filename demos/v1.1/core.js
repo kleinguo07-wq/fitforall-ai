@@ -22,7 +22,7 @@ function day(timestamp){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/S
 function eligible(record,t){return !!record.id&&!!record.userId&&Number.isFinite(record.timestamp)&&['normal','early'].includes(record.reason)&&Number.isFinite(t)&&t>=0&&Number.isFinite(record.seconds)&&record.seconds>=0&&Number.isFinite(record.kcal)&&record.kcal>=0&&(record.reason==='normal'||record.seconds>t);}
 function settle(records,record,t){if(records.some(r=>r.id===record.id))return {records,added:false,valid:eligible(record,t)};const valid=eligible(record,t);return {records:valid?[...records,record]:records,added:valid,valid};}
 function totals(records,userId){const mine=records.filter(r=>r.userId===userId);return {days:new Set(mine.map(r=>day(r.timestamp))).size,kcal:mine.reduce((a,r)=>a+r.kcal,0),seconds:mine.reduce((a,r)=>a+r.seconds,0)};}
-const levels={days:[1,3,7,14,30],kcal:[10,50,100,300,500],minutes:[1,10,30,60,120]};
+const levels={days:[1,3,7,14,30],kcal:[10,50,100,300,500,1000,2000,5000,10000],minutes:[1,10,30,60,120]};
 function progress(value,steps){const next=steps.find(n=>n>value);return {next:next||null,remaining:next?Math.max(0,next-value):0,ratio:next?Math.min(1,value/next):1};}
 const api={catalog,seniorContent,defaults,pool,slice,day,eligible,settle,totals,levels,progress};if(typeof module!=='undefined')module.exports=api;root.FitCore=api;
 })(typeof window!=='undefined'?window:globalThis);
