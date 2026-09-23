@@ -68,3 +68,4 @@
 
 /* Milestone review controls. */
 .milestone-demo-controls{display:grid;gap:12px;margin-top:12px}.milestone-demo-row{padding:10px;border:1px solid #e1e7f0;border-radius:8px;background:#fff}.milestone-demo-row>b{display:block;margin-bottom:8px;color:#52647d;font-size:11px}.milestone-demo-row>div{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.milestone-demo-row button{padding:7px 2px;border:1px solid #dce4ef;border-radius:6px;background:#f8faff;color:#55708f;font-size:10px}.milestone-demo-row button:last-child{color:#9a675f;background:#fff8f6}
+.checkin-state-controls{margin-top:10px}.checkin-state-controls .field-label{margin-top:0}.checkin-state-controls button.active{border-color:#4f91ec;background:#edf4ff;color:#1762ca;font-weight:700}
