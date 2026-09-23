@@ -1,7 +1,8 @@
 const assert=require('node:assert/strict');
 const C=require('../core.js');
 const r={id:'a',userId:'chen',seconds:11,kcal:2,reason:'early',timestamp:Date.parse('2026-09-09T08:00:00Z')};
-assert.equal(C.eligible({...r,seconds:10},10),false);
+assert.equal(C.eligible({...r,seconds:9},10),false);
+assert.equal(C.eligible({...r,seconds:10},10),true);
 assert.equal(C.eligible(r,10),true);
 assert.equal(C.eligible({...r,seconds:0,reason:'normal'},10),true);
 for(const change of [{userId:null},{id:null},{seconds:NaN},{kcal:-1},{reason:'unknown'},{timestamp:NaN}])assert.equal(C.eligible({...r,...change},10),false);
