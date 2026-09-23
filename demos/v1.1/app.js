@@ -2,7 +2,7 @@
 'use strict';
 const C=FitCore,$=s=>document.querySelector(s),D=$('#device');
 const names={chen:'陈阿姨',wang:'王叔叔',new:'新用户'};
-let dataMobile=false,medalOpen=false,calendarOpen=false,requirementsOpen=false;
+let dataMobile=false,medalOpen=false,calendarOpen=false,requirementsOpen=false,adminPage='screen';
 const labels={data:'我的数据',video:'视频屏保',image:'图片屏保',home:'设备首页',guide:'站位与身份确认',exercise:'运动进行中',report:'运动结果报告',milestones:'个人里程碑'};
 const registered=new Set(['chen','wang']);
 const storeKey='fitforall-review-v11';
@@ -60,6 +60,35 @@ function updateRequirementsNote(){if(!requirementsOpen)return;const content=curr
 function toggleRequirements(open){requirementsOpen=open;const area=$('.stage-area'),button=$('#open-requirements'),panel=$('#context-requirements');area.classList.toggle('requirements-open',open);button.setAttribute('aria-expanded',String(open));panel.setAttribute('aria-hidden',String(!open));button.textContent=open?'收起本页需求':'查看本页需求';if(open)updateRequirementsNote();setTimeout(resize,0)}
 function showView(next){if(next!=='device'&&requirementsOpen)toggleRequirements(false);view=next;document.body.classList.toggle('legacy-admin-open',next==='admin');document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.view===next));['device','admin','spec'].forEach(v=>$('#'+v+'-view').classList.toggle('hidden',v!==next));$('#view-title').textContent={device:'从看见，到动起来',admin:'让合适的内容，出现在合适的场地',spec:'把交互与规则，一起讲清楚'}[next];if(next==='admin'){draft=structuredClone(config);renderExistingAdmin()}if(next==='spec')renderSpec();if(next==='device'){render();idle=0}const video=D.querySelector('video');if(video){if(next==='device')video.play().catch(()=>{});else video.pause()}resize()}
 function renderExistingAdmin(){
+ if(adminPage==='heart'){
+  $('#admin-view').innerHTML=`<div class="legacy-admin-shell">
+   <header class="legacy-admin-top"><div class="legacy-venue"><span class="legacy-home-icon">⌂</span><b>徐汇区新时代文明实践中心</b></div><div class="legacy-greeting">下午好，徐汇区新时代文明实践中心 <span class="legacy-menu">☰</span></div></header>
+   <aside class="legacy-admin-side"><nav>
+    <button><i class="legacy-icon blue">♙</i><span>数据统计</span><em>⌄</em></button>
+    <button class="selected" data-admin-section="heart"><i class="legacy-icon red">♥</i><span>心率数据</span><em>⌄</em></button>
+    <button><i class="legacy-icon amber">▤</i><span>运动视频</span></button>
+    <button><i class="legacy-icon green">◧</i><span>用户管理</span></button>
+    <button><i class="legacy-icon mint">♙</i><span>账号管理</span></button>
+    <button><i class="legacy-icon yellow">▣</i><span>我的账号</span></button>
+    <button data-admin-section="screen"><i class="legacy-icon purple">▰</i><span>屏保管理</span></button>
+   </nav></aside>
+   <main class="legacy-admin-main"><div class="legacy-page-heading"><h1>心率数据</h1><button id="leave-admin">返回产品评审</button></div>
+    <section class="heart-empty-card" aria-labelledby="heart-empty-title">
+     <div class="heart-device-art" aria-hidden="true"><span class="heart-watch"><i>♥</i></span><span class="heart-pulse"></span></div>
+     <span class="heart-device-tag">需配套心率设备</span>
+     <h2 id="heart-empty-title">暂无心率数据</h2>
+     <p class="heart-empty-lead">本功能仅供已配套采购心率设备的组织使用。</p>
+     <div class="heart-use-grid">
+      <div><span class="heart-use-icon supported">✓</span><section><b>适用场景</b><p>一位用户与一只手环固定匹配使用。</p></section></div>
+      <div><span class="heart-use-icon unsupported">!</span><section><b>暂不支持</b><p>多位用户共用同一只手环。</p></section></div>
+     </div>
+     <div class="heart-sales-note"><span>i</span><p>如需开通或了解配套方案，请联系服务您的销售同事。</p></div>
+    </section>
+   </main>
+  </div>`;
+  bindExistingAdmin();
+  return;
+ }
  const selectableCatalog=C.catalog.filter(c=>c.screen!==false),order=[...draft.fixed,...selectableCatalog.map(c=>c.id).filter(id=>!draft.fixed.includes(id))],isVideo=draft.mode==='video';
  const poolItems=(draft.poolMode==='fixed'?order.map(id=>C.catalog.find(c=>c.id===id)):C.pool(draft));
  const contentRule='体能完整演示 3 遍后切换；AI 跟练播放 30 秒精选片段。';
@@ -70,12 +99,12 @@ function renderExistingAdmin(){
   <header class="legacy-admin-top"><div class="legacy-venue"><span class="legacy-home-icon">⌂</span><b>徐汇区新时代文明实践中心</b></div><div class="legacy-greeting">下午好，徐汇区新时代文明实践中心 <span class="legacy-menu">☰</span></div></header>
   <aside class="legacy-admin-side"><nav>
    <button><i class="legacy-icon blue">♙</i><span>数据统计</span><em>⌄</em></button>
-   <button><i class="legacy-icon red">♥</i><span>心率数据</span><em>⌄</em></button>
+   <button data-admin-section="heart"><i class="legacy-icon red">♥</i><span>心率数据</span><em>⌄</em></button>
    <button><i class="legacy-icon amber">▤</i><span>运动视频</span></button>
    <button><i class="legacy-icon green">◧</i><span>用户管理</span></button>
    <button><i class="legacy-icon mint">♙</i><span>账号管理</span></button>
    <button><i class="legacy-icon yellow">▣</i><span>我的账号</span></button>
-   <button class="selected"><i class="legacy-icon purple">▰</i><span>屏保管理</span></button>
+   <button class="selected" data-admin-section="screen"><i class="legacy-icon purple">▰</i><span>屏保管理</span></button>
   </nav></aside>
   <main class="legacy-admin-main"><div class="legacy-page-heading"><h1>屏保管理</h1><button id="leave-admin">返回产品评审</button></div>
    <section class="legacy-config-card"><h2>请选择屏保类型</h2>
@@ -94,14 +123,15 @@ function renderExistingAdmin(){
 }
 function rerenderExistingAdminAtScroll(focusSelector){const shell=$('.legacy-admin-shell'),scrollTop=shell?.scrollTop||0;renderExistingAdmin();const nextShell=$('.legacy-admin-shell');if(nextShell)nextShell.scrollTop=scrollTop;if(focusSelector){const target=D.ownerDocument.querySelector(focusSelector);if(target)target.focus({preventScroll:true})}}
 function bindExistingAdmin(){
- $('#leave-admin').onclick=$('#legacy-cancel').onclick=()=>showView('device');
+ $('#leave-admin').onclick=()=>showView('device');const cancel=$('#legacy-cancel');if(cancel)cancel.onclick=()=>showView('device');
+ document.querySelectorAll('[data-admin-section]').forEach(b=>b.onclick=()=>{adminPage=b.dataset.adminSection;renderExistingAdmin()});
  document.querySelectorAll('[data-screen-type]').forEach(b=>b.onclick=()=>{const type=b.dataset.screenType;if(type==='video'||type==='image'){draft.mode=type;renderExistingAdmin();return}toast(`${b.textContent.trim()}为现有功能，本轮仅展示入口`)});
  const pool=$('#legacy-pool-mode'),audience=$('#legacy-audience');if(pool)pool.onchange=e=>{draft.poolMode=e.target.value;rerenderExistingAdminAtScroll('#legacy-pool-mode')};if(audience)audience.onchange=e=>{draft.audience=e.target.value;rerenderExistingAdminAtScroll('#legacy-audience')};
  document.querySelectorAll('[data-legacy-pool]').forEach(b=>b.onchange=()=>{const id=b.dataset.legacyPool;draft.fixed=b.checked?[...draft.fixed,id]:draft.fixed.filter(item=>item!==id);rerenderExistingAdminAtScroll(`[data-legacy-pool="${id}"]`)});
  for(const dir of ['up','down'])document.querySelectorAll(`[data-legacy-${dir}]`).forEach(b=>b.onclick=()=>{const id=b.dataset[`legacy${dir[0].toUpperCase()+dir.slice(1)}`],i=draft.fixed.indexOf(id),j=i+(dir==='up'?-1:1);if(j>=0&&j<draft.fixed.length)[draft.fixed[i],draft.fixed[j]]=[draft.fixed[j],draft.fixed[i]];rerenderExistingAdminAtScroll(`[data-legacy-${dir}="${id}"]`)});
  const images=$('#legacy-images-upload');if(images)images.onchange=e=>{const files=[...e.target.files];if(files.length>9){$('#admin-error').textContent='最多上传 9 张图片，当前选择超过上限。';return}if(files.some(f=>!['image/jpeg','image/png'].includes(f.type)||f.size>10*1024*1024)){$('#admin-error').textContent='请上传小于 10M 的 JPG 或 PNG 图片。';return}imageURLs=files.map(f=>URL.createObjectURL(f));draft.images=[...imageURLs];renderExistingAdmin()};
  const clear=$('#legacy-clear-images');if(clear)clear.onclick=()=>{draft.images=[];renderExistingAdmin()};
- $('#save-config').onclick=saveConfig;
+ const save=$('#save-config');if(save)save.onclick=saveConfig;
 }
 function saveConfig(){const errors=[];if(!C.pool(draft).length)errors.push('内容池至少选择一项运动。');if(errors.length){$('#admin-error').textContent=errors.join(' ');return}config=structuredClone(draft);navigate(config.mode);showView('device');log('配置已保存，屏保已按新配置开始');toast('配置已保存到当前演示会话')}
 function renderSpec(){const rows=[['两种屏保','后台单项选择屏保类型；设备端不跨类型切换','已确认'],['视频轮播','单项完整 3 遍；长课区间内随机 30 秒','已确认'],['启动身份','站位时登录／注册，绑定本次运动者','已确认'],['签到路径','热身完成签到；普通运动完成自动签到','已确认'],['报告进度','单项体能、AI 跟练各加同款简短卡片','已确认'],['有效阈值','提前退出 >10 秒仅为 Demo 假设','待核实'],['里程碑档位','天数、千卡、分钟档位均为演示值','待评审'],['弱网人脸兜底','本地采集人脸并保存运动会话；联网后自动幂等补传','已确认'],['设备会话','首页／报告 60 秒超时，返回后清理当前身份','待评审']];$('#spec-view').innerHTML=`<div class="spec-layout"><h2>本轮评审看什么</h2><p>确认主流程是否顺畅，再讨论参数与异常。v1.1 尚未上线，原型内的示例数据不代表真实识别能力。</p><div class="spec-links"><a href="../../docs/requirements/v1.1-product-review.md" target="_blank">↗ 完整需求评审稿</a><a href="README.md" target="_blank">↗ Demo 运行与验证说明</a></div><div class="panel"><h3>从入口到积累</h3><p>屏保选运动 → 站位与身份确认 → 开始运动 → 符合规则后签到与累计 → 两类报告展示进度 → 查看独立里程碑。</p><table class="review-table"><thead><tr><th>模块</th><th>本稿口径</th><th>状态</th></tr></thead><tbody>${rows.map(([a,b,c])=>`<tr><td>${a}</td><td>${b}</td><td><span class="pill ${c==='已确认'?'':'pending'}">${c}</span></td></tr>`).join('')}</tbody></table></div><div class="panel"><h3>建议走查顺序</h3><p>① 分别从评审工具进入图片／视频屏保，检查设备端没有跨类型切换入口。<br>② 一键跟练，模拟老用户／新用户／人脸失败。<br>③ 在 10 秒和 11 秒提前退出，观察是否计入。<br>④ 同一天完成第二次运动，再重放报告，检查天数与累计。<br>⑤ 切另一用户、模拟下一天，再查看里程碑。<br>⑥ 客户后台切换推荐／指定内容池、调整顺序，再回设备验证。</p></div><div class="panel"><h3>本次未接入</h3><p>人脸与微信服务、真实注册、运动识别和计分、服务端结算、离线人脸采集与补传（本轮仅评审技术需求）、多设备并发、生产素材发布。AI 跟练预览区间、签到热身候选和视频素材由平台内部维护；默认静态色块与示例成绩均只用于交互评审。</p></div></div>`}
