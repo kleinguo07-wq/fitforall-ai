@@ -86,3 +86,12 @@
 .milestone .milestone-card{padding:20px 23px}
 .milestone .milestone-card p{margin-top:13px}
 .milestone-return{position:absolute;left:24px;bottom:22px;width:auto;border-radius:24px;padding:12px 18px;background:#fff;border:1px solid #bfd6ef;color:#467fc2;font-size:16px;box-shadow:0 4px 16px #38547614}
+
+/* Active AI training reuses the existing preparation/camera composition. */
+.exercise-active .teacher-preview h2{max-width:58%;margin:0}
+.exercise-active .camera-preview{padding-bottom:0}
+.exercise-active .score-pill>span{min-width:64px;color:#fff;font-size:24px;text-align:center}
+.exercise-active .score-pill small{white-space:nowrap}
+.exercise-active .position-hint{top:18%}
+.exercise-camera-progress{position:absolute;left:24px;right:24px;bottom:28px;z-index:4;height:8px;overflow:hidden;border-radius:8px;background:#ffffff40}
+.exercise-camera-progress i{display:block;width:0;height:100%;background:#38e6bd}
