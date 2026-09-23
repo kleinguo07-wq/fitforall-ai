@@ -4,7 +4,7 @@
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width,initial-scale=1">
  <title>FitForAll AI · v1.1 产品评审</title>
- <link rel="stylesheet" href="style.css?v=page-review-1">
+ <link rel="stylesheet" href="style.css?v=review-sections-1">
 </head>
 <body>
  <aside class="sidebar">
@@ -12,12 +12,30 @@
   <div class="release">V1.1 <span>需求评审稿</span></div>
   <p class="nav-label">评审空间</p>
   <nav>
-   <button class="nav active" data-view="device">▣ <span>设备体验</span><em>01</em></button>
-   <button class="nav" data-view="admin">▦ <span>后台配置</span><em>02</em></button>
-   <button class="nav" data-view="spec">☷ <span>规则与评审</span><em>03</em></button>
+   <button class="nav" data-view="spec">☷ <span>评审说明</span><em>01</em></button>
+   <button class="nav active" data-view="device">▣ <span>原型体验</span><em>02</em></button>
+   <div class="prototype-subnav" aria-label="原型体验页面目录">
+    <section class="prototype-group"><h3>交互大屏</h3>
+     <button data-review-page="video"><span>D01</span><b>视频屏保</b><em>4</em></button>
+     <button data-review-page="image"><span>D02</span><b>图片屏保</b><em>3</em></button>
+     <button data-review-page="home"><span>D03</span><b>设备首页</b><em>4</em></button>
+     <button data-review-page="calendar"><span>D04</span><b>月度运动签到</b><em>3</em></button>
+     <button data-review-page="guide"><span>D05</span><b>站位与身份确认</b><em>4</em></button>
+     <button data-review-page="exercise"><span>D06</span><b>运动进行中</b><em>3</em></button>
+     <button data-review-page="report"><span>D07</span><b>运动结果报告</b><em>3</em></button>
+     <button data-review-page="data-screen"><span>D08</span><b>大屏我的数据</b><em>4</em></button>
+     <button data-review-page="milestones"><span>D09</span><b>个人里程碑</b><em>3</em></button>
+    </section>
+    <section class="prototype-group"><h3>管理后台</h3>
+     <button data-admin-page="screen"><span>B01</span><b>屏保管理</b><em>4</em></button>
+     <button data-admin-page="heart"><span>B02</span><b>心率数据</b><em>4</em></button>
+    </section>
+    <section class="prototype-group"><h3>小程序</h3>
+     <button data-review-page="data-mobile"><span>M01</span><b>我的数据</b><em>4</em></button>
+    </section>
+   </div>
+   <button class="nav" data-view="docs">▤ <span>需求文档</span><em>03</em></button>
   </nav>
-  <div class="sidebar-note"><span class="dot"></span> 可交互原型<p>先让运动更容易开始，<br>再让每一次坚持被看见。</p></div>
-  <small class="build-note">本地模拟 · 无真实人脸采集<br>v1.0 基线 → v1.1 探索</small>
  </aside>
  <main>
   <header class="topbar"><div><span class="eyebrow">PRODUCT REVIEW / 2026</span><h1 id="view-title">从看见，到动起来</h1></div><span class="draft-badge">● 待评审</span></header>
@@ -25,7 +43,7 @@
    <div class="stage-area">
     <div class="stage-meta">
      <span>设备端 <b>9:16</b></span>
-     <span class="stage-meta-actions"><span id="screen-label">视频屏保</span><button id="open-requirements" class="requirements-entry" aria-expanded="false" aria-controls="context-requirements">查看本页需求</button></span>
+     <span class="stage-meta-actions"><span id="screen-label">视频屏保</span><button id="open-requirements" class="requirements-entry hidden" aria-expanded="false" aria-controls="context-requirements">查看本页需求</button></span>
     </div>
     <div class="stage-canvas">
      <div class="device-wrap"><div class="device" id="device"></div></div>
@@ -38,19 +56,8 @@
     <div class="stage-foot"><span class="dot"></span> 竖屏触控预览 <span>所有身份与成绩均为模拟</span></div>
    </div>
    <aside class="inspector">
-    <div class="inspector-head"><span class="eyebrow">PAGE REVIEW</span><h2>按页面检查本轮变动</h2><p><span id="inspector-current-title">视频屏保</span><b id="inspector-change-count">4 项变动</b></p></div>
-    <div class="control-group page-catalog"><h3>页面目录</h3><div class="page-index">
-     <button data-review-page="video"><span>01</span><b>视频屏保</b><em>4 项</em></button>
-     <button data-review-page="image"><span>02</span><b>图片屏保</b><em>3 项</em></button>
-     <button data-review-page="home"><span>03</span><b>设备首页</b><em>4 项</em></button>
-     <button data-review-page="calendar"><span>04</span><b>月度运动签到</b><em>3 项</em></button>
-     <button data-review-page="guide"><span>05</span><b>站位与身份确认</b><em>4 项</em></button>
-     <button data-review-page="exercise"><span>06</span><b>运动进行中</b><em>3 项</em></button>
-     <button data-review-page="report"><span>07</span><b>运动结果报告</b><em>3 项</em></button>
-     <button data-review-page="data-screen"><span>08</span><b>大屏我的数据</b><em>4 项</em></button>
-     <button data-review-page="data-mobile"><span>09</span><b>小程序我的数据</b><em>4 项</em></button>
-     <button data-review-page="milestones"><span>10</span><b>个人里程碑</b><em>3 项</em></button>
-    </div></div>
+    <div class="inspector-head"><span class="eyebrow">PAGE REVIEW</span><h2>本页需求与演示</h2><p><span id="inspector-current-title">视频屏保</span><b id="inspector-change-count">4 项变动</b></p></div>
+    <div class="control-group current-page-requirements"><h3>本页需求</h3><ul id="inspector-requirements-list"></ul></div>
     <div id="person-controls" class="control-group" data-pages="home calendar guide data-screen data-mobile milestones"><h3>模拟本页使用者</h3><label class="field-label" for="person">用户</label><select id="person"><option value="chen">陈阿姨 · 老用户</option><option value="wang">王叔叔 · 老用户</option><option value="new">新用户 · 尚未注册</option></select><div data-pages="guide"><label class="field-label" for="identity">身份确认结果</label><select id="identity"><option value="success">识别成功</option><option value="failure">人脸识别失败</option></select></div></div>
     <div id="timing-controls" class="control-group" data-pages="video exercise report home calendar data-screen data-mobile milestones"><h3>本页演示控制</h3><div data-pages="video exercise"><label class="field-label" for="speed">预览 / 运动时间速度</label><select id="speed"><option value="1">正常速度 ×1</option><option value="5">评审加速 ×5</option><option value="30">评审加速 ×30</option></select></div><div class="scenario-grid tight"><button id="advance" data-pages="video exercise">推进 10 秒</button><button id="finish" data-pages="exercise">模拟自然结束</button><button id="next-day" data-pages="report home calendar data-screen data-mobile milestones">模拟下一天</button><button id="replay" data-pages="report">重放报告</button><button id="fail-video" data-pages="video">当前视频失败</button><button id="empty" data-pages="video">模拟空内容池</button></div></div>
     <div class="status-box"><span class="eyebrow">当前状态</span><p id="state-detail"></p><div id="event-log"></div></div>
@@ -60,9 +67,10 @@
   </section>
   <section id="admin-view" class="hidden"></section>
   <section id="spec-view" class="hidden"></section>
+  <section id="docs-view" class="hidden"></section>
  </main>
  <div id="toast" role="status"></div>
  <script src="core.js?v=senior-pool-2"></script>
- <script src="app.js?v=page-review-1"></script>
+ <script src="app.js?v=review-sections-1"></script>
 </body>
 </html>
