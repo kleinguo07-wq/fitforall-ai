@@ -15,7 +15,7 @@ const c=C.catalog.find(c=>c.id==='baduan');assert.deepEqual(C.slice(c,[60,90]),{
 for(const range of [[60,89],[-1,60],[0,721]])assert.throws(()=>C.slice(c,range));
 assert.deepEqual(C.pool({...C.defaults,poolMode:'fixed',fixed:['jump','baduan']}).map(c=>c.id),['jump','baduan']);
 assert.equal(C.pool({...C.defaults,poolMode:'fixed',fixed:[]}).length,0);
-assert.deepEqual(C.pool({...C.defaults,poolMode:'recommended',audience:'senior'}).map(c=>c.name),['提踵','单侧外摆腿','前侧平举','徒手推天','坐姿收腹提膝','坐姿身体侧屈','八段锦 简易版','八段锦','八式太极拳','五禽戏']);
+assert.deepEqual(C.pool({...C.defaults,poolMode:'recommended',audience:'senior'}).map(c=>c.name),['提踵','单侧外摆腿','前侧平举','徒手推天','坐姿收腹提膝','坐姿身体侧屈','热身操','八段锦','八式太极拳','五禽戏']);
 assert.deepEqual(C.levels.days,[1,3,7,14,30,60,100,180,365]);
 assert.deepEqual(C.levels.minutes,[10,30,60,150,300,600,1500,3000,6000]);
 assert.deepEqual(C.levels.kcal,[50,100,300,500,1000,2000,5000,10000,20000]);
