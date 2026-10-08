@@ -20,4 +20,6 @@ assert.deepEqual(C.levels.days,[1,3,7,14,30,60,100,180,365]);
 assert.deepEqual(C.levels.minutes,[10,30,60,150,300,600,1500,3000,6000]);
 assert.deepEqual(C.levels.kcal,[50,100,300,500,1000,2000,5000,10000,20000]);
 assert.deepEqual(C.progress(45,C.levels.minutes),{previous:30,next:60,remaining:15,ratio:.5});
+assert.equal(C.progress(0,C.levels.days).ratio,0);
+assert.equal(C.progress(3,C.levels.days).ratio,.1);
 console.log('PASS: completion boundaries, invalid records, idempotency, days, identity isolation, preview ranges, ordered pool, confirmed milestone levels');
