@@ -10,6 +10,25 @@
 
 在仓库根目录运行 `python3 -m http.server 8765`，打开 http://localhost:8765/demos/v1.1/ 。也可直接打开 `demos/v1.1/index.html`。
 
+## 在线版本工作台
+
+GitHub Pages 统一入口为 <https://kleinguo07-wq.github.io/fitforall-ai/>，每个版本保留独立地址，例如 v1.1 为 <https://kleinguo07-wq.github.io/fitforall-ai/demos/v1.1/>。
+
+后续新增版本时：
+
+1. 复制现有版本目录为 `demos/v1.2/`，保证目录内有 `index.html`。
+2. 在该目录添加 `version.json`，填写版本标题、简介、状态和更新时间。
+3. 将变更合并到 `main`。GitHub Actions 会自动重建总站、保留旧版本并发布新版本。
+
+本地检查完整发布结果时运行：
+
+```sh
+python3 scripts/build_pages.py
+python3 -m http.server 8765 --directory _site
+```
+
+然后打开 <http://localhost:8765/>。生成的 `_site` 目录只用于本地检查和自动发布，不需要提交。
+
 ## 产品形态
 
 | 端 | 已确认的信息 | 待补充 |
