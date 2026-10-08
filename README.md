@@ -6,7 +6,7 @@
 
 ## v1.1 需求评审
 
-已增加 [需求文档](docs/requirements/v1.1-product-review.md) 和 [交互 Demo](demos/v1.1/README.md)，覆盖双模式屏保、站位身份确认、签到、里程碑和两类运动报告。v1.1 为评审草稿，尚未上线。
+已增加 [需求文档](docs/requirements/v1.1-product-review.md)、[功能埋点清单](docs/requirements/v1.1-event-tracking.md) 和 [交互 Demo](demos/v1.1/README.md)，覆盖双模式屏保、站位身份确认、签到、里程碑和两类运动报告。v1.1 为评审草稿，尚未上线。
 
 在仓库根目录运行 `python3 -m http.server 8765`，打开 http://localhost:8765/demos/v1.1/ 。也可直接打开 `demos/v1.1/index.html`。
 
