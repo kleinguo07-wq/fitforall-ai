@@ -23,6 +23,6 @@ function eligible(record,t){return !!record.id&&!!record.userId&&Number.isFinite
 function settle(records,record,t){if(records.some(r=>r.id===record.id))return {records,added:false,valid:eligible(record,t)};const valid=eligible(record,t);return {records:valid?[...records,record]:records,added:valid,valid};}
 function totals(records,userId){const mine=records.filter(r=>r.userId===userId);return {days:new Set(mine.map(r=>day(r.timestamp))).size,kcal:mine.reduce((a,r)=>a+r.kcal,0),seconds:mine.reduce((a,r)=>a+r.seconds,0)};}
 const levels={days:[1,3,7,14,30,60,100,180,365],kcal:[50,100,300,500,1000,2000,5000,10000,20000],minutes:[10,30,60,150,300,600,1500,3000,6000]};
-function progress(value,steps){const previous=[...steps].reverse().find(n=>n<=value)||0,next=steps.find(n=>n>value),raw=next?Math.min(1,Math.max(0,(value-previous)/(next-previous))):1,ratio=value>0?Math.max(.1,raw):0;return {previous:previous||null,next:next||null,remaining:next?Math.max(0,next-value):0,ratio};}
+function progress(value,steps){const previous=[...steps].reverse().find(n=>n<=value)||0,next=steps.find(n=>n>value),ratio=next?Math.min(1,Math.max(0,value/next)):value>0?1:0;return {previous:previous||null,next:next||null,remaining:next?Math.max(0,next-value):0,ratio};}
 const api={catalog,seniorContent,defaults,pool,slice,day,eligible,settle,totals,levels,progress};if(typeof module!=='undefined')module.exports=api;root.FitCore=api;
 })(typeof window!=='undefined'?window:globalThis);
