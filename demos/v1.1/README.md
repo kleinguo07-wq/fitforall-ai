@@ -2,6 +2,8 @@
 
 对应 [需求评审稿](../../docs/requirements/v1.1-product-review.md)。用于 UI 与研发走查，不是设备应用或正式发布版本。
 
+左侧“埋点”板块直接读取 [v1.1 功能埋点清单](../../docs/requirements/v1.1-event-tracking.md)，展示完整九列表格并支持搜索。该板块需通过本地服务或 GitHub Pages 访问，直接用 `file://` 打开时浏览器可能阻止读取源文档。
+
 ## 打开
 
 无需安装依赖。可直接打开本目录 `index.html`；推荐在仓库根目录执行：
