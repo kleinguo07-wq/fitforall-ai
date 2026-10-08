@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+ <title>FitForAll AI · v1.1 产品评审</title>
+ <link rel="stylesheet" href="style.css?v=milestone-target-carousel-1">
+</head>
+<body>
+ <aside class="sidebar">
+  <a class="brand" href="#"><span class="brand-icon">F</span><span>FitForAll<span class="brand-ai"> AI</span><small>全民健身 · 产品工作台</small></span></a>
+  <div class="release">V1.1 <span>需求评审稿</span></div>
+  <p class="nav-label">评审空间</p>
+  <nav>
+   <button class="nav" data-view="spec">☷ <span>评审说明</span><em>01</em></button>
+   <button class="nav active" data-view="device">▣ <span>原型体验</span><em>02</em></button>
+   <div class="prototype-subnav" aria-label="原型体验页面目录">
+    <section class="prototype-group"><h3>交互大屏</h3>
+     <button data-review-page="video"><span>D01</span><b>视频屏保</b><em>4</em></button>
+     <button data-review-page="home"><span>D02</span><b>设备首页</b><em>4</em></button>
+     <button data-review-page="calendar"><span>D03</span><b>月度运动签到</b><em>3</em></button>
+     <button data-review-page="exercise"><span>D04</span><b>运动进行中</b><em>4</em></button>
+     <button data-review-page="report"><span>D05</span><b>运动结果报告</b><em>3</em></button>
+     <button data-review-page="data-screen"><span>D06</span><b>大屏我的数据</b><em>4</em></button>
+     <button data-review-page="milestones"><span>D07</span><b>个人里程碑</b><em>4</em></button>
+     <button data-review-page="audience"><span>D08</span><b>人群内容页</b><em>2</em></button>
+    </section>
+    <section class="prototype-group"><h3>管理后台</h3>
+     <button data-admin-page="screen"><span>B01</span><b>屏保管理</b><em>4</em></button>
+     <button data-admin-page="heart"><span>B02</span><b>心率数据</b><em>4</em></button>
+    </section>
+    <section class="prototype-group"><h3>小程序</h3>
+     <button data-review-page="data-mobile"><span>M01</span><b>我的数据</b><em>4</em></button>
+    </section>
+   </div>
+   <button class="nav" data-view="docs">▤ <span>需求文档</span><em>03</em></button>
+  </nav>
+ </aside>
+ <main>
+  <header class="topbar"><div><span class="eyebrow">PRODUCT REVIEW / 2026</span><h1 id="view-title">激发用户使用互动屏</h1></div><span class="draft-badge">● 待评审</span></header>
+  <section id="device-view" class="workspace">
+   <div class="stage-area">
+    <div class="stage-meta">
+     <span>设备端 <b>9:16</b></span>
+     <span class="stage-meta-actions"><span id="screen-label">视频屏保</span><button id="open-requirements" class="requirements-entry hidden" aria-expanded="false" aria-controls="context-requirements">查看本页需求</button></span>
+    </div>
+    <div class="stage-canvas">
+     <div class="device-wrap"><div class="device" id="device"></div></div>
+     <aside id="context-requirements" class="context-requirements" aria-hidden="true">
+      <header><span>本页需求</span><button id="close-requirements" aria-label="关闭本页需求">×</button></header>
+      <h2 id="context-requirements-title"></h2>
+      <ul id="context-requirements-list"></ul>
+     </aside>
+    </div>
+    <div class="stage-foot"><span class="dot"></span> 竖屏触控预览 <span>所有身份与成绩均为模拟</span></div>
+   </div>
+   <aside class="inspector">
+    <div class="inspector-head"><span class="eyebrow">PAGE REVIEW</span><h2>本页需求与演示</h2><p><span id="inspector-current-title">视频屏保</span><b id="inspector-change-count">4 项变动</b></p></div>
+    <div class="control-group current-page-requirements"><h3>本页需求</h3><ul id="inspector-requirements-list"></ul></div>
+    <div id="person-controls" class="control-group" data-pages="home calendar guide data-screen data-mobile milestones"><h3>模拟本页使用者</h3><label class="field-label" for="person">用户</label><select id="person"><option value="chen">陈阿姨 · 老用户</option><option value="wang">王叔叔 · 老用户</option><option value="new">新用户 · 尚未注册</option></select><div data-pages="guide"><label class="field-label" for="identity">身份确认结果</label><select id="identity"><option value="success">识别成功</option><option value="failure">人脸识别失败</option></select></div></div>
+    <div id="timing-controls" class="control-group" data-pages="video exercise report home calendar data-screen data-mobile milestones audience"><h3>本页演示控制</h3><div data-pages="video exercise"><label class="field-label" for="speed">预览 / 运动时间速度</label><select id="speed"><option value="1">正常速度 ×1</option><option value="5">评审加速 ×5</option><option value="30">评审加速 ×30</option></select></div><div class="scenario-grid tight"><button id="advance" data-pages="video exercise">推进 10 秒</button><button id="finish" data-pages="exercise">提前结束</button><button id="next-day" data-pages="report">模拟下一天</button><button id="replay" data-pages="report">重放报告</button><button id="fail-video" data-pages="video">当前视频失败</button><button id="empty" data-pages="video">模拟空内容池</button></div><div class="checkin-state-controls" data-pages="home calendar"><span class="field-label">今日签到状态</span><div class="scenario-grid"><button id="checkin-unchecked">未签到</button><button id="checkin-checked">已签到</button></div></div><div data-pages="audience"><span class="field-label">人群内容页</span><div class="scenario-grid"><button id="audience-adult">成人 · 热力健将</button><button id="audience-youth">儿童 · 跃动少年</button></div></div><div class="milestone-demo-controls" data-pages="data-screen data-mobile milestones"><div class="milestone-demo-row"><b>实际运动分钟</b><div><button data-milestone-metric="minutes" data-step="1">+1</button><button data-milestone-metric="minutes" data-step="10">+10</button><button data-milestone-metric="minutes" data-step="100">+100</button><button data-milestone-metric="minutes" data-zero="true">归零</button></div></div><div class="milestone-demo-row"><b>消耗千卡</b><div><button data-milestone-metric="kcal" data-step="1">+1</button><button data-milestone-metric="kcal" data-step="10">+10</button><button data-milestone-metric="kcal" data-step="100">+100</button><button data-milestone-metric="kcal" data-zero="true">归零</button></div></div><div class="milestone-demo-row"><b>运动天数</b><div><button data-milestone-metric="days" data-step="1">+1</button><button data-milestone-metric="days" data-step="10">+10</button><button data-milestone-metric="days" data-step="100">+100</button><button data-milestone-metric="days" data-zero="true">归零</button></div></div></div></div>
+    <div class="status-box"><span class="eyebrow">当前状态</span><p id="state-detail"></p><div id="event-log"></div></div>
+    <div class="assumption"><b>本页说明</b><p id="page-assumption-text"></p></div>
+    <button id="reset" class="reset hidden" tabindex="-1">重置全部演示数据</button>
+   </aside>
+  </section>
+  <section id="admin-view" class="hidden"></section>
+  <section id="spec-view" class="hidden"></section>
+  <section id="docs-view" class="hidden"></section>
+ </main>
+ <div id="toast" role="status"></div>
+  <script src="core.js?v=milestone-total-progress-1"></script>
+ <script src="app.js?v=milestone-exact-minutes-1"></script>
+</body>
+</html>

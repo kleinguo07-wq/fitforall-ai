@@ -4,6 +4,31 @@
 
 **当前产品版本：v1.0（包含体态检测功能）。** 本仓库目前建立产品需求与设计资料基线，用于后续需求梳理、原型和 Demo 迭代；尚未收录设备应用、算法、后台或小程序的实现代码。产品版本不代表仓库已有可运行的软件发行版。
 
+## v1.1 需求评审
+
+已增加 [需求文档](docs/requirements/v1.1-product-review.md) 和 [交互 Demo](demos/v1.1/README.md)，覆盖双模式屏保、站位身份确认、签到、里程碑和两类运动报告。v1.1 为评审草稿，尚未上线。
+
+在仓库根目录运行 `python3 -m http.server 8765`，打开 http://localhost:8765/demos/v1.1/ 。也可直接打开 `demos/v1.1/index.html`。
+
+## 在线版本工作台
+
+GitHub Pages 统一入口为 <https://kleinguo07-wq.github.io/fitforall-ai/>，每个版本保留独立地址，例如 v1.1 为 <https://kleinguo07-wq.github.io/fitforall-ai/demos/v1.1/>。
+
+后续新增版本时：
+
+1. 复制现有版本目录为 `demos/v1.2/`，保证目录内有 `index.html`。
+2. 在该目录添加 `version.json`，填写版本标题、简介、状态和更新时间。
+3. 将变更合并到 `main`。GitHub Actions 会自动重建总站、保留旧版本并发布新版本。
+
+本地检查完整发布结果时运行：
+
+```sh
+python3 scripts/build_pages.py
+python3 -m http.server 8765 --directory _site
+```
+
+然后打开 <http://localhost:8765/>。生成的 `_site` 目录只用于本地检查和自动发布，不需要提交。
+
 ## 产品形态
 
 | 端 | 已确认的信息 | 待补充 |
@@ -38,4 +63,4 @@
 
 ## 后续迭代
 
-每次围绕一个具体功能，依次补充需求、原型、交互 Demo 和验收结果。未确认的技术栈、算法指标、排期和跨端能力保留为待确认项。当前无需安装依赖，可直接阅读 Markdown 文档；可运行 Demo 的启动方法在对应 Demo 创建后提供。
+每次围绕一个具体功能，依次补充需求、原型、交互 Demo 和验收结果。未确认的技术栈、算法指标、排期和跨端能力保留为待确认项。当前无需安装依赖，可直接阅读 Markdown 文档；v1.1 Demo 的启动与评审方法见上方链接。
