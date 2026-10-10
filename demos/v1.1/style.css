@@ -105,3 +105,5 @@
 
 /* Scope status belongs to the review workbench, outside device UI. */
 .inspector-priority{margin:12px 0;padding:10px 12px;background:#fff5df;border-radius:8px;color:#946b28;font-size:11px;line-height:1.6}.requirement-priority{font-size:11px;line-height:1.6;color:#946b28;background:#fff7e7;padding:8px 10px;border-radius:6px}.scope-panel{border-left:4px solid #2467ef;margin-bottom:24px}.senior-content-table{overflow:auto}.senior-content-table .review-table{width:100%;min-width:360px;font-size:12px}.docs-page-grid article[id]{scroll-margin-top:24px}.scope-panel p{line-height:1.7}
+
+.data-checkin{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 16px;padding:16px;border-radius:14px;background:#e9fbf5;color:#167566}.data-checkin strong{font-size:18px}.data-checkin p{margin:6px 0 0;font-size:12px}.data-checkin button{padding:12px 18px;border-radius:10px;background:#ff9d19;color:white;font-size:16px;font-weight:700}.data-checkin button.is-checked{background:#198e79}
