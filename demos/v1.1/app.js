@@ -17,7 +17,7 @@ const requirementGroups=[
   ["D08", "我的数据-签到入口", ["完成人脸确认后展示当前账号的个人运动数据。", "在本页提供“去签到／✓ 已签到”入口；未签到进入固定舒缓热身 AI 跟练，已签到打开月度日历。", "移除大屏累计运动卡片的奖牌和里程碑入口，仅保留个人运动数据。", "关闭签到日历返回本页；换用户或进入屏保时清理个人状态。"]]
  ]},
  {title:'管理后台',code:'B',pages:[
-  ['B01','屏保管理',['沿用现有客户管理后台的页面结构和导航。','支持选择默认、排行榜、自定义图片或运动视频屏保。','运动视频配置分为“系统默认”和“自定义”；系统默认按体能、AI 跟练、趣味运动分类预览，自定义展示全部可选运动，可选择内容并调整顺序。','视频素材由平台维护，统一从开头播放 30 秒，不设置预览起止区间。']],
+  ['B01','屏保管理',['沿用现有客户管理后台的页面结构和导航。','支持选择默认、排行榜、自定义图片或运动视频屏保。','运动视频配置分为“系统默认”和“自定义”；系统默认按体能、AI 跟练、趣味运动分类预览，自定义复用默认分类和内容，可选择内容并调整顺序。','视频素材由平台维护，统一从开头播放 30 秒，不设置预览起止区间。']],
   ['B02','心率数据',['仅向配套采购心率设备的组织提供。','适用于用户与手环固定匹配的使用方式。','暂不支持多人共用同一手环。','有使用需求时联系服务该组织的销售同事。']]
  ]},
  {title:'小程序',code:'M',pages:[
@@ -124,11 +124,13 @@ function renderExistingAdmin(){if(draft.poolMode==='recommended')draft.audience=
   bindExistingAdmin();
   return;
  }
- const selectableCatalog=C.catalog.filter(c=>c.screen!==false),order=[...draft.fixed,...selectableCatalog.map(c=>c.id).filter(id=>!draft.fixed.includes(id))],isVideo=draft.mode==='video';
- const poolItems=(draft.poolMode==='fixed'?order.map(id=>C.catalog.find(c=>c.id===id)):C.pool(draft));
- const contentRule='体能和 AI 跟练均从视频开头播放 30 秒后切换；不足 30 秒的视频播完即切换。';
- const fixedContentRows=poolItems.map(c=>`<div class="legacy-content-row"><input aria-label="选择${c.name}" type="checkbox" data-legacy-pool="${c.id}" ${draft.fixed.includes(c.id)?'checked':''}><div><span class="legacy-play-position">${draft.fixed.includes(c.id)?String(draft.fixed.indexOf(c.id)+1).padStart(2,'0'):'未选'}</span><b>${c.name}</b></div>${draft.fixed.includes(c.id)?`<span class="legacy-order"><button aria-label="上移${c.name}" data-legacy-up="${c.id}" ${draft.fixed.indexOf(c.id)===0?'disabled':''}>↑</button><button aria-label="下移${c.name}" data-legacy-down="${c.id}" ${draft.fixed.indexOf(c.id)===draft.fixed.length-1?'disabled':''}>↓</button></span>`:''}</div>`).join('');
- const recommendedGroups=[['体能',poolItems.filter(c=>c.type==='single')],['AI 跟练',poolItems.filter(c=>c.type==='ai')],['趣味运动',['切水果','节奏跳跃','顺序摸球','拳脚快打'].map(name=>({name}))]].filter(([,items])=>items.length).map(([title,items])=>`<section class="legacy-content-group"><h4>${title}</h4>${items.map(c=>`<div class="legacy-content-name"><span class="legacy-pass">✓</span><b>${c.name}</b></div>`).join('')}</section>`).join('');
+ const selectableCatalog=C.pool({...C.defaults,poolMode:'recommended'}),validIds=new Set(selectableCatalog.map(c=>c.id));draft.fixed=draft.fixed.filter(id=>validIds.has(id));
+ const order=[...draft.fixed,...selectableCatalog.map(c=>c.id).filter(id=>!draft.fixed.includes(id))],isVideo=draft.mode==='video';
+ const poolItems=order.map(id=>selectableCatalog.find(c=>c.id===id));
+ const contentRule='所有项目均从视频开头播放 30 秒后切换；不足 30 秒的视频播完即切换。';
+ const categories=[['体能','single'],['AI 跟练','ai'],['趣味运动','game']];
+ const fixedContentRows=categories.map(([title,type])=>`<section class="legacy-content-group"><h4>${title}</h4>${poolItems.filter(c=>c.type===type).map(c=>`<div class="legacy-content-row"><input aria-label="选择${c.name}" type="checkbox" data-legacy-pool="${c.id}" ${draft.fixed.includes(c.id)?'checked':''}><div><span class="legacy-play-position">${draft.fixed.includes(c.id)?String(draft.fixed.indexOf(c.id)+1).padStart(2,'0'):'未选'}</span><b>${c.name}</b></div>${draft.fixed.includes(c.id)?`<span class="legacy-order"><button aria-label="上移${c.name}" data-legacy-up="${c.id}" ${draft.fixed.indexOf(c.id)===0?'disabled':''}>↑</button><button aria-label="下移${c.name}" data-legacy-down="${c.id}" ${draft.fixed.indexOf(c.id)===draft.fixed.length-1?'disabled':''}>↓</button></span>`:''}</div>`).join('')}</section>`).join('');
+ const recommendedGroups=categories.map(([title,type])=>`<section class="legacy-content-group"><h4>${title}</h4>${selectableCatalog.filter(c=>c.type===type).map(c=>`<div class="legacy-content-name"><span class="legacy-pass">✓</span><b>${c.name}</b></div>`).join('')}</section>`).join('');
  const screenTypes=[['default','默认'],['rank','排行榜屏保'],['image','自定义图片屏保'],['video','运动视频屏保']];
  $('#admin-view').innerHTML=`<div class="legacy-admin-shell">
   <header class="legacy-admin-top"><div class="legacy-venue"><span class="legacy-home-icon">⌂</span><b>徐汇区新时代文明实践中心</b></div><div class="legacy-greeting">下午好，徐汇区新时代文明实践中心 <span class="legacy-menu">☰</span></div></header>
@@ -147,7 +149,7 @@ function renderExistingAdmin(){if(draft.poolMode==='recommended')draft.audience=
     ${isVideo?`<div class="legacy-video-settings">
      <div class="legacy-section-title"><div><h3>运动视频屏保</h3><p>设备端全屏播放运动预览，并支持一键跟练、点击或左右滑动切换内容。</p></div><span class="legacy-new">新增</span></div>
      <div class="legacy-form-grid"><label>配置方式<select id="legacy-pool-mode"><option value="recommended" ${draft.poolMode==='recommended'?'selected':''}>系统默认</option><option value="fixed" ${draft.poolMode==='fixed'?'selected':''}>自定义</option></select><small>${draft.poolMode==='fixed'?'自行选择运动内容并调整播放顺序。':'使用平台维护的默认内容和播放顺序。'}</small></label></div>
-     <div class="legacy-subcard"><h3>${draft.poolMode==='fixed'?'自定义内容及播放顺序':'系统默认内容预览'}</h3><p>${draft.poolMode==='fixed'?'序号表示实际播放顺序；勾选运动后用箭头调整，未选内容不参与播放。 ':`默认内容不可编辑；选择“自定义”后可选择运动并调整顺序。 `}${contentRule}</p>${draft.poolMode==='fixed'?`<div class="legacy-content-list">${fixedContentRows}</div>`:`<div class="legacy-content-groups">${recommendedGroups}</div>`}</div>
+     <div class="legacy-subcard"><h3>${draft.poolMode==='fixed'?'自定义内容及播放顺序':'系统默认内容预览'}</h3><p>${draft.poolMode==='fixed'?'分类与系统默认一致；序号表示跨分类的实际播放顺序，可用箭头调整，未选内容不参与播放。 ':`默认内容不可编辑；选择“自定义”后可选择运动并调整顺序。 `}${contentRule}</p>${draft.poolMode==='fixed'?`<div class="legacy-content-groups legacy-custom-groups">${fixedContentRows}</div>`:`<div class="legacy-content-groups">${recommendedGroups}</div>`}</div>
     </div>`:`<div class="legacy-image-settings"><div class="legacy-image-preview">${draft.images[0]?`<img src="${draft.images[0]}" alt="已上传屏保预览">`:'<img src="./assets/screensaver-fun-ai.jpg" alt="默认图片屏保预览">'}</div><div class="legacy-upload-line"><label class="legacy-upload-button">↥ 点击上传<input id="legacy-images-upload" type="file" accept="image/jpeg,image/png" multiple></label><span>请上传尺寸1440*2560，小于10M的JPG、PNG格式图片 <b>(${draft.images.length||1}/9)</b></span><button id="legacy-clear-images">恢复默认图片</button></div></div>`}
     <div id="admin-error" class="legacy-error" role="alert"></div>
    </section>
