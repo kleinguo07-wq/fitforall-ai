@@ -27,7 +27,7 @@ const requirementGroups=[
 ];
 const scopeNote='P0：除签到与里程碑外的全部需求。P1：签到与里程碑。';
 function priorityNote(code){return ['D03','D04','D05','D06','M01','M02'].includes(code)?'P1':'P0'}
-function seniorContentTable(){return `<div class="senior-content-table"><table class="review-table"><thead><tr><th>类型</th><th>新增内容</th><th>交付状态</th></tr></thead><tbody>${['椅子起立','坐姿抬脚','招财猫','坐姿肘碰膝'].map(name=>`<tr><td>体能单项</td><td>${name}</td><td>本期新增 · 内容待制作／接入</td></tr>`).join('')}<tr><td>AI 跟练</td><td>易筋经</td><td>新增 1 节 · 内容待制作／接入</td></tr></tbody></table></div>`}
+function seniorContentTable(){return `<div class="senior-content-table"><table class="review-table"><thead><tr><th>类型</th><th>新增内容</th><th>交付状态</th></tr></thead><tbody>${['椅子起立','坐姿抬脚','招财猫','坐姿肘碰膝'].map(name=>`<tr><td>体能单项</td><td>${name}</td><td>本期新增 · 内容待制作／接入</td></tr>`).join('')}<tr><td>AI 跟练</td><td>易筋经</td><td>新增 1 节 · 内容待制作／接入</td></tr></tbody></table></div><p class="senior-design-note">设计交付：设计同事需新增椅子起立、坐姿抬脚、招财猫、坐姿肘碰膝 4 个体能单项封面，以及 1 节易筋经 AI 跟练课程封面。</p>`}
 function scopePanel(){return `<div class="panel scope-panel"><h3>本期优先级与内容交付</h3><p>${scopeNote}</p>${seniorContentTable()}<p>新增内容独立于签到；正式内容 ID、完整动作说明、课程时长与识别配置待补齐。当前仅展示文字需求，尚未接入真实课程。</p></div>`}
 document.querySelectorAll('[data-doc-target]').forEach(button=>button.onclick=()=>{showView('docs');button.classList.add('active');$('#requirement-'+button.dataset.docTarget)?.scrollIntoView({block:'start'})});
 const registered=new Set(['chen','wang']);
