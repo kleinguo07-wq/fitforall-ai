@@ -17,7 +17,7 @@ const requirementGroups=[
   ["D08", "我的数据-签到入口", ["完成人脸确认后展示当前账号的个人运动数据。", "在本页提供“去签到／✓ 已签到”入口；未签到进入固定舒缓热身 AI 跟练，已签到打开月度日历。", "移除大屏累计运动卡片的奖牌和里程碑入口，仅保留个人运动数据。", "关闭签到日历返回本页；换用户或进入屏保时清理个人状态。"]]
  ]},
  {title:'管理后台',code:'B',pages:[
-  ['B01','屏保管理',['沿用现有客户管理后台的页面结构和导航。','支持选择默认、排行榜、自定义图片或运动视频屏保。','运动视频配置分为“系统默认”和“自定义”；系统默认使用平台内容，自定义展示全部可选运动，可选择内容并调整顺序。','视频素材由平台维护，统一从开头播放 30 秒，不设置预览起止区间。']],
+  ['B01','屏保管理',['沿用现有客户管理后台的页面结构和导航。','支持选择默认、排行榜、自定义图片或运动视频屏保。','运动视频配置分为“系统默认”和“自定义”；系统默认按体能、AI 跟练、趣味运动分类预览，自定义展示全部可选运动，可选择内容并调整顺序。','视频素材由平台维护，统一从开头播放 30 秒，不设置预览起止区间。']],
   ['B02','心率数据',['仅向配套采购心率设备的组织提供。','适用于用户与手环固定匹配的使用方式。','暂不支持多人共用同一手环。','有使用需求时联系服务该组织的销售同事。']]
  ]},
  {title:'小程序',code:'M',pages:[
@@ -128,7 +128,7 @@ function renderExistingAdmin(){if(draft.poolMode==='recommended')draft.audience=
  const poolItems=(draft.poolMode==='fixed'?order.map(id=>C.catalog.find(c=>c.id===id)):C.pool(draft));
  const contentRule='体能和 AI 跟练均从视频开头播放 30 秒后切换；不足 30 秒的视频播完即切换。';
  const fixedContentRows=poolItems.map(c=>`<div class="legacy-content-row"><input aria-label="选择${c.name}" type="checkbox" data-legacy-pool="${c.id}" ${draft.fixed.includes(c.id)?'checked':''}><div><span class="legacy-play-position">${draft.fixed.includes(c.id)?String(draft.fixed.indexOf(c.id)+1).padStart(2,'0'):'未选'}</span><b>${c.name}</b></div>${draft.fixed.includes(c.id)?`<span class="legacy-order"><button aria-label="上移${c.name}" data-legacy-up="${c.id}" ${draft.fixed.indexOf(c.id)===0?'disabled':''}>↑</button><button aria-label="下移${c.name}" data-legacy-down="${c.id}" ${draft.fixed.indexOf(c.id)===draft.fixed.length-1?'disabled':''}>↓</button></span>`:''}</div>`).join('');
- const recommendedGroups=[['体能',poolItems.filter(c=>c.type==='single')],['AI 跟练',poolItems.filter(c=>c.type==='ai')]].filter(([,items])=>items.length).map(([title,items])=>`<section class="legacy-content-group"><h4>${title}</h4>${items.map(c=>`<div class="legacy-content-name"><span class="legacy-pass">✓</span><b>${c.name}</b></div>`).join('')}</section>`).join('');
+ const recommendedGroups=[['体能',poolItems.filter(c=>c.type==='single')],['AI 跟练',poolItems.filter(c=>c.type==='ai')],['趣味运动',['切水果','节奏跳跃','顺序摸球','拳脚快打'].map(name=>({name}))]].filter(([,items])=>items.length).map(([title,items])=>`<section class="legacy-content-group"><h4>${title}</h4>${items.map(c=>`<div class="legacy-content-name"><span class="legacy-pass">✓</span><b>${c.name}</b></div>`).join('')}</section>`).join('');
  const screenTypes=[['default','默认'],['rank','排行榜屏保'],['image','自定义图片屏保'],['video','运动视频屏保']];
  $('#admin-view').innerHTML=`<div class="legacy-admin-shell">
   <header class="legacy-admin-top"><div class="legacy-venue"><span class="legacy-home-icon">⌂</span><b>徐汇区新时代文明实践中心</b></div><div class="legacy-greeting">下午好，徐汇区新时代文明实践中心 <span class="legacy-menu">☰</span></div></header>
