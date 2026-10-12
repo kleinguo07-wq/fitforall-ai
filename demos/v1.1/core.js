@@ -14,8 +14,11 @@ const catalog=[
 {id:'taichi',name:'八式太极拳',type:'ai',duration:600,kcal:22,audiences:['senior','adult'],warm:false,color:'lavender',tag:'AI 跟练'},
 {id:'wuqinxi',name:'五禽戏',type:'ai',duration:900,kcal:35,audiences:['senior'],warm:false,color:'amber',tag:'AI 跟练'},
 {id:'horse',name:'蹲马步',type:'single',duration:30,kcal:3,audiences:['adult'],warm:false,color:'blue',tag:'单项体能'}];
+// Local prototype keys; production games reuse the existing platform IDs and media.
+const funGames=[['demo-fruit','切水果'],['demo-rhythm','节奏跳跃'],['demo-touch','顺序摸球'],['demo-punch','拳脚快打']].map(([id,name])=>({id,name,type:'game',duration:30,kcal:0,audiences:['senior','adult','youth'],warm:false,color:'amber',tag:'趣味运动'}));
+catalog.push(...funGames);
 const seniorContent=['heel-raise','side-leg-swing','front-raise','push-sky','seated-knee-raise','seated-side-bend','baduan','baduan-full','taichi','wuqinxi'];
-const defaults={mode:'video',poolMode:'recommended',audience:'senior',fixed:[...seniorContent],warm:['warm'],threshold:10,idle:60,imageInterval:8,images:[]};
+const defaults={mode:'video',poolMode:'recommended',audience:'senior',fixed:[...seniorContent,...funGames.map(c=>c.id)],warm:['warm'],threshold:10,idle:60,imageInterval:8,images:[]};
 function pool(config){return config.poolMode==='fixed'?config.fixed.map(id=>catalog.find(c=>c.id===id)).filter(Boolean):catalog.filter(c=>c.screen!==false&&c.audiences.includes(config.audience));}
 function slice(course){if(!Number.isFinite(course.duration)||course.duration<=0)throw Error('视频时长必须为正数');return {start:0,end:Math.min(30,course.duration),repeats:1};}
 function day(timestamp){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(timestamp));}

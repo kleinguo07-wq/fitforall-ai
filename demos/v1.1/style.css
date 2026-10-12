@@ -109,3 +109,5 @@
 .data-checkin{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 16px;padding:16px;border-radius:14px;background:#e9fbf5;color:#167566}.data-checkin strong{font-size:18px}.data-checkin p{margin:6px 0 0;font-size:12px}.data-checkin button{padding:12px 18px;border-radius:10px;background:#ff9d19;color:white;font-size:16px;font-weight:700}.data-checkin button.is-checked{background:#198e79}
 
 .legacy-play-position{display:inline-block;min-width:28px;margin-right:8px;font-size:11px;font-weight:600;color:#2467ef;font-variant-numeric:tabular-nums}
+
+.legacy-custom-groups .legacy-content-row{gap:5px}.legacy-custom-groups .legacy-content-row>div{display:flex;align-items:center;min-width:0;flex:1}.legacy-custom-groups .legacy-play-position{min-width:20px;margin-right:4px}.legacy-custom-groups .legacy-content-row b{font-size:12px}.legacy-custom-groups .legacy-order{flex-shrink:0}
