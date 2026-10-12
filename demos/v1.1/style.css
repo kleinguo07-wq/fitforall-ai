@@ -111,3 +111,5 @@
 .legacy-play-position{display:inline-block;min-width:28px;margin-right:8px;font-size:11px;font-weight:600;color:#2467ef;font-variant-numeric:tabular-nums}
 
 .legacy-custom-groups .legacy-content-row{gap:5px}.legacy-custom-groups .legacy-content-row>div{display:flex;align-items:center;min-width:0;flex:1}.legacy-custom-groups .legacy-play-position{min-width:20px;margin-right:4px}.legacy-custom-groups .legacy-content-row b{font-size:12px}.legacy-custom-groups .legacy-order{flex-shrink:0}
+
+.tracking-priority-section{margin:22px 0 30px}.tracking-priority-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.tracking-priority-head h3{margin:0;color:#2467ef;font-size:18px}.tracking-priority-head span{font-size:12px;color:#8190a6}

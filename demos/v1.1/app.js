@@ -183,16 +183,21 @@ function trackingCell(value){return esc(value).replace(/\n/g,'<br>')}
 function updateTrackingRows(query=''){
  const filtered=trackingRows.filter(row=>row.join(' ').toLowerCase().includes(query.trim().toLowerCase()));
  $('#tracking-count').textContent=`显示 ${filtered.length} / ${trackingRows.length} 个事件`;
- $('#tracking-table-body').innerHTML=filtered.length?filtered.map(row=>`<tr>${row.map(cell=>`<td>${trackingCell(cell)}</td>`).join('')}</tr>`).join(''):'<tr><td colspan="9" class="tracking-empty">没有匹配的埋点</td></tr>';
+ for(const priority of ['P0','P1']){
+  const total=trackingRows.filter(row=>row[7].startsWith(priority+'。'));
+  const rows=filtered.filter(row=>row[7].startsWith(priority+'。'));
+  $('#tracking-count-'+priority).textContent=`${rows.length} / ${total.length} 个事件`;
+  $('#tracking-table-body-'+priority).innerHTML=rows.length?rows.map(row=>`<tr>${row.map(cell=>`<td>${trackingCell(cell)}</td>`).join('')}</tr>`).join(''):'<tr><td colspan="9" class="tracking-empty">没有匹配的埋点</td></tr>';
+ }
 }
 async function renderTracking(){
  const host=$('#tracking-view');
- host.innerHTML=`<div class="tracking-layout"><header class="docs-heading"><div><span class="eyebrow">EVENT TRACKING / V1.1</span><h2>本轮功能埋点</h2><p>签到与里程碑相关埋点为 P1，其余为 P0。新增课程复用既有课程事件，按正式内容 ID 区分。</p></div><a href="${trackingSource}" target="_blank" rel="noopener">查看源文档 ↗</a></header><div id="tracking-content" class="tracking-content" role="status">正在读取埋点表…</div></div>`;
+ host.innerHTML=`<div class="tracking-layout"><header class="docs-heading"><div><span class="eyebrow">EVENT TRACKING / V1.1</span><h2>本轮功能埋点</h2><p>P0：视频屏保、内容同步和后台配置。P1：签到与小程序里程碑。按最新需求分组，沿用既有 eventID。</p></div><a href="${trackingSource}" target="_blank" rel="noopener">查看源文档 ↗</a></header><div id="tracking-content" class="tracking-content" role="status">正在读取埋点表…</div></div>`;
  try{
-  if(!trackingRows){const response=await fetch(trackingSource);if(!response.ok)throw new Error(`HTTP ${response.status}`);const rows=parseTrackingRows(await response.text());if(!rows.length)throw new Error('未找到埋点表');trackingRows=rows}
+  if(!trackingRows){const response=await fetch(trackingSource+'?v=priority-tracking-18');if(!response.ok)throw new Error(`HTTP ${response.status}`);const rows=parseTrackingRows(await response.text());if(!rows.length)throw new Error('未找到埋点表');trackingRows=rows}
   const content=$('#tracking-content');
   content.removeAttribute('role');
-  content.innerHTML=`<div class="tracking-toolbar"><label for="tracking-search">搜索事件</label><input id="tracking-search" type="search" placeholder="输入 eventID、事件描述或属性…" autocomplete="off"><span id="tracking-count"></span></div><div class="tracking-table-wrap" role="region" aria-label="本轮功能埋点表" tabindex="0"><table class="tracking-table"><thead><tr>${trackingHeaders.map(header=>`<th scope="col">${esc(header)}</th>`).join('')}</tr></thead><tbody id="tracking-table-body"></tbody></table></div><div class="tracking-notes"><h3>统一口径</h3><p>事件需带端标识、应用版本、事件时间及匿名会话标识；业务日按上海时间的运动结束时间确定。有效运动、签到、奖牌达成以服务端结算为准。</p><p>评审 Demo 的推进时间、切换签到状态、里程碑数值调整等控制不计入正式产品埋点。上线前请与既有埋点字典核对事件名称及后端内容 ID。</p></div>`;
+  content.innerHTML=`<div class="tracking-toolbar"><label for="tracking-search">搜索事件</label><input id="tracking-search" type="search" placeholder="输入 eventID、事件描述或属性…" autocomplete="off"><span id="tracking-count"></span></div>${['P0','P1'].map(priority=>`<section class="tracking-priority-section"><header class="tracking-priority-head"><h3>${priority}</h3><span id="tracking-count-${priority}"></span></header><div class="tracking-table-wrap" role="region" aria-label="${priority} 功能埋点表" tabindex="0"><table class="tracking-table"><thead><tr>${trackingHeaders.map(header=>`<th scope="col">${esc(header)}</th>`).join('')}</tr></thead><tbody id="tracking-table-body-${priority}"></tbody></table></div></section>`).join('')}<div class="tracking-notes"><h3>统一口径</h3><p>事件需带端标识、应用版本、事件时间及匿名会话标识；业务日按上海时间的运动结束时间确定。有效运动、签到、奖牌达成以服务端结算为准。</p><p>评审 Demo 的推进时间、切换签到状态、里程碑数值调整等控制不计入正式产品埋点。上线前请与既有埋点字典核对事件名称及后端内容 ID。</p></div>`;
   $('#tracking-search').oninput=e=>updateTrackingRows(e.target.value);
   updateTrackingRows();
  }catch(error){$('#tracking-content').textContent=`埋点表读取失败：${error.message}。请通过本地服务或 GitHub Pages 打开工作台。`}
