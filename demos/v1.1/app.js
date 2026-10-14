@@ -9,7 +9,7 @@ const requirementGroups=[
  {title:'交互大屏',code:'D',pages:[
   ['D01','视频屏保',['体能与 AI 跟练复用运动详情页顶部视频，历史 16:9 视频按 9:16 居中裁切；趣味运动暂无现成演示视频，需新制作并随设备资源包打包到本地用于轮播。','体能、AI 跟练和趣味运动均从视频开头播放 30 秒后切换；不足 30 秒的视频播完即切换。','仅保留右侧正圆“下一个运动”按钮，支持左右滑动浏览运动；底部左侧 1/3 为“首页”，右侧 2/3 为“一键跟练”并进入站位确认。','声音按钮仅提供“静音”和“开启声音”两种状态，不提供音量增减，也不调整设备系统音量。']],
   ['D02','趣运动项目同步',['将现有“水果达人”和“元气对决”的游戏内容、入口素材与启动链路同步到成人（热力健将）和儿童（跃动少年）人群内容页，复用现有游戏本体。','两个人群页均将“水果达人”“元气对决”固定排在对应游戏分区第一、第二项；成人从“运动游戏”的“更多”进入，儿童从“趣味锻炼”的“更多”进入。']],
-  ['D03','设置默认值（线上问题）',['设置中的“人脸服务”默认选中“云端”。','设置中的“图片旋转角度”默认值为 90°。']],
+  ['D03','线上问题修正',['设置中的“人脸服务”默认选中“云端”。','设置中的“图片旋转角度”默认值为 90°。','趣味运动项目的运动详情页补充“个人最高分”板块，展示当前用户在该项目的历史最高分；无记录时显示暂无成绩。']],
   ['D04','老年运动内容扩充',['本期优先补充康乐银发内容：新增椅子起立、坐姿抬脚、招财猫、坐姿肘碰膝 4 个体能单项，来源为动作表第 2 块；保留第 1 块已有 6 项。','新增 1 节老年人适用的 AI 跟练课程：易筋经；作为独立运动内容，不依赖签到功能上线。','新增内容在康乐银发对应体能及 AI 跟练分区提供入口，接入已有详情、站位、运动及报告链路；内容发布后可供后台屏保选用。','新增演示视频按 9:16 竖屏制作；补齐内容 ID、完整动作说明、视频、课程时长及识别配置，经内容审核与实机验证后发布。']],
   ['D05','签到日历',['按自然月和周一至周日展示日期。','有效运动按上海时间自然日去重。','清楚区分已签到、今天和未来日期。']],
   ['D06','主动签到跳转热身操',['新制作一套用于签到热身的 AI 跟练内容，作为大屏“我的数据”中的“去签到”的固定运动项目。','开始运动后沿用站位阶段的 AI 跟练画面，并切换为计时和评分状态。','本轮不新增屏幕操作按钮；沿用设备现有提前退出机制，实际运动达到 10 秒即按有效运动结算。','有效运动自动完成当日签到，运动记录归属于已确认的用户和项目。']],
@@ -194,7 +194,7 @@ async function renderTracking(){
  const host=$('#tracking-view');
  host.innerHTML=`<div class="tracking-layout"><header class="docs-heading"><div><span class="eyebrow">EVENT TRACKING / V1.1</span><h2>本轮功能埋点</h2><p>P0：视频屏保、内容同步和后台配置。P1：签到与小程序里程碑。按最新需求分组，沿用既有 eventID。</p></div><a href="${trackingSource}" target="_blank" rel="noopener">查看源文档 ↗</a></header><div id="tracking-content" class="tracking-content" role="status">正在读取埋点表…</div></div>`;
  try{
-  if(!trackingRows){const response=await fetch(trackingSource+'?v=priority-tracking-18');if(!response.ok)throw new Error(`HTTP ${response.status}`);const rows=parseTrackingRows(await response.text());if(!rows.length)throw new Error('未找到埋点表');trackingRows=rows}
+  if(!trackingRows){const response=await fetch(trackingSource+'?v=game-personal-best-23');if(!response.ok)throw new Error(`HTTP ${response.status}`);const rows=parseTrackingRows(await response.text());if(!rows.length)throw new Error('未找到埋点表');trackingRows=rows}
   const content=$('#tracking-content');
   content.removeAttribute('role');
   content.innerHTML=`<p class="tracking-existing-note">如事件已有埋点，则忽略，不重复新增。</p><div class="tracking-toolbar"><label for="tracking-search">搜索事件</label><input id="tracking-search" type="search" placeholder="输入 eventID、事件描述或属性…" autocomplete="off"><span id="tracking-count"></span></div>${['P0','P1'].map(priority=>`<section class="tracking-priority-section"><header class="tracking-priority-head"><h3>${priority}</h3><span id="tracking-count-${priority}"></span></header><div class="tracking-table-wrap" role="region" aria-label="${priority} 功能埋点表" tabindex="0"><table class="tracking-table"><thead><tr>${trackingHeaders.map(header=>`<th scope="col">${esc(header)}</th>`).join('')}</tr></thead><tbody id="tracking-table-body-${priority}"></tbody></table></div></section>`).join('')}<div class="tracking-notes"><h3>统一口径</h3><p>事件需带端标识、应用版本、事件时间及匿名会话标识；业务日按上海时间的运动结束时间确定。有效运动、签到、奖牌达成以服务端结算为准。</p><p>评审 Demo 的推进时间、切换签到状态、里程碑数值调整等控制不计入正式产品埋点。上线前请与既有埋点字典核对事件名称及后端内容 ID。</p></div>`;
