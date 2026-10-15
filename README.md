@@ -6,7 +6,11 @@
 
 ## v1.1 需求评审
 
-已增加 [需求文档](docs/requirements/v1.1-product-review.md)、[功能埋点清单](docs/requirements/v1.1-event-tracking.md) 和 [交互 Demo](demos/v1.1/README.md)，覆盖双模式屏保、站位身份确认、签到、里程碑和两类运动报告。v1.1 为评审草稿，尚未上线。
+当前 [需求文档](docs/requirements/v1.1-product-review.md)、[功能埋点清单](docs/requirements/v1.1-event-tracking.md) 和 [交互 Demo](demos/v1.1/README.md) 仅展示本期 P0：视频屏保、趣运动项目同步、线上问题修正、老年内容扩充及后台需求。B02 保留文字需求，原型目录隐藏入口。v1.1 为评审草稿，尚未上线。
+
+## 待开发需求池
+
+2026-10-15 将本次 6 项 P1（22 条需求点）及 11 个专属埋点迁入独立[需求池](demos/backlog/)，状态为待排期。保留原编号、详细规则、可交互演示、验收、埋点及迁移前来源快照，当前版本不再展示这些内容。普通运动的共用事件只保留当前来源，后续扩展说明随待开发内容保存。
 
 在仓库根目录运行 `python3 -m http.server 8765`，打开 http://localhost:8765/demos/v1.1/ 。也可直接打开 `demos/v1.1/index.html`。
 

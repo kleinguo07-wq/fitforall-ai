@@ -99,6 +99,9 @@ def render_index(versions: list[dict[str, str]]) -> str:
     .card-meta {{ margin-top:auto; padding:22px 0; color:#8090a8; border-top:1px solid #edf1f7; font-size:13px; }}
     .version-card strong {{ color:var(--blue); font-size:16px; }}
     footer {{ margin-top:52px; color:#8b99ac; font-size:13px; }}
+    .backlog-entry {{ display:block; margin-top:24px; padding:22px 28px; color:var(--ink); background:#fff; border:1px solid var(--line); border-radius:18px; text-decoration:none; }}
+    .backlog-entry strong {{ color:var(--blue); }}
+    .backlog-entry p {{ margin:8px 0 0; color:var(--muted); font-size:14px; }}
     @media (max-width:600px) {{ .shell {{ width:min(100% - 28px,1080px); padding-top:30px; }} .brand {{ margin-bottom:50px; }} .intro {{ margin-bottom:38px; }} }}
   </style>
 </head>
@@ -111,6 +114,7 @@ def render_index(versions: list[dict[str, str]]) -> str:
     <section class="versions" aria-label="版本列表">
       {cards}
     </section>
+    <a class="backlog-entry" href="./demos/backlog/"><strong>待开发需求池 →</strong><p>保留待排期的需求、演示、验收与埋点，独立于当前版本。</p></a>
     <footer>FitForAll AI · AI 全民健身机产品工作台</footer>
   </main>
 </body>
