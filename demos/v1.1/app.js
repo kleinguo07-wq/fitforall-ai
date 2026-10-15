@@ -2,7 +2,7 @@
 'use strict';
 const C=FitCore,$=s=>document.querySelector(s),D=$('#device');
 const names={chen:'陈阿姨',wang:'王叔叔',new:'新用户'};
-let dataMobile=false,calendarOpen=false,requirementsOpen=false,adminPage='screen',milestoneReturn='home',audienceDemo='adult',audienceYouthDetail=false;
+let dataMobile=false,calendarOpen=false,requirementsOpen=false,adminPage='screen',heartDevicePurchased=false,milestoneReturn='home',audienceDemo='adult',audienceYouthDetail=false;
 const labels={data:'我的数据',video:'视频屏保',image:'图片屏保',home:'设备首页',audience:'趣运动项目同步',guide:'站位与身份确认',exercise:'主动签到跳转热身操',report:'运动结果报告-签到及里程碑累计情况',milestones:'个人里程碑'};
 const reviewPages=[['video','D01','视频屏保',4],['calendar','D05','签到日历',3],['guide','—','站位与身份确认',0],['exercise','D06','主动签到跳转热身操',4],['report','D07','运动结果报告-签到及里程碑累计情况',3],['data-screen','D08','我的数据-签到入口',4],['milestones','M02','个人里程碑',4],['audience','D02','趣运动项目同步',2],['data-mobile','M01','里程碑入口',4]];
 const requirementGroups=[
@@ -18,7 +18,7 @@ const requirementGroups=[
  ]},
  {title:'管理后台',code:'B',pages:[
   ['B01','屏保管理',['沿用现有客户管理后台的页面结构和导航。','支持选择默认、排行榜、自定义图片或运动视频屏保。','运动视频配置分为“系统默认”和“自定义”；系统默认按体能、AI 跟练、趣味运动分类预览，自定义复用默认分类和内容，可选择内容并调整顺序。','视频素材由平台维护；趣味运动新制作演示视频并随设备资源包存放本地。三类视频统一从开头播放 30 秒，不设置预览起止区间。']],
-  ['B02','心率数据',['仅向配套采购心率设备的组织提供。','适用于用户与手环固定匹配的使用方式。','暂不支持多人共用同一手环。','有使用需求时联系服务该组织的销售同事。']]
+  ['B02','心率数据入口',['按当前组织是否购买心率设备，控制后台左侧“心率数据”入口。','未购买时不显示入口，移除原无数据说明卡片。','已购买时显示入口，沿用原有心率数据页面。','设备离线或暂无数据不作为隐藏入口的依据；切换组织时重新判断。']]
  ]},
  {title:'小程序',code:'M',pages:[
   ["M01", "里程碑入口", ["展示当前登录账号的个人运动数据。", "累计运动卡片右上角保留奖牌入口，进入 M02 个人里程碑。", "里程碑仅保留小程序入口，展示三个累计维度的最佳奖牌和后续目标。", "跑步与休闲锻炼未接入时显示空状态。"]],
@@ -94,36 +94,6 @@ function updateRequirementsNote(){if(!requirementsOpen)return;const content=curr
 function toggleRequirements(open){requirementsOpen=open;const area=$('.stage-area'),button=$('#open-requirements'),panel=$('#context-requirements');area.classList.toggle('requirements-open',open);button.setAttribute('aria-expanded',String(open));panel.setAttribute('aria-hidden',String(!open));button.textContent=open?'收起本页需求':'查看本页需求';if(open)updateRequirementsNote();setTimeout(resize,0)}
 function showView(next){if(next!=='device'&&requirementsOpen)toggleRequirements(false);view=next;document.body.classList.remove('legacy-admin-open');const navView=next==='admin'?'device':next;document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.view===navView));if(next!=='device')document.querySelectorAll('[data-review-page]').forEach(b=>b.classList.remove('active'));document.querySelectorAll('[data-admin-page]').forEach(b=>b.classList.toggle('active',next==='admin'&&b.dataset.adminPage===adminPage));['device','admin','spec','docs','tracking'].forEach(v=>$('#'+v+'-view').classList.toggle('hidden',v!==next));$('#view-title').textContent={device:'激发用户使用互动屏',admin:'让合适的内容，出现在合适的场地',spec:'先看说明，再走流程',docs:'按终端查看本轮需求',tracking:'查看本轮功能埋点'}[next];if(next==='admin'){draft=structuredClone(config);renderExistingAdmin()}if(next==='spec')renderSpec();if(next==='docs')renderDocs();document.querySelectorAll('[data-doc-target]').forEach(b=>b.classList.toggle('active',false));if(next==='tracking')renderTracking();if(next==='device'){render();idle=0}const video=D.querySelector('video');if(video){if(next==='device')video.play().catch(()=>{});else video.pause()}resize()}
 function renderExistingAdmin(){if(draft.poolMode==='recommended')draft.audience=C.defaults.audience;
- if(adminPage==='heart'){
-  $('#admin-view').innerHTML=`<div class="legacy-admin-shell">
-   <header class="legacy-admin-top"><div class="legacy-venue"><span class="legacy-home-icon">⌂</span><b>徐汇区新时代文明实践中心</b></div><div class="legacy-greeting">下午好，徐汇区新时代文明实践中心 <span class="legacy-menu">☰</span></div></header>
-   <aside class="legacy-admin-side"><nav>
-    <button><i class="legacy-icon blue">♙</i><span>数据统计</span><em>⌄</em></button>
-    <button class="selected" data-admin-section="heart"><i class="legacy-icon red">♥</i><span>心率数据</span><em>⌄</em></button>
-    <button><i class="legacy-icon amber">▤</i><span>运动视频</span></button>
-    <button><i class="legacy-icon green">◧</i><span>用户管理</span></button>
-    <button><i class="legacy-icon mint">♙</i><span>账号管理</span></button>
-    <button><i class="legacy-icon yellow">▣</i><span>我的账号</span></button>
-    <button data-admin-section="screen"><i class="legacy-icon purple">▰</i><span>屏保管理</span></button>
-   </nav></aside>
-   <main class="legacy-admin-main"><div class="legacy-page-heading"><h1>心率数据</h1><button id="leave-admin">返回产品评审</button></div>
-    <section class="heart-empty-card" aria-labelledby="heart-empty-title">
-     <div class="heart-device-art" aria-hidden="true"><span class="heart-watch"><i>♥</i></span><span class="heart-pulse"></span></div>
-     <span class="heart-device-tag">需配套心率设备</span>
-     <h2 id="heart-empty-title">暂无心率数据</h2>
-     <p class="heart-empty-lead">本功能仅供已配套采购心率设备的组织使用。</p>
-     <div class="heart-use-grid">
-      <div><span class="heart-use-icon supported">✓</span><section><b>适用场景</b><p>一位用户与一只手环固定匹配使用。</p></section></div>
-      <div><span class="heart-use-icon unsupported">!</span><section><b>暂不支持</b><p>多位用户共用同一只手环。</p></section></div>
-     </div>
-     <div class="heart-sales-note"><span>i</span><p>如需开通或了解配套方案，请联系服务您的销售同事。</p></div>
-    </section>
-   </main>
-  </div>`;
-  mountAdminReview();
-  bindExistingAdmin();
-  return;
- }
  const selectableCatalog=C.pool({...C.defaults,poolMode:'recommended'}),validIds=new Set(selectableCatalog.map(c=>c.id));draft.fixed=draft.fixed.filter(id=>validIds.has(id));
  const order=[...draft.fixed,...selectableCatalog.map(c=>c.id).filter(id=>!draft.fixed.includes(id))],isVideo=draft.mode==='video';
  const poolItems=order.map(id=>selectableCatalog.find(c=>c.id===id));
@@ -136,7 +106,7 @@ function renderExistingAdmin(){if(draft.poolMode==='recommended')draft.audience=
   <header class="legacy-admin-top"><div class="legacy-venue"><span class="legacy-home-icon">⌂</span><b>徐汇区新时代文明实践中心</b></div><div class="legacy-greeting">下午好，徐汇区新时代文明实践中心 <span class="legacy-menu">☰</span></div></header>
   <aside class="legacy-admin-side"><nav>
    <button><i class="legacy-icon blue">♙</i><span>数据统计</span><em>⌄</em></button>
-   <button data-admin-section="heart"><i class="legacy-icon red">♥</i><span>心率数据</span><em>⌄</em></button>
+   ${heartDevicePurchased?'<button class="heart-entry" data-admin-section="heart"><i class="legacy-icon red">♥</i><span>心率数据</span><em>⌄</em></button>':''}
    <button><i class="legacy-icon amber">▤</i><span>运动视频</span></button>
    <button><i class="legacy-icon green">◧</i><span>用户管理</span></button>
    <button><i class="legacy-icon mint">♙</i><span>账号管理</span></button>
@@ -159,11 +129,25 @@ function renderExistingAdmin(){if(draft.poolMode==='recommended')draft.audience=
  mountAdminReview();
  bindExistingAdmin();
 }
-function mountAdminReview(){const host=$('#admin-view'),shell=host.querySelector('.legacy-admin-shell'),page=requirementGroups[1].pages.find(([,title])=>title===(adminPage==='heart'?'心率数据':'屏保管理')),title=page[1],items=page[2],code=page[0];host.classList.add('admin-review-workspace');const stage=document.createElement('div');stage.className='admin-stage-area';const frame=document.createElement('div');frame.className='admin-preview-frame';stage.append(frame);frame.append(shell);host.prepend(stage);host.insertAdjacentHTML('beforeend',`<aside class="inspector admin-review-inspector"><div class="inspector-head"><span class="eyebrow">PAGE REVIEW</span><h2>本页需求与演示</h2><p><span>${code} ${title}</span><b>${items.length} 项变动</b></p></div><div class="control-group current-page-requirements"><h3>本页需求</h3><ul>${items.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></div><div class="control-group"><h3>本页演示控制</h3>${adminPage==='screen'?'<div class="scenario-grid"><button data-admin-demo="video">运动视频配置</button><button data-admin-demo="image">图片配置</button></div><p class="admin-control-note">中间页面保留原有表单交互，可切换系统默认／自定义；自定义可选择内容并排序。</p>':'<p class="admin-control-note">当前展示心率数据无数据状态，本页无需额外模拟参数。</p>'}</div><div class="status-box"><span class="eyebrow">当前状态</span><p>${adminPage==='screen'?`屏保管理 · ${draft.mode==='video'?'运动视频屏保':'自定义图片屏保'}`:'心率数据 · 暂无配套设备数据'}</p></div></aside>`);document.querySelectorAll('[data-admin-page]').forEach(b=>b.classList.toggle('active',b.dataset.adminPage===adminPage));document.querySelectorAll('[data-admin-demo]').forEach(b=>b.onclick=()=>{draft.mode=b.dataset.adminDemo;renderExistingAdmin()})}
+function mountAdminReview(){
+ const host=$('#admin-view'),shell=host.querySelector('.legacy-admin-shell'),isHeart=adminPage==='heart';
+ const page=requirementGroups[1].pages.find(([code])=>code===(isHeart?'B02':'B01')),[code,title,items]=page;
+ host.classList.add('admin-review-workspace');
+ host.classList.toggle('heart-entry-review',isHeart);
+ const stage=document.createElement('div');stage.className='admin-stage-area';
+ const frame=document.createElement('div');frame.className='admin-preview-frame';
+ stage.append(frame);frame.append(shell);host.prepend(stage);
+ const controls=isHeart?`<div class="scenario-grid"><button data-heart-purchase="false" class="${!heartDevicePurchased?'active':''}" aria-pressed="${!heartDevicePurchased}">未购买心率设备</button><button data-heart-purchase="true" class="${heartDevicePurchased?'active':''}" aria-pressed="${heartDevicePurchased}">已购买心率设备</button></div><p class="admin-control-note">切换采购状态，查看后台左侧入口显隐。背景沿用屏保管理页，心率数据页不在本轮重新设计。</p>`:'<div class="scenario-grid"><button data-admin-demo="video">运动视频配置</button><button data-admin-demo="image">图片配置</button></div><p class="admin-control-note">中间页面保留原有表单交互，可切换系统默认／自定义；自定义可选择内容并排序。</p>';
+ const status=isHeart?(heartDevicePurchased?'已购买心率设备 · 显示心率数据入口':'未购买心率设备 · 隐藏心率数据入口'):`屏保管理 · ${draft.mode==='video'?'运动视频屏保':'自定义图片屏保'}`;
+ host.insertAdjacentHTML('beforeend',`<aside class="inspector admin-review-inspector"><div class="inspector-head"><span class="eyebrow">PAGE REVIEW</span><h2>本页需求与演示</h2><p><span>${code} ${title}</span><b>${items.length} 项变动</b></p></div><div class="control-group current-page-requirements"><h3>本页需求</h3><ul>${items.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></div><div class="control-group"><h3>本页演示控制</h3>${controls}</div><div class="status-box"><span class="eyebrow">当前状态</span><p>${status}</p></div></aside>`);
+ document.querySelectorAll('[data-admin-page]').forEach(b=>b.classList.toggle('active',b.dataset.adminPage===adminPage));
+ document.querySelectorAll('[data-admin-demo]').forEach(b=>b.onclick=()=>{draft.mode=b.dataset.adminDemo;renderExistingAdmin()});
+ document.querySelectorAll('[data-heart-purchase]').forEach(b=>b.onclick=()=>{heartDevicePurchased=b.dataset.heartPurchase==='true';renderExistingAdmin()});
+}
 function rerenderExistingAdminAtScroll(focusSelector){const scroller=$('.admin-preview-frame')||$('.legacy-admin-shell'),scrollTop=scroller?.scrollTop||0;renderExistingAdmin();const nextScroller=$('.admin-preview-frame')||$('.legacy-admin-shell');if(nextScroller)nextScroller.scrollTop=scrollTop;if(focusSelector){const target=D.ownerDocument.querySelector(focusSelector);if(target)target.focus({preventScroll:true})}}
 function bindExistingAdmin(){
  $('#leave-admin').onclick=()=>showView('device');const cancel=$('#legacy-cancel');if(cancel)cancel.onclick=()=>showView('device');
- document.querySelectorAll('[data-admin-section]').forEach(b=>b.onclick=()=>{adminPage=b.dataset.adminSection;renderExistingAdmin()});
+ document.querySelectorAll('[data-admin-section]').forEach(b=>b.onclick=()=>{const section=b.dataset.adminSection;if(section==='heart'&&!heartDevicePurchased)return;adminPage=section;renderExistingAdmin();if(section==='heart')toast('心率数据沿用现有页面，本轮仅演示入口显隐')});
  document.querySelectorAll('[data-screen-type]').forEach(b=>b.onclick=()=>{const type=b.dataset.screenType;if(type==='video'||type==='image'){draft.mode=type;renderExistingAdmin();return}toast(`${b.textContent.trim()}为现有功能，本轮仅展示入口`)});
  const pool=$('#legacy-pool-mode');if(pool)pool.onchange=e=>{draft.poolMode=e.target.value;rerenderExistingAdminAtScroll('#legacy-pool-mode')};
  document.querySelectorAll('[data-legacy-pool]').forEach(b=>b.onchange=()=>{const id=b.dataset.legacyPool;draft.fixed=b.checked?[...draft.fixed,id]:draft.fixed.filter(item=>item!==id);rerenderExistingAdminAtScroll(`[data-legacy-pool="${id}"]`)});
@@ -194,7 +178,7 @@ async function renderTracking(){
  const host=$('#tracking-view');
  host.innerHTML=`<div class="tracking-layout"><header class="docs-heading"><div><span class="eyebrow">EVENT TRACKING / V1.1</span><h2>本轮功能埋点</h2><p>P0：视频屏保、内容同步和后台配置。P1：签到与小程序里程碑。按最新需求分组，沿用既有 eventID。</p></div><a href="${trackingSource}" target="_blank" rel="noopener">查看源文档 ↗</a></header><div id="tracking-content" class="tracking-content" role="status">正在读取埋点表…</div></div>`;
  try{
-  if(!trackingRows){const response=await fetch(trackingSource+'?v=game-personal-best-23');if(!response.ok)throw new Error(`HTTP ${response.status}`);const rows=parseTrackingRows(await response.text());if(!rows.length)throw new Error('未找到埋点表');trackingRows=rows}
+  if(!trackingRows){const response=await fetch(trackingSource+'?v=heartrate-entry-24');if(!response.ok)throw new Error(`HTTP ${response.status}`);const rows=parseTrackingRows(await response.text());if(!rows.length)throw new Error('未找到埋点表');trackingRows=rows}
   const content=$('#tracking-content');
   content.removeAttribute('role');
   content.innerHTML=`<p class="tracking-existing-note">如事件已有埋点，则忽略，不重复新增。</p><div class="tracking-toolbar"><label for="tracking-search">搜索事件</label><input id="tracking-search" type="search" placeholder="输入 eventID、事件描述或属性…" autocomplete="off"><span id="tracking-count"></span></div>${['P0','P1'].map(priority=>`<section class="tracking-priority-section"><header class="tracking-priority-head"><h3>${priority}</h3><span id="tracking-count-${priority}"></span></header><div class="tracking-table-wrap" role="region" aria-label="${priority} 功能埋点表" tabindex="0"><table class="tracking-table"><thead><tr>${trackingHeaders.map(header=>`<th scope="col">${esc(header)}</th>`).join('')}</tr></thead><tbody id="tracking-table-body-${priority}"></tbody></table></div></section>`).join('')}<div class="tracking-notes"><h3>统一口径</h3><p>事件需带端标识、应用版本、事件时间及匿名会话标识；业务日按上海时间的运动结束时间确定。有效运动、签到、奖牌达成以服务端结算为准。</p><p>评审 Demo 的推进时间、切换签到状态、里程碑数值调整等控制不计入正式产品埋点。上线前请与既有埋点字典核对事件名称及后端内容 ID。</p></div>`;
