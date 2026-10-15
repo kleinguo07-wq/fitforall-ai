@@ -1,0 +1,31 @@
+{
+  "migrated_on": "2026-10-15",
+  "source_commit": "9b699b8193c18620f2624d5f847e06d8a39dead1",
+  "status": "待排期",
+  "requirement_ids": [
+    "D05",
+    "D06",
+    "D07",
+    "D08",
+    "M01",
+    "M02"
+  ],
+  "requirement_point_count": 22,
+  "event_ids": [
+    "click_mydata_checkin",
+    "PV_checkin_calendar",
+    "result_daily_checkin",
+    "PV_training_report_growth",
+    "click_training_report_checkin",
+    "click_mydata_medal",
+    "PV_personal_milestone",
+    "click_personal_milestone_targets",
+    "result_milestone_achieved",
+    "PV_mydata_checkin",
+    "PV_mydata_medal"
+  ],
+  "source_sha256": {
+    "v1.1-review-before-migration.md": "4910fa38ddf595c72d4c6e37c841b5d2c3696f18250acf5bac1e3de9929b1c7d",
+    "v1.1-tracking-before-migration.md": "74c052b0e1f386ae17dc8c0ff53a169d1ddf2b7d3bb1c1d15c63d16b306035c9"
+  }
+}

@@ -1,16 +1,5 @@
 const assert=require('node:assert/strict');
 const C=require('../core.js');
-const r={id:'a',userId:'chen',seconds:11,kcal:2,reason:'early',timestamp:Date.parse('2026-09-09T08:00:00Z')};
-assert.equal(C.eligible({...r,seconds:9},10),false);
-assert.equal(C.eligible({...r,seconds:10},10),true);
-assert.equal(C.eligible(r,10),true);
-assert.equal(C.eligible({...r,seconds:0,reason:'normal'},10),true);
-for(const change of [{userId:null},{id:null},{seconds:NaN},{kcal:-1},{reason:'unknown'},{timestamp:NaN}])assert.equal(C.eligible({...r,...change},10),false);
-let a=C.settle([],r,10);assert.equal(a.added,true);
-a=C.settle(a.records,r,10);assert.equal(a.added,false);assert.equal(a.records.length,1);
-a=C.settle(a.records,{...r,id:'b'},10);assert.deepEqual(C.totals(a.records,'chen'),{days:1,kcal:4,seconds:22});
-a=C.settle(a.records,{...r,id:'c',timestamp:r.timestamp+86400000},10);assert.equal(C.totals(a.records,'chen').days,2);assert.equal(C.totals(a.records,'wang').days,0);
-assert.notEqual(C.day(Date.parse('2026-09-09T15:59:59Z')),C.day(Date.parse('2026-09-09T16:00:00Z')));
 for(const type of ['single','ai']){
  for(const duration of [10,30,720])assert.deepEqual(C.slice({type,duration}),{start:0,end:Math.min(30,duration),repeats:1});
  for(const duration of [0,-1,NaN,Infinity,undefined])assert.throws(()=>C.slice({type,duration}));
@@ -19,10 +8,4 @@ assert.deepEqual(C.pool({...C.defaults,poolMode:'fixed',fixed:['jump','baduan']}
 assert.equal(C.pool({...C.defaults,poolMode:'fixed',fixed:[]}).length,0);
 assert.deepEqual(C.pool({...C.defaults,poolMode:'fixed',fixed:['demo-punch','heel-raise','demo-fruit']}).map(c=>c.name),['拳脚快打','提踵','切水果']);
 assert.deepEqual(C.pool({...C.defaults,poolMode:'recommended',audience:'senior'}).map(c=>c.name),['提踵','单侧外摆腿','前侧平举','徒手推天','坐姿收腹提膝','坐姿身体侧屈','热身操','八段锦','八式太极拳','五禽戏','切水果','节奏跳跃','顺序摸球','拳脚快打']);
-assert.deepEqual(C.levels.days,[1,3,7,14,30,60,100,180,365]);
-assert.deepEqual(C.levels.minutes,[10,30,60,150,300,600,1500,3000,6000]);
-assert.deepEqual(C.levels.kcal,[50,100,300,500,1000,2000,5000,10000,20000]);
-assert.deepEqual(C.progress(45,C.levels.minutes),{previous:30,next:60,remaining:15,ratio:.75});
-assert.equal(C.progress(0,C.levels.days).ratio,0);
-assert.equal(C.progress(3,C.levels.days).ratio,3/7);
-console.log('PASS: completion boundaries, invalid records, idempotency, days, identity isolation, opening 30-second preview boundaries, ordered pool, confirmed milestone levels');
+console.log('PASS: current preview boundaries and ordered/default content pools');

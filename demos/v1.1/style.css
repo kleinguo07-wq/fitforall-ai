@@ -114,3 +114,5 @@
 .tracking-priority-section{margin:22px 0 30px}.tracking-priority-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.tracking-priority-head h3{margin:0;color:#2467ef;font-size:18px}.tracking-priority-head span{font-size:12px;color:#8190a6}
 
 .legacy-admin-side .heart-entry{position:relative;z-index:2}.heart-entry-review .legacy-config-card,.heart-entry-review .legacy-actions{opacity:.4;pointer-events:none}
+
+.backlog-link{text-decoration:none}
