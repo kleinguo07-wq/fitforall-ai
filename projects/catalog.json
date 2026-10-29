@@ -1,0 +1,26 @@
+[
+  {
+    "id": "fitness",
+    "title": "全民健身机",
+    "form": "竖屏",
+    "description": "查看全民健身机的版本需求、交互演示与待开发需求池。",
+    "status": "版本评审",
+    "current": "v1.1"
+  },
+  {
+    "id": "landscape",
+    "title": "公园横屏",
+    "form": "横屏",
+    "description": "AI跟练、体能训练、运动视频、趣味运动与本站服务。",
+    "status": "交互原型",
+    "current": "v0.6"
+  },
+  {
+    "id": "trail-checkin",
+    "title": "智慧步道打卡杆",
+    "form": "户外打卡杆",
+    "description": "预留独立项目入口，后续在此整理需求、方案与原型。",
+    "status": "筹备中",
+    "current": ""
+  }
+]

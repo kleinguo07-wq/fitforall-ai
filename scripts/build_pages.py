@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the static GitHub Pages site from every demos/v* directory."""
+"""Build project navigation and keep each product's versions independent."""
 
 from __future__ import annotations
 
@@ -8,6 +8,8 @@ import json
 import re
 import shutil
 from pathlib import Path
+
+from project_pages import load_projects, render_hub, render_landscape, render_pending
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -144,9 +146,32 @@ def main() -> None:
             shutil.copy2(asset, OUTPUT / asset.name)
 
     versions = [load_version(path) for path in version_dirs]
-    (OUTPUT / "index.html").write_text(render_index(versions), encoding="utf-8")
+    projects = load_projects(ROOT)
+    project_sources = ROOT / "projects"
+    shutil.copytree(project_sources, OUTPUT / "projects", ignore=shutil.ignore_patterns("catalog.json", "README.md", ".DS_Store"))
+    for project in projects:
+        target = OUTPUT / "projects" / project["id"]
+        target.mkdir(parents=True, exist_ok=True)
+        if project["id"] == "fitness":
+            # Existing vertical version URLs remain /demos/v*/.
+            content = render_index(versions).replace('href="./demos/', 'href="../../demos/')
+            content = content.replace('<div class="brand">', '<a href="../../">← 项目总览</a><div class="brand">', 1)
+            content = content.replace("产品需求与交互原型<br>统一评审入口", "全民健身机 · 竖屏<br>版本评审")
+        elif project["id"] == "landscape":
+            landscape_versions = sorted(
+                (item for item in (project_sources / "landscape").glob("v*")
+                 if item.is_dir() and (item / "index.html").is_file() and (item / "version.json").is_file()),
+                key=version_key, reverse=True,
+            )
+            if not landscape_versions:
+                raise SystemExit("No publishable landscape prototype found")
+            content = render_landscape(project, landscape_versions)
+        else:
+            content = render_pending(project)
+        (target / "index.html").write_text(content, encoding="utf-8")
+    (OUTPUT / "index.html").write_text(render_hub(projects), encoding="utf-8")
     (OUTPUT / ".nojekyll").touch()
-    print(f"Built {OUTPUT} with {len(versions)} version(s): {', '.join(item['name'] for item in versions)}")
+    print(f"Built {len(projects)} projects; retained {len(versions)} vertical version(s): {', '.join(item['name'] for item in versions)}")
 
 
 if __name__ == "__main__":
