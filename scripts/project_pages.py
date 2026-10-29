@@ -57,7 +57,7 @@ def render_landscape(project: dict[str, str], version_dirs: list[Path]) -> str:
         rows.append(f'''<a class="version-row" href="./{e(directory.name)}/#home"><div><b>{e(metadata['title'])}</b><small>{e(metadata['status'])} · 更新于 {e(metadata.get('updated', metadata.get('date', '')))}</small></div><span>打开原型 →</span></a>''')
     content = f'''<div class="meta"><span>横屏 · 独立项目</span><span class="status">交互原型</span></div>
 <h1>{e(project['title'])}</h1><p class="intro">{e(project['description'])}</p><section class="versions" aria-label="横屏原型版本">{''.join(rows)}</section>
-<section class="panel"><h2>评审说明</h2><p>展示大屏内容选择、站位准备、运动过程、结果与本站服务。摄像头、评分、计时、账号、二维码、视频、环境及榜单均为模拟；课程目录和可点击流程不代表真实功能已交付。</p></section>'''
+<section class="panel"><h2>评审说明</h2><p>热身、AI跟练和体能训练展示内容选择与详情，运动过程沿用原产品，仅保留文字说明。趣味运动保留站位、互动与结果演示，运动视频保留观看流程。摄像头、评分、计时、账号、二维码、媒体、环境及榜单均为模拟；原型不代表真实功能已交付。</p></section>'''
     return page(project["title"], content, "../../")
 
 
