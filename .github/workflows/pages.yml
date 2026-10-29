@@ -6,7 +6,8 @@ on:
     paths:
       - "demos/**"
       - "docs/**"
-      - "scripts/build_pages.py"
+      - "projects/**"
+      - "scripts/**"
       - "*.png"
       - "*.jpg"
       - "*.jpeg"

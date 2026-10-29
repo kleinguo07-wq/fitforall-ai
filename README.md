@@ -14,24 +14,33 @@
 
 在仓库根目录运行 `python3 -m http.server 8765`，打开 http://localhost:8765/demos/v1.1/ 。也可直接打开 `demos/v1.1/index.html`。
 
-## 在线版本工作台
+## 在线项目工作台
 
-GitHub Pages 统一入口为 <https://kleinguo07-wq.github.io/fitforall-ai/>，每个版本保留独立地址，例如 v1.1 为 <https://kleinguo07-wq.github.io/fitforall-ai/demos/v1.1/>。
+GitHub Pages 统一入口：<https://kleinguo07-wq.github.io/fitforall-ai/>。先按产品项目选择，再查看该项目的版本；原型不代表真实产品已交付。
 
-后续新增版本时：
+| 项目 | 独立入口 | 当前内容 |
+| --- | --- | --- |
+| 全民健身机 · 竖屏 | [项目页](https://kleinguo07-wq.github.io/fitforall-ai/projects/fitness/) | v1.1需求工作台及待开发需求池 |
+| 公园横屏 | [项目页](https://kleinguo07-wq.github.io/fitforall-ai/projects/landscape/) | [v0.6交互原型](https://kleinguo07-wq.github.io/fitforall-ai/projects/landscape/v0.6/#home) |
+| 智慧步道打卡杆 | [项目页](https://kleinguo07-wq.github.io/fitforall-ai/projects/trail-checkin/) | 筹备中，暂无原型 |
 
-1. 复制现有版本目录为 `demos/v1.2/`，保证目录内有 `index.html`。
-2. 在该目录添加 `version.json`，填写版本标题、简介、状态和更新时间。
-3. 将变更合并到 `main`。GitHub Actions 会自动重建总站、保留旧版本并发布新版本。
+已有竖屏地址 `demos/v1.1/`、`demos/backlog/` 保持不变。横屏使用 `projects/landscape/v0.6/`，不放入竖屏版本列表。本仓库的竖屏产品基线不自动适用于横屏或打卡杆。
 
-本地检查完整发布结果时运行：
+后续维护：
+
+1. 竖屏版本仍放在 `demos/v*/`，目录内保留 `index.html` 与 `version.json`。
+2. 横屏公开快照位于 `projects/landscape/v*/`；同步方式见 [横屏发布说明](projects/landscape/README.md)。只提交经过检查的公开原型，不复制原始表格、会议、研究或归档。
+3. 项目名称、状态和当前版本在 `projects/catalog.json` 维护。打卡杆有可评审原型后再增加版本与构建规则，不提前标记为已实现。
+4. 合并到 `main` 后，GitHub Actions 自动构建并发布。
+
+本地检查完整发布结果：
 
 ```sh
 python3 scripts/build_pages.py
 python3 -m http.server 8765 --directory _site
 ```
 
-然后打开 <http://localhost:8765/>。生成的 `_site` 目录只用于本地检查和自动发布，不需要提交。
+打开 <http://localhost:8765/>。`_site` 仅用于检查与自动发布，不提交。
 
 ## 产品形态
 
