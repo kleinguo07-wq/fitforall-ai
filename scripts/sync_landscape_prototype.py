@@ -86,7 +86,7 @@ def audit(text):
             raise ValueError(f"Publication audit rejected pattern: {pattern}")
     for marker in ["const HOME_ROTATION_MS=20000", "remaining<=5000",
                    "function movementThumbnail", "const views=", "function switchModule",
-                   "function prototypeHelpItems", "function togglePrototypeHelp",
+                   "function prototypeHelpItems", "function togglePrototypeHelp", 'data-ranking-metric="calories"',
                    "热身、AI跟练和体能训练的运动过程沿用原产品，本原型展示到详情选择为止。"]:
         if marker not in text:
             raise ValueError(f"Required prototype behavior is missing: {marker}")
@@ -113,13 +113,13 @@ def derive(source_text):
     text = text.replace("本地评审稿", "公开评审原型")
     notes = ('<section class="review-notes" id="notes"><h2>整体说明</h2>'
         '<p>本页为公园横屏 v0.6 交互原型，不代表已部署产品。热身、AI跟练和体能训练的运动过程沿用原产品，本原型展示到详情选择为止。未接入真实相机、评分、身份、小程序或媒体服务。</p>'
-        '<ul><li>公园环境、开放安排、排行榜昵称与时长均为模拟；小程序码不可扫码。</li>'
+        '<ul><li>公园环境、开放安排、排行榜昵称、时长与估算消耗均为模拟；小程序码不可扫码。</li>'
         '<li>点击“原型说明”可查看当前页面逐功能编号、用途、操作及规则；说明随页面和弹窗切换，阅读时暂停演示计时与首页轮换，关闭后继续。</li>'
         '<li>三类运动的站位、运动中、暂停、结果和领取按原产品执行，需求保留文字说明，原型不另作设计；详情开始按钮仅表示入口位置。</li>'
         '<li>趣味运动保留站位、互动、暂停、退出确认及结果演示，运动视频保留观看流程。</li>'
         '<li>首页推荐每20秒更新；交互时暂停，更新前5秒显示提示。课程支持分类、搜索和分页；体能按训练部位分类并分页。</li>'
         '<li>趣味运动为候选内容，模拟输入不代表真实识别；水果连击和中心切加分尚未接入判定。</li>'
-        '<li>运动榜按本站今日有效运动时长展示，同秒并列；暂停、离区与纯观看不累计。</li></ul></section>')
+        '<li>完整排行榜可切换本站今日运动时长榜与卡路里消耗榜，默认时长；两榜独立排序，同值并列。估算消耗以整千卡展示，正式算法与单位仍待核验；暂停、离区与纯观看不累计。</li></ul></section>')
     text, n = re.subn(r'<section class="review-notes" id="notes">.*?</section>',
                       lambda _: notes, text, count=1, flags=re.S)
     if n != 1:
