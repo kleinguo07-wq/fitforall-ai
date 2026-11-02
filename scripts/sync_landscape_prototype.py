@@ -12,7 +12,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 DESTINATION = ROOT / "projects" / "landscape" / "v0.6"
-VERSION_DATE = "2026-10-29"
+VERSION_DATE = "2026-11-02"
 DATA_KEYS = {"source", "itemId", "refs", "priority", "difficulty", "risks"}
 
 
@@ -86,6 +86,7 @@ def audit(text):
             raise ValueError(f"Publication audit rejected pattern: {pattern}")
     for marker in ["const HOME_ROTATION_MS=20000", "remaining<=5000",
                    "function movementThumbnail", "const views=", "function switchModule",
+                   "function prototypeHelpItems", "function togglePrototypeHelp",
                    "热身、AI跟练和体能训练的运动过程沿用原产品，本原型展示到详情选择为止。"]:
         if marker not in text:
             raise ValueError(f"Required prototype behavior is missing: {marker}")
@@ -110,9 +111,10 @@ def derive(source_text):
     text = replace_once(text,
         '<a class="tool" href="趣味运动-调研与候选项目-v0.4.html">玩法调研</a>', "")
     text = text.replace("本地评审稿", "公开评审原型")
-    notes = ('<section class="review-notes" id="notes"><h2>原型说明</h2>'
+    notes = ('<section class="review-notes" id="notes"><h2>整体说明</h2>'
         '<p>本页为公园横屏 v0.6 交互原型，不代表已部署产品。热身、AI跟练和体能训练的运动过程沿用原产品，本原型展示到详情选择为止。未接入真实相机、评分、身份、小程序或媒体服务。</p>'
         '<ul><li>公园环境、开放安排、排行榜昵称与时长均为模拟；小程序码不可扫码。</li>'
+        '<li>点击“原型说明”可查看当前页面逐功能编号、用途、操作及规则；说明随页面和弹窗切换，阅读时暂停演示计时与首页轮换，关闭后继续。</li>'
         '<li>三类运动的站位、运动中、暂停、结果和领取按原产品执行，需求保留文字说明，原型不另作设计；详情开始按钮仅表示入口位置。</li>'
         '<li>趣味运动保留站位、互动、暂停、退出确认及结果演示，运动视频保留观看流程。</li>'
         '<li>首页推荐每20秒更新；交互时暂停，更新前5秒显示提示。课程支持分类、搜索和分页；体能按训练部位分类并分页。</li>'
