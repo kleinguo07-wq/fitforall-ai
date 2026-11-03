@@ -165,7 +165,10 @@ def main() -> None:
             )
             if not landscape_versions:
                 raise SystemExit("No publishable landscape prototype found")
-            content = render_landscape(project, landscape_versions)
+            background = json.loads(
+                (project_sources / "landscape" / "background.json").read_text(encoding="utf-8")
+            )
+            content = render_landscape(project, landscape_versions, background)
         else:
             content = render_pending(project)
         (target / "index.html").write_text(content, encoding="utf-8")
