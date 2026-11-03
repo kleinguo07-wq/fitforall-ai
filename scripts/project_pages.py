@@ -35,7 +35,9 @@ h1{{font-size:38px;line-height:1.3;margin:0 0 16px}}h2{{font-size:25px;line-heig
 .panel{{padding:28px;background:#fff;border:1px solid var(--line);border-radius:14px;margin-top:24px}}.panel h2{{margin-top:0}}.panel p{{color:var(--muted)}}.button{{display:inline-flex;align-items:center;justify-content:center;padding:11px 20px;min-height:46px;background:var(--blue);color:#fff;text-decoration:none;border-radius:7px;margin-top:22px}}
 .versions{{display:grid;gap:12px}}.version-row{{display:flex;justify-content:space-between;align-items:center;gap:20px;color:inherit;padding:22px;background:#fff;border:1px solid var(--line);border-radius:12px;text-decoration:none}}.version-row:hover{{border-color:#8ab3fa}}.version-row b{{font-size:21px}}.version-row small{{display:block;color:var(--muted)}}.version-row>span{{color:var(--blue)}}
 .empty{{min-height:210px;display:flex;align-items:flex-start;justify-content:center;flex-direction:column}}footer{{margin-top:38px;font-size:13px;color:var(--muted)}}
+.background-link{{display:inline-block;margin-top:16px}}#background{{scroll-margin-top:24px}}.background-meta{{font-size:13px;color:var(--muted);margin-bottom:8px}}.background-summary{{color:var(--ink)!important;max-width:960px}}.background-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 28px;margin:12px 0 28px}}.background-item h4,.background-thought h4{{font-size:18px;line-height:1.6;margin:0 0 7px}}.background-item p,.background-thought p{{font-size:15px;line-height:1.9}}.background-thought+.background-thought{{margin-top:22px}}.background-note{{margin-top:28px;padding:16px 18px;background:#f3f7fd;border-left:3px solid #9eb6da;font-size:14px}}
 @media(max-width:800px){{.projects{{grid-template-columns:1fr}}.project-card{{min-height:230px}}main{{width:calc(100% - 32px);padding-top:25px}}h1{{font-size:30px}}.brand{{margin-bottom:26px}}.version-row{{align-items:flex-start}}}}
+@media(max-width:600px){{.background-grid{{grid-template-columns:1fr;gap:20px}}#background{{padding:22px}}}}
 </style></head><body><main><div class="brand"><span>FitForAll · 产品评审</span>{nav}</div>{content}<footer>按项目、按版本独立维护 · 评审原型不代表真实产品已交付</footer></main></body></html>'''
 
 
@@ -50,13 +52,31 @@ def render_hub(projects: list[dict[str, str]]) -> str:
     return page("项目总览", '<h1>项目总览</h1><p class="intro">先选择产品项目，再查看对应版本的需求与原型。</p><section class="projects" aria-label="产品项目">' + "".join(cards) + "</section>")
 
 
-def render_landscape(project: dict[str, str], version_dirs: list[Path]) -> str:
+def render_landscape_background(background: dict) -> str:
+    highlights = "".join(
+        f'<article class="background-item"><h4>{e(item["title"])}</h4><p>{e(item["body"])}</p></article>'
+        for item in background["highlights"]
+    )
+    reflections = "".join(
+        f'<article class="background-thought"><h4>{e(item["title"])}</h4><p>{e(item["body"])}</p></article>'
+        for item in background["reflections"]
+    )
+    return f'''<section class="panel" id="background" aria-labelledby="background-title">
+<div class="background-meta">项目组阅读 · 更新于 {e(background['updated'])}</div><h2 id="background-title">项目背景与产品思考</h2>
+<h3>产品定位</h3><p class="background-summary">{e(background['summary'])}</p>
+<h3>产品亮点</h3><div class="background-grid">{highlights}</div>
+<h3>持续思考</h3><div class="background-reflections">{reflections}</div>
+<p class="background-note">{e(background['status_note'])}</p></section>'''
+
+
+def render_landscape(project: dict[str, str], version_dirs: list[Path], background: dict) -> str:
     rows = []
     for directory in version_dirs:
         metadata = json.loads((directory / "version.json").read_text(encoding="utf-8"))
         rows.append(f'''<a class="version-row" href="./{e(directory.name)}/#home"><div><b>{e(metadata['title'])}</b><small>{e(metadata['status'])} · 更新于 {e(metadata.get('updated', metadata.get('date', '')))}</small></div><span>打开原型 →</span></a>''')
     content = f'''<div class="meta"><span>横屏 · 独立项目</span><span class="status">交互原型</span></div>
-<h1>{e(project['title'])}</h1><p class="intro">{e(project['description'])}</p><section class="versions" aria-label="横屏原型版本">{''.join(rows)}</section>
+<h1>{e(project['title'])}</h1><p class="intro">{e(project['description'])}<br><a class="background-link" href="#background">阅读项目背景与产品思考 ↓</a></p><section class="versions" aria-label="横屏原型版本">{''.join(rows)}</section>
+{render_landscape_background(background)}
 <section class="panel"><h2>评审说明</h2><p>每页顶部点击“原型说明”，可对照编号查看功能用途、操作和规则。热身、AI跟练和体能训练展示内容选择与详情，运动过程沿用原产品，仅保留文字说明。趣味运动保留站位、互动与结果演示，运动视频保留观看流程。摄像头、评分、计时、账号、二维码、媒体、环境及榜单均为模拟；原型不代表真实功能已交付。</p></section>'''
     return page(project["title"], content, "../../")
 
