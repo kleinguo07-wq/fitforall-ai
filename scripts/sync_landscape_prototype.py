@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create the allowlisted public v0.6 snapshot without copying source materials."""
+"""Create the allowlisted public v1.0 snapshot without copying source materials."""
 
 import argparse
 import hashlib
@@ -11,7 +11,7 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DESTINATION = ROOT / "projects" / "landscape" / "v0.6"
+DESTINATION = ROOT / "projects" / "landscape" / "v1.0"
 VERSION_DATE = "2026-11-04"
 DATA_KEYS = {"source", "itemId", "refs", "priority", "difficulty", "risks"}
 
@@ -112,10 +112,10 @@ def derive(source_text):
         '<a class="tool" href="趣味运动-调研与候选项目-v0.4.html">玩法调研</a>', "")
     text = text.replace("本地评审稿", "公开评审原型")
     notes = ('<section class="review-notes" id="notes"><h2>整体说明</h2>'
-        '<p>本页为公园横屏 v0.6 交互原型，不代表已部署产品。AI跟练和体能训练的运动过程沿用原产品，本原型展示到详情选择为止。每次运动逐人通过人脸登录或注册关联数据，结束自动上报，设备不保留登录态。人脸、注册、上报、相机、评分、小程序和媒体均未接入真实服务。</p>'
+        '<p>本页为公园横屏 v1.0 交互原型，不代表已部署产品。用户账号体系与横屏多人检测复用教学屏体验，共用过程不另行设计；教学屏参照版本、账号接口、横屏实际人数与场地能力需联调及实机验收。AI跟练和体能训练的运动过程沿用原产品，本原型展示到详情选择为止。每次运动逐人通过人脸登录或注册关联数据，结束自动上报，设备不保留登录态。人脸、注册、上报、相机、评分、小程序和媒体均未接入真实服务。</p>'
         '<ul><li>公园环境、开放安排、排行榜昵称、时长与估算消耗均为模拟；小程序码不可扫码。</li>'
         '<li>点击“原型说明”可查看当前页面逐功能编号、用途、操作及规则；说明随页面和弹窗切换，阅读时暂停演示计时与首页轮换，关闭后继续。</li>'
-        '<li>三类运动的站位、运动中、暂停、结果和领取按原产品执行，需求保留文字说明，原型不另作设计；详情开始按钮仅表示入口位置。</li>'
+        '<li>AI跟练和体能训练的站位、运动中、暂停、结果和领取按原产品执行，需求保留文字说明，原型不另作设计；详情开始按钮仅表示入口位置。</li>'
         '<li>趣味运动保留站位、互动、暂停、退出确认及结果演示；结束按用户自动上报，结果页直接展示通用微信小程序查询码，登录后查看自己的记录，无需主动清除信息，运动视频保留观看流程。</li>'
         '<li>导航默认右侧，可在本站服务的系统设置切换左右；进入大模块列表自动收起，首页默认展开。公告名称和显示开关可由后台配置，首页底部左侧超长内容滚动、弱提示右置；榜单与查询采用图标加文字。</li><li>首页推荐每20秒更新；交互时暂停，更新前5秒显示提示。课程支持分类、搜索和分页；体能按训练部位分类并分页。</li>'
         '<li>一期趣味运动聚焦单人切水果，其余候选后续迭代；热身移至下一期，本期隐藏入口；复用成熟内容完成0到1，社会体育统一账号跨横屏、竖屏及小程序通用，真实账号接口仍待联调。模拟输入不代表真实识别，水果连切和果心加分仍待真实判定。</li>'
@@ -137,15 +137,18 @@ def main():
         source_bytes = args.source.read_bytes()
         public_html = derive(source_bytes.decode("utf-8"))
         version = {
-            "title": "横屏v0.6交互原型", "version": "v0.6", "date": VERSION_DATE,
+            "title": "横屏v1.0交互原型", "version": "v1.0", "date": VERSION_DATE,
             "status": "交互原型", "entry": "index.html#home",
+            "reuse_reference": "教学屏",
+            "reuse_scope": ["用户账号体系", "横屏多人检测体验"],
+            "implementation_status": "横屏接入与实机能力待联调验收",
             "source_sha256": hashlib.sha256(source_bytes).hexdigest(),
         }
         DESTINATION.mkdir(parents=True, exist_ok=True)
         (DESTINATION / "index.html").write_text(public_html, encoding="utf-8")
         (DESTINATION / "version.json").write_text(
             json.dumps(version, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        print(json.dumps({"destination": "projects/landscape/v0.6/", **version,
+        print(json.dumps({"destination": "projects/landscape/v1.0/", **version,
             "public_sha256": hashlib.sha256(public_html.encode("utf-8")).hexdigest()},
             ensure_ascii=False))
     except (OSError, UnicodeError, ValueError) as exc:

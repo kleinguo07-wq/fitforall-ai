@@ -1,0 +1,14 @@
+{
+  "title": "横屏v1.0交互原型",
+  "version": "v1.0",
+  "date": "2026-11-04",
+  "status": "交互原型",
+  "entry": "index.html#home",
+  "reuse_reference": "教学屏",
+  "reuse_scope": [
+    "用户账号体系",
+    "横屏多人检测体验"
+  ],
+  "implementation_status": "横屏接入与实机能力待联调验收",
+  "source_sha256": "bc5180d16e3ac914681d6facb222535685298116caef5863342cd387cbed6a55"
+}
