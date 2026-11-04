@@ -21,10 +21,10 @@ GitHub Pages 统一入口：<https://kleinguo07-wq.github.io/fitforall-ai/>。�
 | 项目 | 独立入口 | 当前内容 |
 | --- | --- | --- |
 | 全民健身机 · 竖屏 | [项目页](https://kleinguo07-wq.github.io/fitforall-ai/projects/fitness/) | v1.1需求工作台及待开发需求池 |
-| 公园横屏 | [项目页](https://kleinguo07-wq.github.io/fitforall-ai/projects/landscape/) | [v0.6交互原型](https://kleinguo07-wq.github.io/fitforall-ai/projects/landscape/v0.6/#home) |
+| 公园横屏 | [项目页](https://kleinguo07-wq.github.io/fitforall-ai/projects/landscape/) | [v1.0交互原型](https://kleinguo07-wq.github.io/fitforall-ai/projects/landscape/v1.0/#home) |
 | 智慧步道打卡杆 | [项目页](https://kleinguo07-wq.github.io/fitforall-ai/projects/trail-checkin/) | 筹备中，暂无原型 |
 
-已有竖屏地址 `demos/v1.1/`、`demos/backlog/` 保持不变。横屏使用 `projects/landscape/v0.6/`，不放入竖屏版本列表。本仓库的竖屏产品基线不自动适用于横屏或打卡杆。
+已有竖屏地址 `demos/v1.1/`、`demos/backlog/` 保持不变。横屏使用 `projects/landscape/v1.0/`，不放入竖屏版本列表。本仓库的竖屏产品基线不自动适用于横屏或打卡杆。
 
 后续维护：
 
