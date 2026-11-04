@@ -77,7 +77,7 @@ def render_landscape(project: dict[str, str], version_dirs: list[Path], backgrou
     content = f'''<div class="meta"><span>横屏 · 独立项目</span><span class="status">交互原型</span></div>
 <h1>{e(project['title'])}</h1><p class="intro">{e(project['description'])}<br><a class="background-link" href="#background">阅读项目背景与产品思考 ↓</a></p><section class="versions" aria-label="横屏原型版本">{''.join(rows)}</section>
 {render_landscape_background(background)}
-<section class="panel"><h2>评审说明</h2><p>每页顶部点击“原型说明”，可对照编号查看功能用途、操作和规则。热身、AI跟练和体能训练展示内容选择与详情，运动过程沿用原产品，仅保留文字说明。趣味运动保留站位、互动与结果演示，运动视频保留观看流程。摄像头、评分、计时、账号、二维码、媒体、环境及榜单均为模拟；原型不代表真实功能已交付。</p></section>'''
+<section class="panel"><h2>评审说明</h2><p>每页顶部点击“原型说明”，可对照编号查看功能用途、操作和规则。AI跟练和体能训练展示内容选择与详情，运动过程沿用原产品，仅保留文字说明。热身下一期、本期不展示；一期趣味仅单人切水果，保留站位、互动与结果演示，运动视频保留观看流程。摄像头、评分、计时、账号、二维码、媒体、环境及榜单均为模拟；原型不代表真实功能已交付。</p></section>'''
     return page(project["title"], content, "../../")
 
 
