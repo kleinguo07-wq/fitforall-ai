@@ -40,3 +40,5 @@ python3 scripts/build_pages.py
 本期埋点需求位于`v1.0/tracking.html`，含24组采集需求、复用映射、参数、去重和验收；`tracking.md`为同源文本，均为需求而非真实采集实现。项目页在v1.0版本区提供大屏端、后台和埋点三个同级入口。用`sync_landscape_tracking.py --source /path/to/埋点需求-v1.0.html --text /path/to/埋点需求-v1.0.md`同步，公开页不加载或发送生产埋点。
 
 2026-11-06当前项目入口改为统一版本区：集中突出v1.0，在同一组内并列“大屏端原型”“管理后台原型”“埋点需求”三个整卡点击入口；仅展示当前版本，后台需求文本仍由原URL及版本元数据保留。
+
+2026-11-06体能一期只选原清单，保留前侧平举、提踵、单侧外摆腿3项，其余31项转后续；全身/核心暂空，不新增或改编凑数。`v1.0/fitness-scope.md`列出筛选及延期原因，原始来源字段不发布。用`sync_landscape_fitness_scope.py --source /path/to/需求内容.json`同步，实际素材与识别接入仍待核验。
