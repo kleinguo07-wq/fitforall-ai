@@ -74,6 +74,8 @@ def render_landscape(project: dict[str, str], version_dirs: list[Path], backgrou
     for directory in version_dirs:
         metadata = json.loads((directory / "version.json").read_text(encoding="utf-8"))
         rows.append(f'''<a class="version-row" href="./{e(directory.name)}/#home"><div><b>{e(metadata['title'])}</b><small>{e(metadata['status'])} · 更新于 {e(metadata.get('updated', metadata.get('date', '')))}</small></div><span>打开原型 →</span></a>''')
+        if metadata.get("admin_entry"):
+            rows.append(f'''<div class="panel"><h2>{e(metadata['version'])} 管理后台</h2><p>运动视频按AI全民健身机/AI全民运动站切换；公告仅支持全民运动站。</p><a class="button" href="./{e(directory.name)}/{e(metadata['admin_entry'])}">打开后台原型 →</a> <a href="./{e(directory.name)}/{e(metadata['admin_requirements'])}">查看后台需求</a></div>''')
     content = f'''<div class="meta"><span>横屏 · 独立项目</span><span class="status">交互原型</span></div>
 <h1>{e(project['title'])}</h1><p class="intro">{e(project['description'])}<br><a class="background-link" href="#background">阅读项目背景与产品思考 ↓</a></p><section class="versions" aria-label="横屏原型版本">{''.join(rows)}</section>
 {render_landscape_background(background)}

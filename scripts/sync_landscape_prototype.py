@@ -139,6 +139,9 @@ def main():
         version = {
             "title": "横屏v1.0交互原型", "version": "v1.0", "date": VERSION_DATE,
             "status": "交互原型", "entry": "index.html#home",
+            "updated": "2026-11-06",
+            "admin_entry": "admin.html#videos",
+            "admin_requirements": "admin-requirements.md",
             "reuse_reference": "教学屏",
             "reuse_scope": ["用户账号体系", "横屏多人检测体验"],
             "implementation_status": "横屏接入与实机能力待联调验收",
