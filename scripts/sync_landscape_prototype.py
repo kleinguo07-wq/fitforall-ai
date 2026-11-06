@@ -111,10 +111,15 @@ def derive(source_text):
     text = replace_once(text,
         '<a class="tool" href="趣味运动-调研与候选项目-v0.4.html">玩法调研</a>', "")
     text = text.replace("本地评审稿", "公开评审原型")
-    fitness_count = len(re.findall(r'\"category\"\s*:\s*\"fitness\"', source_text))
+    resource_start = source_text.index("const resources=[") + len("const resources=[")
+    resource_end = source_text.index("\n{id:'warmup-demo'", resource_start)
+    fitness = json.loads("[" + source_text[resource_start:resource_end].strip().rstrip(",") + "]")
+    fitness_count = len(fitness)
+    body_counts = "、".join(body + str(sum(x["body"] == body for x in fitness)) for body in ["全身", "上肢", "核心", "下肢"])
+    deferred_count = 70 - fitness_count
     notes = ('<section class="review-notes" id="notes"><h2>整体说明</h2>'
         '<p>本页为公园横屏 v1.0 交互原型，不代表已部署产品。用户账号体系与横屏多人检测复用教学屏体验，共用过程不另行设计；教学屏参照版本、账号接口、横屏实际人数与场地能力需联调及实机验收。AI跟练和体能训练的运动过程沿用原产品，本原型展示到详情选择为止。每次运动逐人通过人脸登录或注册关联数据，结束自动上报，设备不保留登录态。人脸、注册、上报、相机、评分、小程序和媒体均未接入真实服务。</p>'
-        f'<ul><li>体能以教学屏61项名称为基础，原表9项有ID补充记录单列；一期{fitness_count}项选型候选，全身1、上肢3、核心0、下肢4，其余62项转后续，不新增或改编。JSON仅有名称，分类、朝向、强度、素材及判定需核对原示范。</li><li>公园环境、开放安排、排行榜昵称、时长与估算消耗均为模拟；小程序码不可扫码。</li>'
+        f'<ul><li>体能以教学屏61项名称为基础，原表9项有ID补充记录单列；一期{fitness_count}项选型候选，{body_counts}，其余{deferred_count}项转后续，不新增或改编。JSON仅有名称，分类、朝向、强度、素材及判定需核对原示范。</li><li>公园环境、开放安排、排行榜昵称、时长与估算消耗均为模拟；小程序码不可扫码。</li>'
         '<li>点击“原型说明”可查看当前页面逐功能编号、用途、操作及规则；说明随页面和弹窗切换，阅读时暂停演示计时与首页轮换，关闭后继续。</li>'
         '<li>AI跟练和体能训练的站位、运动中、暂停、结果和领取按原产品执行，需求保留文字说明，原型不另作设计；详情开始按钮仅表示入口位置。</li>'
         '<li>趣味运动保留站位、互动、暂停、退出确认及结果演示；结束按用户自动上报，结果页直接展示通用微信小程序查询码，登录后查看自己的记录，无需主动清除信息，运动视频保留观看流程。</li>'
