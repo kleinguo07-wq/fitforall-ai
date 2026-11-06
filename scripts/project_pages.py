@@ -34,7 +34,7 @@ h1{{font-size:38px;line-height:1.3;margin:0 0 16px}}h2{{font-size:25px;line-heig
 .meta{{display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--muted);font-size:13px}}.status{{font-size:13px;color:#17614a;background:#e6f4ed;border-radius:5px;padding:3px 9px}}.status.pending{{color:#7d6840;background:#f7f0e1}}
 .panel{{padding:28px;background:#fff;border:1px solid var(--line);border-radius:14px;margin-top:24px}}.panel h2{{margin-top:0}}.panel p{{color:var(--muted)}}.button{{display:inline-flex;align-items:center;justify-content:center;padding:11px 20px;min-height:46px;background:var(--blue);color:#fff;text-decoration:none;border-radius:7px;margin-top:22px}}
 .versions{{display:grid;gap:12px}}.version-row{{display:flex;justify-content:space-between;align-items:center;gap:20px;color:inherit;padding:22px;background:#fff;border:1px solid var(--line);border-radius:12px;text-decoration:none}}.version-row:hover{{border-color:#8ab3fa}}.version-row b{{font-size:21px}}.version-row small{{display:block;color:var(--muted)}}.version-row>span{{color:var(--blue)}}
-.review-resources{{grid-column:1/-1;display:flex;align-items:center;gap:20px;flex-wrap:wrap;font-size:14px;padding:12px 4px;color:var(--muted)}}.review-resources b{{font-weight:500}}.review-entries{{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}.review-entry{{display:flex;flex-direction:column;padding:24px;background:#fff;border:1px solid var(--line);border-radius:12px;min-height:244px}}.entry-meta{{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted)}}.review-entry h2{{font-size:23px;margin:16px 0 9px}}.review-entry p{{font-size:15px;color:var(--muted);line-height:1.7}}.entry-actions{{display:flex;gap:18px;align-items:center;margin-top:auto;padding-top:22px;flex-wrap:wrap}}.entry-actions .button{{margin-top:0;font-size:15px;min-height:46px}}.entry-secondary{{font-size:14px}}@media(max-width:700px){{.review-entries{{grid-template-columns:1fr}}.review-entry{{min-height:230px}}}}
+.release-section{{padding:26px;background:#fff;border:1px solid var(--line);border-radius:16px}}.release-header{{display:flex;justify-content:space-between;gap:20px;align-items:center;padding-bottom:22px;margin-bottom:22px;border-bottom:1px solid var(--line)}}.release-label{{display:block;color:var(--muted);font-size:13px;margin-bottom:3px}}.release-title{{display:flex;align-items:center;gap:16px}}.release-title h2{{font-size:44px;letter-spacing:-.045em;line-height:1.2;color:var(--blue);margin:0;font-weight:750}}.release-updated{{font-size:13px;color:var(--muted);white-space:nowrap}}.review-entries{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}.review-entry{{display:flex;flex-direction:column;align-items:flex-start;padding:22px;background:#f8faff;border:1px solid var(--line);border-radius:10px;min-height:230px;color:var(--ink);text-decoration:none;transition:border-color .15s,background .15s}}.review-entry:hover{{border-color:#8ab3fa;background:#f1f6ff}}.entry-icon{{display:grid;place-items:center;width:42px;height:42px;border-radius:8px;color:var(--blue);background:#eaf1ff;margin-bottom:15px}}.entry-icon svg{{width:25px;height:25px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}}.review-entry h3{{font-size:21px;margin:0 0 9px;line-height:1.4}}.review-entry p{{font-size:14px;color:var(--muted);line-height:1.7}}.entry-action{{margin-top:auto;padding-top:22px;font-size:15px;color:var(--blue);font-weight:550}}@media(max-width:740px){{.release-section{{padding:20px}}.review-entries{{grid-template-columns:1fr}}.review-entry{{min-height:205px}}.release-header{{align-items:flex-start;flex-wrap:wrap;gap:10px}}.release-title h2{{font-size:38px}}}}
 .empty{{min-height:210px;display:flex;align-items:flex-start;justify-content:center;flex-direction:column}}footer{{margin-top:38px;font-size:13px;color:var(--muted)}}
 .background-link{{display:inline-block;margin-top:16px}}#background{{scroll-margin-top:24px}}.background-meta{{font-size:13px;color:var(--muted);margin-bottom:8px}}.background-summary{{color:var(--ink)!important;max-width:960px}}.background-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 28px;margin:12px 0 28px}}.background-item h4,.background-thought h4{{font-size:18px;line-height:1.6;margin:0 0 7px}}.background-item p,.background-thought p{{font-size:15px;line-height:1.9}}.background-thought+.background-thought{{margin-top:22px}}.background-note{{margin-top:28px;padding:16px 18px;background:#f3f7fd;border-left:3px solid #9eb6da;font-size:14px}}
 @media(max-width:800px){{.projects{{grid-template-columns:1fr}}.project-card{{min-height:230px}}main{{width:calc(100% - 32px);padding-top:25px}}h1{{font-size:30px}}.brand{{margin-bottom:26px}}.version-row{{align-items:flex-start}}}}
@@ -71,24 +71,23 @@ def render_landscape_background(background: dict) -> str:
 
 
 def render_landscape(project: dict[str, str], version_dirs: list[Path], background: dict) -> str:
-    rows = []
-    # Keep historical URLs available; the landing only exposes the current review.
-    for directory in version_dirs:
-        if directory.name != project["current"]:
-            continue
-        metadata = json.loads((directory / "version.json").read_text(encoding="utf-8"))
-        updated = e(metadata.get("updated", metadata.get("date", "")))
-        version = e(metadata["version"])
-        entries = [("屏端原型", "首页、运动内容、趣味互动与本站服务。", metadata["entry"], "")]
-        if metadata.get("admin_entry"):
-            entries.append(("管理后台原型", "视频按产品切换，配置全民运动站公告。", metadata["admin_entry"], metadata["admin_requirements"]))
-        for title, description, entry, requirements in entries:
-            secondary = f'<a class="entry-secondary" href="./{e(directory.name)}/{e(requirements)}">查看需求</a>' if requirements else ""
-            rows.append(f'''<article class="review-entry"><div class="entry-meta"><span class="status">{version}</span><span>更新于 {updated}</span></div><h2>{e(title)}</h2><p>{e(description)}</p><div class="entry-actions"><a class="button" href="./{e(directory.name)}/{e(entry)}">打开原型 →</a>{secondary}</div></article>''')
-        if metadata.get("tracking_entry"):
-            rows.append(f'''<nav class="review-resources" aria-label="本期需求资料"><b>本期需求资料</b><a href="./{e(directory.name)}/{e(metadata['tracking_entry'])}">查看埋点需求 →</a></nav>''')
+    current_dir = next((directory for directory in version_dirs if directory.name == project["current"]), None)
+    if current_dir is None:
+        raise ValueError("Current landscape review version is missing")
+    metadata = json.loads((current_dir / "version.json").read_text(encoding="utf-8"))
+    updated = e(metadata.get("updated", metadata.get("date", "")))
+    version = e(metadata["version"])
+    entries = [
+        ("大屏端原型", "首页、运动内容、趣味互动与本站服务。", metadata["entry"], "打开原型", '<rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>'),
+        ("管理后台原型", "视频按产品切换，配置全民运动站公告。", metadata["admin_entry"], "打开原型", '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'),
+        ("埋点需求", "采集事件、参数、触发时机与验收口径。", metadata["tracking_entry"], "查看需求", '<path d="M4 3v18h17M8 16v-4M13 16V8M18 16V5"/>'),
+    ]
+    cards = []
+    for title, description, entry, action, icon in entries:
+        cards.append(f'''<a class="review-entry" href="./{e(current_dir.name)}/{e(entry)}"><span class="entry-icon" aria-hidden="true"><svg viewBox="0 0 24 24">{icon}</svg></span><h3>{e(title)}</h3><p>{e(description)}</p><span class="entry-action">{e(action)} →</span></a>''')
+    entry_section = f'''<section class="release-section" aria-labelledby="release-version"><header class="release-header"><div><span class="release-label">当前评审版本</span><div class="release-title"><h2 id="release-version">{version}</h2><span class="status">当前版本</span></div></div><span class="release-updated">更新于 {updated}</span></header><nav class="review-entries" aria-label="当前版本评审入口">{''.join(cards)}</nav></section>'''
     content = f'''<div class="meta"><span>横屏 · 独立项目</span><span class="status">交互原型</span></div>
-<h1>{e(project['title'])}</h1><p class="intro">{e(project['description'])}<br><a class="background-link" href="#background">阅读项目背景与产品思考 ↓</a></p><section class="versions review-entries" aria-label="当前版本评审入口">{''.join(rows)}</section>
+<h1>{e(project['title'])}</h1><p class="intro">{e(project['description'])}<br><a class="background-link" href="#background">阅读项目背景与产品思考 ↓</a></p>{entry_section}
 {render_landscape_background(background)}
 <section class="panel"><h2>评审说明</h2><p>每页顶部点击“原型说明”，可对照编号查看功能用途、操作和规则。AI跟练和体能训练展示内容选择与详情，运动过程沿用原产品，仅保留文字说明。热身下一期、本期不展示；一期趣味仅单人切水果，保留站位、互动与结果演示，运动视频保留观看流程。摄像头、评分、计时、账号、二维码、媒体、环境及榜单均为模拟；原型不代表真实功能已交付。</p></section>'''
     return page(project["title"], content, "../../")
