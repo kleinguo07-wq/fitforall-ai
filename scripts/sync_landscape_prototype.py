@@ -142,6 +142,8 @@ def main():
             "updated": "2026-11-06",
             "admin_entry": "admin.html#videos",
             "admin_requirements": "admin-requirements.md",
+            "tracking_entry": "tracking.html",
+            "tracking_requirements": "tracking.md",
             "reuse_reference": "教学屏",
             "reuse_scope": ["用户账号体系", "横屏多人检测体验"],
             "implementation_status": "横屏接入与实机能力待联调验收",
