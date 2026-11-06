@@ -34,3 +34,7 @@ python3 scripts/build_pages.py
 ## v1.0管理后台评审
 
 2026-11-06纳入本期：`v1.0/admin.html`是独立模拟页面，运动视频分AI全民健身机/AI全民运动站两个带图标Tab，公告设置固定仅支持运动站。真实后台源码未修改，原始参考HTML不发布。通过`python3 scripts/sync_landscape_admin.py --source /path/to/管理后台-评审原型-v1.0.html --requirements /path/to/管理后台需求-v1.0.md`导出；规则由本地需求JSON生成，当前屏端快照保持原内容。
+
+2026-11-06项目页仅展示当前v1.0屏端和管理后台两个入口，采用同款卡片与“打开原型”按钮；后台需求保留为次级文字链接。不在项目页展示v0.6入口，历史公开快照仍保留。
+
+本期埋点需求位于`v1.0/tracking.html`，含24组采集需求、复用映射、参数、去重和验收；`tracking.md`为同源文本，均为需求而非真实采集实现。项目页在两张统一原型卡片下提供埋点入口。用`sync_landscape_tracking.py --source /path/to/埋点需求-v1.0.html --text /path/to/埋点需求-v1.0.md`同步，公开页不加载或发送生产埋点。
