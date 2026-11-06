@@ -4,14 +4,14 @@
   "date": "2026-11-04",
   "status": "交互原型",
   "entry": "index.html#home",
+  "updated": "2026-11-06",
+  "admin_entry": "admin.html#videos",
+  "admin_requirements": "admin-requirements.md",
   "reuse_reference": "教学屏",
   "reuse_scope": [
     "用户账号体系",
     "横屏多人检测体验"
   ],
   "implementation_status": "横屏接入与实机能力待联调验收",
-  "source_sha256": "c85afc89c37556467abc50812b667b7040671b89c2536183b585927c5591d3b8",
-  "updated": "2026-11-06",
-  "admin_entry": "admin.html#videos",
-  "admin_requirements": "admin-requirements.md"
+  "source_sha256": "21a546a3c1adb0025a82c94daff9c2bae502f822a6b89821027dd714a9596ef6"
 }
