@@ -7,13 +7,13 @@
   "updated": "2026-11-06",
   "admin_entry": "admin.html#videos",
   "admin_requirements": "admin-requirements.md",
+  "tracking_entry": "tracking.html",
+  "tracking_requirements": "tracking.md",
   "reuse_reference": "教学屏",
   "reuse_scope": [
     "用户账号体系",
     "横屏多人检测体验"
   ],
   "implementation_status": "横屏接入与实机能力待联调验收",
-  "source_sha256": "21a546a3c1adb0025a82c94daff9c2bae502f822a6b89821027dd714a9596ef6",
-  "tracking_entry": "tracking.html",
-  "tracking_requirements": "tracking.md"
+  "source_sha256": "8e4816f3d95383aabf9aceaccf18eb013b8ac6bb4d62778302a39baefd558f3c"
 }
