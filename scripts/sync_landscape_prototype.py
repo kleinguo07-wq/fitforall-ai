@@ -111,9 +111,10 @@ def derive(source_text):
     text = replace_once(text,
         '<a class="tool" href="趣味运动-调研与候选项目-v0.4.html">玩法调研</a>', "")
     text = text.replace("本地评审稿", "公开评审原型")
+    fitness_count = len(re.findall(r'\"category\"\s*:\s*\"fitness\"', source_text))
     notes = ('<section class="review-notes" id="notes"><h2>整体说明</h2>'
         '<p>本页为公园横屏 v1.0 交互原型，不代表已部署产品。用户账号体系与横屏多人检测复用教学屏体验，共用过程不另行设计；教学屏参照版本、账号接口、横屏实际人数与场地能力需联调及实机验收。AI跟练和体能训练的运动过程沿用原产品，本原型展示到详情选择为止。每次运动逐人通过人脸登录或注册关联数据，结束自动上报，设备不保留登录态。人脸、注册、上报、相机、评分、小程序和媒体均未接入真实服务。</p>'
-        '<ul><li>公园环境、开放安排、排行榜昵称、时长与估算消耗均为模拟；小程序码不可扫码。</li>'
+        f'<ul><li>体能一期从原清单保留{fitness_count}项：前侧平举、提踵、单侧外摆腿；其余31项转后续，全身和核心暂空，不新增或改编。提踵扶椅说明、前侧平举高度提示与侧摆腿识别仍待核验。</li><li>公园环境、开放安排、排行榜昵称、时长与估算消耗均为模拟；小程序码不可扫码。</li>'
         '<li>点击“原型说明”可查看当前页面逐功能编号、用途、操作及规则；说明随页面和弹窗切换，阅读时暂停演示计时与首页轮换，关闭后继续。</li>'
         '<li>AI跟练和体能训练的站位、运动中、暂停、结果和领取按原产品执行，需求保留文字说明，原型不另作设计；详情开始按钮仅表示入口位置。</li>'
         '<li>趣味运动保留站位、互动、暂停、退出确认及结果演示；结束按用户自动上报，结果页直接展示通用微信小程序查询码，登录后查看自己的记录，无需主动清除信息，运动视频保留观看流程。</li>'
@@ -147,6 +148,7 @@ def main():
             "reuse_reference": "教学屏",
             "reuse_scope": ["用户账号体系", "横屏多人检测体验"],
             "implementation_status": "横屏接入与实机能力待联调验收",
+            "fitness_content_count": len(re.findall(r'"category"\s*:\s*"fitness"', public_html)),
             "source_sha256": hashlib.sha256(source_bytes).hexdigest(),
         }
         DESTINATION.mkdir(parents=True, exist_ok=True)

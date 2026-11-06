@@ -15,5 +15,6 @@
     "横屏多人检测体验"
   ],
   "implementation_status": "横屏接入与实机能力待联调验收",
-  "source_sha256": "8e4816f3d95383aabf9aceaccf18eb013b8ac6bb4d62778302a39baefd558f3c"
+  "fitness_content_count": 3,
+  "source_sha256": "f7bbdf7fe1b8ff72a8a3622d7363b8ee9979c2ef03522ca2f926c7ec05ba4b44"
 }
