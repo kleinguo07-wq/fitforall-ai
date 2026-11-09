@@ -148,26 +148,36 @@ function renderDocs(){$('#docs-view').innerHTML=`<div class="docs-layout"><heade
 const trackingSource='../../docs/requirements/v1.1-event-tracking.md';
 const trackingHeaders=['序号','eventID','事件描述','key','属性名说明','Vaule','属性值说明','其他备注','版本号'];
 let trackingRows=null;
+let trackingReuse=[];
 function parseTrackingRows(markdown){return markdown.split(/\r?\n/).filter(line=>/^\|\s*\d+\s*\|/.test(line)).map(line=>line.trim().slice(1,-1).split('|').map(cell=>cell.trim().replace(/<br\s*\/?\s*>/gi,'\n').replace(/`/g,''))).filter(cells=>cells.length===trackingHeaders.length)}
 function trackingCell(value){return esc(value).replace(/\n/g,'<br>')}
 function updateTrackingRows(query=''){
  const filtered=trackingRows.filter(row=>row.join(' ').toLowerCase().includes(query.trim().toLowerCase()));
- $('#tracking-count').textContent=`显示 ${filtered.length} / ${trackingRows.length} 个事件`;
+ $('#tracking-count').textContent=`显示 ${filtered.length} / ${trackingRows.length} 项`;
  for(const priority of ['P0']){
   const total=trackingRows.filter(row=>row[7].startsWith(priority+'。'));
   const rows=filtered.filter(row=>row[7].startsWith(priority+'。'));
-  $('#tracking-count-'+priority).textContent=`${rows.length} / ${total.length} 个事件`;
+  $('#tracking-count-'+priority).textContent=`${rows.length} / ${total.length} 项`;
   $('#tracking-table-body-'+priority).innerHTML=rows.length?rows.map(row=>`<tr>${row.map(cell=>`<td>${trackingCell(cell)}</td>`).join('')}</tr>`).join(''):'<tr><td colspan="9" class="tracking-empty">没有匹配的埋点</td></tr>';
  }
 }
 async function renderTracking(){
  const host=$('#tracking-view');
- host.innerHTML=`<div class="tracking-layout"><header class="docs-heading"><div><span class="eyebrow">EVENT TRACKING / V1.1</span><h2>本轮功能埋点</h2><p>本期 P0 埋点，沿用既有 eventID。</p></div><a href="${trackingSource}" target="_blank" rel="noopener">查看源文档 ↗</a></header><div id="tracking-content" class="tracking-content" role="status">正在读取埋点表…</div></div>`;
+ host.innerHTML=`<div class="tracking-layout"><header class="docs-heading"><div><span class="eyebrow">EVENT TRACKING / V1.1</span><h2>本轮功能埋点</h2><p>本期功能的 P0 采集需求与既有事件复用说明。</p></div><a href="${trackingSource}" target="_blank" rel="noopener">查看源文档 ↗</a></header><div id="tracking-content" class="tracking-content" role="status">正在读取埋点表…</div></div>`;
  try{
-  if(!trackingRows){const response=await fetch(trackingSource+'?v=backlog-split-26');if(!response.ok)throw new Error(`HTTP ${response.status}`);const rows=parseTrackingRows(await response.text());if(!rows.length)throw new Error('未找到埋点表');trackingRows=rows}
+  if(!trackingRows){
+   const response=await fetch(trackingSource+'?v=scope-20261109');
+   if(!response.ok)throw new Error(`HTTP ${response.status}`);
+   const markdown=await response.text();
+   const rows=parseTrackingRows(markdown);
+   if(!rows.length)throw new Error('未找到埋点表');
+   const reuseSection=markdown.split('## 既有事件复用')[1]?.split('\n## ')[0]||'';
+   trackingReuse=reuseSection.split(/\r?\n/).filter(line=>line.startsWith('- ')).map(line=>line.slice(2).replace(/`/g,''));
+   trackingRows=rows;
+  }
   const content=$('#tracking-content');
   content.removeAttribute('role');
-  content.innerHTML=`<p class="tracking-existing-note">如事件已有埋点，则忽略，不重复新增。</p><div class="tracking-toolbar"><label for="tracking-search">搜索事件</label><input id="tracking-search" type="search" placeholder="输入 eventID、事件描述或属性…" autocomplete="off"><span id="tracking-count"></span></div>${['P0'].map(priority=>`<section class="tracking-priority-section"><header class="tracking-priority-head"><h3>${priority}</h3><span id="tracking-count-${priority}"></span></header><div class="tracking-table-wrap" role="region" aria-label="${priority} 功能埋点表" tabindex="0"><table class="tracking-table"><thead><tr>${trackingHeaders.map(header=>`<th scope="col">${esc(header)}</th>`).join('')}</tr></thead><tbody id="tracking-table-body-${priority}"></tbody></table></div></section>`).join('')}<div class="tracking-notes"><h3>统一口径</h3><p>事件需带端标识、应用版本、事件时间及匿名会话标识；业务日按上海时间的运动结束时间确定。运动记录以服务端结算为准。</p><p>评审 Demo 的推进时间、视频失败与空内容池等控制不计入正式产品埋点。上线前请与既有埋点字典核对事件名称及后端内容 ID。</p></div>`;
+  content.innerHTML=`<p class="tracking-existing-note">同口径事件沿用既有 eventID，复用及字段补充见表下方。</p><div class="tracking-toolbar"><label for="tracking-search">搜索事件</label><input id="tracking-search" type="search" placeholder="输入 eventID、事件描述或属性…" autocomplete="off"><span id="tracking-count"></span></div>${['P0'].map(priority=>`<section class="tracking-priority-section"><header class="tracking-priority-head"><h3>${priority}</h3><span id="tracking-count-${priority}"></span></header><div class="tracking-table-wrap" role="region" aria-label="${priority} 功能埋点表" tabindex="0"><table class="tracking-table"><thead><tr>${trackingHeaders.map(header=>`<th scope="col">${esc(header)}</th>`).join('')}</tr></thead><tbody id="tracking-table-body-${priority}"></tbody></table></div></section>`).join('')}${trackingReuse.length?`<div class="tracking-notes"><h3>既有事件复用 · ${trackingReuse.length} 项</h3><ul>${trackingReuse.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></div>`:''}<div class="tracking-notes"><h3>统一口径</h3><p>事件需带端标识、应用版本、事件时间及匿名会话标识；业务日按上海时间的运动结束时间确定。运动记录以服务端结算为准。</p><p>评审 Demo 的推进时间、视频失败与空内容池等控制不计入正式产品埋点。上线前请与既有埋点字典核对事件名称及后端内容 ID。</p></div>`;
   $('#tracking-search').oninput=e=>updateTrackingRows(e.target.value);
   updateTrackingRows();
  }catch(error){$('#tracking-content').textContent=`埋点表读取失败：${error.message}。请通过本地服务或 GitHub Pages 打开工作台。`}
