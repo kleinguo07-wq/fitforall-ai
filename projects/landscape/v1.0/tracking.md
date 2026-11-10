@@ -299,12 +299,12 @@
 - 端与环节：屏端 / 视频与服务；本期必要
 - eventID：`PV_landscape_record_qr`
 - 复用状态：建议事件名；先核对横屏/教学屏/后台字典，已有同义事件直接复用，不同时上报两条
-- 触发：本站服务、查询页或趣味结果页的通用码实际可见时发送。
+- 触发：首页查询浮窗、本站服务、原查询页或趣味结果页的通用码实际可见时发送。
 - 去重：page_instance_id＋qr_location一次；这里只能证明展示，不能推算扫码、本人查询成功或记录保存。小程序已有查询事件可复用补来源，不新增领取流程。
 
 | key | 取值 | 说明 |
 | --- | --- | --- |
-| qr_location | board / records / game_result | 展示位置 |
+| qr_location | home_popup / board / records / game_result | 展示位置 |
 | code_state | ready / failed | 正式码可用状态 |
 | session_id | 运动会话ID / 空 | 仅本局结果页关联，不携带可代领记录 |
 
