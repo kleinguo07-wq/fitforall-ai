@@ -169,6 +169,8 @@ def main() -> None:
                 (project_sources / "landscape" / "background.json").read_text(encoding="utf-8")
             )
             content = render_landscape(project, landscape_versions, background)
+        elif (target / "index.html").is_file():
+            continue  # Preserve standalone project pages copied from projects/.
         else:
             content = render_pending(project)
         (target / "index.html").write_text(content, encoding="utf-8")
