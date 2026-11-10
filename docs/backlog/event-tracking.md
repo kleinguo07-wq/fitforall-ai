@@ -25,7 +25,7 @@
 | PV_face_flow | entry_source 增加 personal_data_checkin；课程 ID 指向固定新制作的舒缓热身内容。 |
 | click_face_flow_result | 复用身份确认结果，entry_source 支持 personal_data_checkin，不另加确认点击。 |
 | result_training_start | 正式计时开始时复用原事件，以 personal_data_checkin 区分数据页热身来源。 |
-| result_training_settlement | 复用本人与本次运动的结算与去重；未来接入时联动满 10 秒有效方案、签到及累计，不重复发送普通与签到两套事件。 |
+| 服务端运动结算（待对齐 eventID） | 待排期时对齐本人本次运动的结算事件及去重口径，联动满 10 秒有效方案、签到与累计。 |
 
 ## 统计与演示边界
 
