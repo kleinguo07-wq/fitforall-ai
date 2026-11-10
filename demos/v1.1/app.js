@@ -166,7 +166,7 @@ async function renderTracking(){
  host.innerHTML=`<div class="tracking-layout"><header class="docs-heading"><div><span class="eyebrow">EVENT TRACKING / V1.1</span><h2>本轮功能埋点</h2><p>本期功能的 P0 采集需求与既有事件复用说明。</p></div><a href="${trackingSource}" target="_blank" rel="noopener">查看源文档 ↗</a></header><div id="tracking-content" class="tracking-content" role="status">正在读取埋点表…</div></div>`;
  try{
   if(!trackingRows){
-   const response=await fetch(trackingSource+'?v=scope-20261110');
+   const response=await fetch(trackingSource+'?v=tracking-merge-20261110');
    if(!response.ok)throw new Error(`HTTP ${response.status}`);
    const markdown=await response.text();
    const rows=parseTrackingRows(markdown);
