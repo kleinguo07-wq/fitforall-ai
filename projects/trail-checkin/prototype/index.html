@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>智慧步道打卡杆 · 首期交互原型</title>
+  <link rel="stylesheet" href="../trail.css">
+  <script src="./demo.js" defer></script>
+</head>
+<body>
+<main class="workspace">
+  <a class="back" href="../">← 智慧步道打卡杆</a>
+  <header class="workspace-heading">
+    <div>
+      <p class="eyebrow">首期评审</p>
+      <h1>打卡杆交互原型</h1>
+    </div>
+    <p class="muted">中城绿谷示意 · 点位、距离和记录均为模拟</p>
+  </header>
+  <div class="workbench">
+    <section class="preview" aria-label="原型预览">
+      <nav class="view-nav" aria-label="预览界面">
+        <button type="button" data-view="public" aria-pressed="true">市民杆屏</button>
+        <button type="button" data-view="ops" aria-pressed="false">设备运维</button>
+        <button type="button" data-view="admin" aria-pressed="false">管理后台</button>
+        <button type="button" data-view="phone" aria-pressed="false">小程序</button>
+      </nav>
+      <div id="preview" class="preview-stage"></div>
+    </section>
+    <aside class="controls" aria-labelledby="controls-title">
+      <h2 id="controls-title">场景模拟</h2>
+      <label for="route">布点方案</label>
+      <select id="route"><option value="four">四杆 · 分段计时</option><option value="two">两杆 · 全程计时</option></select>
+      <label for="journey">经过路线</label>
+      <select id="journey"></select>
+      <label for="point">杆屏预览点位</label>
+      <select id="point"></select>
+      <label for="condition">模拟设备状态</label>
+      <select id="condition">
+        <option value="online">正常运行</option>
+        <option value="offline">断网 · 可本地记录</option>
+        <option value="fault">摄像头故障</option>
+        <option value="unbound">初装 · 未绑定</option>
+      </select>
+      <button class="button primary next" id="next" type="button">模拟经过下一点</button>
+      <button class="button secondary" id="repeat" type="button">模拟重复识别</button>
+      <button class="button secondary" id="reset" type="button">重置演示记录</button>
+      <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+      <details class="how-to">
+        <summary>怎么评审</summary>
+        <ol>
+          <li>模拟经过 A 点后，打开小程序查看进度。</li>
+          <li>继续模拟经过，在小程序查看有效路段、里程和用时。</li>
+          <li>切到断网，经过一个点位，再恢复在线，查看补传结果。</li>
+          <li>选择初装，在设备运维页完成绑定和自检。</li>
+        </ol>
+      </details>
+    </aside>
+  </div>
+</main>
+</body>
+</html>
