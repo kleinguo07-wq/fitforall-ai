@@ -63,9 +63,10 @@ def render_project(project: dict[str, str], entries: list[Entry], extra: str = "
 <h3>{escape(entry.title)}</h3><p>{escape(entry.description)}</p>
 <span class="site-card-action">打开 <span aria-hidden="true">→</span></span></a>""")
     timestamp = f'<time datetime="{escape(updated)}">更新于 {escape(updated)}</time>' if updated else ""
+    background_link = '<a class="site-heading-link" href="#background">项目背景与产品思考 ↓</a>' if extra else ""
     return render_page(project["title"], f"""<header class="site-heading">
 <p class="site-kicker">{escape(project['form'])}</p><h1>{escape(project['title'])}</h1>
-<p>{escape(project['description'])}</p></header>
+<p>{escape(project['description'])}</p>{background_link}</header>
 <section class="site-release" aria-labelledby="current-version">
 <header class="site-section-heading"><div><p class="site-kicker">当前评审</p>
 <h2 id="current-version">{escape(project['current'] or project['status'])}</h2></div>{timestamp}</header>
@@ -106,7 +107,7 @@ def add_shell(
     )
     tools = ""
     if guide:
-        tools += '<button type="button" id="site-guide-open">原型说明</button>'
+        tools += '<button type="button" id="site-guide-open">使用说明</button>'
     if fullscreen:
         tools += '<button type="button" id="site-fullscreen">全屏预览</button>'
     local_nav = ""
@@ -120,7 +121,7 @@ def add_shell(
 <nav class="site-local" aria-label="项目内导航">{overview}{shortcuts}</nav>
 <div class="site-tools">{tools}</div></div>"""
     dialog = (
-        f'<dialog id="site-guide" aria-labelledby="site-guide-title"><h2 id="site-guide-title">原型说明</h2>'
+        f'<dialog id="site-guide" aria-labelledby="site-guide-title"><h2 id="site-guide-title">使用说明</h2>'
         f'<p>{escape(guide)}</p><form method="dialog"><button type="submit" autofocus>关闭</button></form></dialog>'
         if guide else ""
     )
