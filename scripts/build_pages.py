@@ -149,6 +149,13 @@ def main() -> None:
     projects = load_projects(ROOT)
     project_sources = ROOT / "projects"
     shutil.copytree(project_sources, OUTPUT / "projects", ignore=shutil.ignore_patterns("catalog.json", "README.md", ".DS_Store"))
+    admin_preview = OUTPUT / "projects" / "landscape" / "v1.0" / "admin.html"
+    if admin_preview.is_file():
+        admin_html = admin_preview.read_text(encoding="utf-8")
+        sidebar_section = '<div class="menu-label">已有功能参照</div>'
+        trail_link = ('<a class="menu-static" style="display:block;color:inherit;text-decoration:none" '
+                      'href="../../trail-checkin/prototype/?view=admin">智慧步道</a>')
+        admin_preview.write_text(admin_html.replace(sidebar_section, trail_link + sidebar_section, 1), encoding="utf-8")
     for project in projects:
         target = OUTPUT / "projects" / project["id"]
         target.mkdir(parents=True, exist_ok=True)
