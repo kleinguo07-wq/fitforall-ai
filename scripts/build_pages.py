@@ -74,7 +74,14 @@ def main() -> None:
     background = json.loads((ROOT / "projects/landscape/background.json").read_text(encoding="utf-8"))
     for project in projects:
         key = project["id"]
-        extra = render_landscape_background(background) if key == "landscape" else ""
+        extra = ""
+        if key == "landscape":
+            extra = render_landscape_background(background) + (
+                '<section class="site-note"><h2>评审说明</h2>'
+                '<p>屏端可使用页面标注核对功能、操作和规则。AI 跟练和体能训练展示内容选择与详情，'
+                '运动过程沿用原产品的评审说明。首期趣味运动演示单人切水果，运动视频保留观看流程。'
+                '摄像头、评分、计时、账号、二维码、媒体、环境及榜单均为模拟。</p></section>'
+            )
         updated = {"fitness": vertical_meta["updated"], "landscape": landscape_meta["updated"]}.get(key, "")
         write(f"projects/{key}/index.html", key, render_project(project, resources.get(key, []), extra, updated))
 
@@ -84,7 +91,13 @@ def main() -> None:
           guide="从评审目录切换交互大屏的功能，使用场景模拟调整时间、内容和状态，查看本页需求。管理后台、需求文档和埋点可从项目内导航直接打开。", fullscreen=True)
     write(backlog, "fitness", surface="backlog",
           guide="从左侧选择待开发需求，查看对应的屏端或小程序演示，再核对本页规则。", fullscreen=True)
-    write(landscape_screen.split("#")[0], "landscape", surface="landscape",
+    screen_path = landscape_screen.split("#")[0]
+    screen_source = (OUTPUT / screen_path).read_text(encoding="utf-8")
+    screen_source = screen_source.replace(
+        'aria-controls="prototype-help-panel">原型说明</button>',
+        'aria-controls="prototype-help-panel">页面标注</button>',
+    )
+    write(screen_path, "landscape", screen_source, surface="landscape",
           guide="直接点按设备画面，或用页面目录跳转。打开页面功能标注可对照组件和规则，场景模拟用于切换状态。", fullscreen=True)
     admin_path = landscape_admin.split("#")[0]
     admin_html = (OUTPUT / admin_path).read_text(encoding="utf-8")

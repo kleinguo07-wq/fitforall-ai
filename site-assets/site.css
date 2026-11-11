@@ -158,3 +158,12 @@
 .review-admin .review > nav a {
   display: none;
 }
+
+.site-heading-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--site-accent);
+  font-size: 14px;
+  font-weight: 650;
+  text-underline-offset: 3px;
+}
