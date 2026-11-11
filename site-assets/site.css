@@ -110,7 +110,7 @@
 .site-heading { margin-bottom: 28px; max-width: 750px; }
 .site-kicker { color: var(--site-accent); font-size: 13px; font-weight: 700; margin: 0 0 5px; }
 .site-heading h1 { margin: 0 0 9px; font-size: clamp(31px, 5vw, 46px); line-height: 1.15; }
-.site-heading > p:last-child, .site-card p { color: var(--site-muted); margin: 0; line-height: 1.6; }
+.site-heading > p:last-of-type, .site-card p { color: var(--site-muted); margin: 0; line-height: 1.6; }
 .site-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .site-card {
   display: flex;
