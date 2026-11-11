@@ -8,6 +8,7 @@ on:
       - "docs/**"
       - "projects/**"
       - "scripts/**"
+      - "site-assets/**"
       - "*.png"
       - "*.jpg"
       - "*.jpeg"
