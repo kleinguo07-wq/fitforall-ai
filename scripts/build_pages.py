@@ -1,189 +1,112 @@
 #!/usr/bin/env python3
-"""Build project navigation and keep each product's versions independent."""
+"""Build the product review site while retaining published prototype URLs."""
 
 from __future__ import annotations
 
-import html
+from hashlib import sha256
 import json
+from pathlib import Path
 import re
 import shutil
-from pathlib import Path
 
-from project_pages import load_projects, render_hub, render_landscape, render_pending
-
+from project_pages import Entry, add_shell, load_projects, render_hub, render_landscape_background, render_project
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "_site"
-DEMOS = ROOT / "demos"
 STATIC_EXTENSIONS = {".gif", ".jpeg", ".jpg", ".png", ".svg", ".webp"}
 
 
-def version_key(path: Path) -> tuple[int, ...]:
-    numbers = re.findall(r"\d+", path.name)
-    return tuple(int(number) for number in numbers)
-
-
-def load_version(version_dir: Path) -> dict[str, str]:
-    defaults = {
-        "name": version_dir.name,
-        "title": f"{version_dir.name} 产品评审",
-        "description": "交互原型与需求评审材料",
-        "status": "评审中",
-        "updated": "",
-    }
-    metadata_path = version_dir / "version.json"
-    if metadata_path.exists():
-        metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
-        for key in defaults:
-            value = metadata.get(key)
-            if isinstance(value, str) and value.strip():
-                defaults[key] = value.strip()
-    return defaults
-
-
-def build_version_cards(versions: list[dict[str, str]]) -> str:
-    cards = []
-    for index, version in enumerate(versions):
-        latest = '<span class="latest">最新版本</span>' if index == 0 else ""
-        updated = (
-            f'<time datetime="{html.escape(version["updated"])}">'
-            f'更新于 {html.escape(version["updated"])}</time>'
-            if version["updated"]
-            else ""
-        )
-        cards.append(
-            f"""
-            <a class="version-card" href="./demos/{html.escape(version['name'])}/">
-              <div class="card-top">
-                <span class="version">{html.escape(version['name'].upper())}</span>
-                {latest}
-              </div>
-              <h2>{html.escape(version['title'])}</h2>
-              <p>{html.escape(version['description'])}</p>
-              <div class="card-meta">
-                <span>{html.escape(version['status'])}</span>
-                {updated}
-              </div>
-              <strong>打开工作台 <span aria-hidden="true">→</span></strong>
-            </a>
-            """.strip()
-        )
-    return "\n".join(cards)
-
-
-def render_index(versions: list[dict[str, str]]) -> str:
-    cards = build_version_cards(versions)
-    return f"""<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="FitForAll AI 产品需求、原型与版本评审入口">
-  <title>FitForAll AI · 产品评审工作台</title>
-  <style>
-    :root {{ color-scheme: light; --ink:#14243d; --muted:#6f809b; --line:#dce5f2; --blue:#1769f3; --panel:#fff; }}
-    * {{ box-sizing:border-box; }}
-    body {{ margin:0; min-height:100vh; color:var(--ink); background:#f3f7fd; font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif; }}
-    .shell {{ width:min(1080px,calc(100% - 40px)); margin:0 auto; padding:72px 0 80px; }}
-    .brand {{ display:flex; align-items:center; gap:12px; margin-bottom:72px; font-weight:750; font-size:20px; }}
-    .logo {{ display:grid; place-items:center; width:44px; height:44px; color:#fff; background:var(--blue); border-radius:13px; font-size:25px; }}
-    .eyebrow {{ margin:0 0 14px; color:var(--blue); font-size:13px; font-weight:750; letter-spacing:.16em; }}
-    h1 {{ max-width:760px; margin:0; font-size:clamp(38px,6vw,68px); line-height:1.12; letter-spacing:-.04em; }}
-    .intro {{ max-width:660px; margin:24px 0 54px; color:var(--muted); font-size:18px; line-height:1.8; }}
-    .versions {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:20px; }}
-    .version-card {{ display:flex; min-height:330px; padding:30px; flex-direction:column; color:inherit; text-decoration:none; background:var(--panel); border:1px solid var(--line); border-radius:24px; box-shadow:0 14px 40px rgba(31,68,122,.08); transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease; }}
-    .version-card:hover {{ transform:translateY(-4px); border-color:#a9c7fb; box-shadow:0 20px 46px rgba(31,68,122,.14); }}
-    .card-top,.card-meta {{ display:flex; align-items:center; justify-content:space-between; gap:12px; }}
-    .version {{ color:var(--blue); font-size:14px; font-weight:800; letter-spacing:.1em; }}
-    .latest {{ padding:7px 10px; color:#116741; background:#e6f7ef; border-radius:999px; font-size:12px; font-weight:700; }}
-    h2 {{ margin:34px 0 12px; font-size:28px; }}
-    .version-card p {{ margin:0; color:var(--muted); line-height:1.7; }}
-    .card-meta {{ margin-top:auto; padding:22px 0; color:#8090a8; border-top:1px solid #edf1f7; font-size:13px; }}
-    .version-card strong {{ color:var(--blue); font-size:16px; }}
-    footer {{ margin-top:52px; color:#8b99ac; font-size:13px; }}
-    .backlog-entry {{ display:block; margin-top:24px; padding:22px 28px; color:var(--ink); background:#fff; border:1px solid var(--line); border-radius:18px; text-decoration:none; }}
-    .backlog-entry strong {{ color:var(--blue); }}
-    .backlog-entry p {{ margin:8px 0 0; color:var(--muted); font-size:14px; }}
-    @media (max-width:600px) {{ .shell {{ width:min(100% - 28px,1080px); padding-top:30px; }} .brand {{ margin-bottom:50px; }} .intro {{ margin-bottom:38px; }} }}
-  </style>
-</head>
-<body>
-  <main class="shell">
-    <div class="brand"><span class="logo">F</span><span>FitForAll AI</span></div>
-    <p class="eyebrow">PRODUCT REVIEW WORKSPACE</p>
-    <h1>产品需求与交互原型<br>统一评审入口</h1>
-    <p class="intro">按版本查看需求、交互演示与评审状态。每个版本使用独立地址，历史版本会持续保留，方便产品、开发和测试共同核对。</p>
-    <section class="versions" aria-label="版本列表">
-      {cards}
-    </section>
-    <a class="backlog-entry" href="./demos/backlog/"><strong>待开发需求池 →</strong><p>保留待排期的需求、演示、验收与埋点，独立于当前版本。</p></a>
-    <footer>FitForAll AI · AI 全民健身机产品工作台</footer>
-  </main>
-</body>
-</html>
-"""
-
-
 def main() -> None:
-    version_dirs = sorted(
-        (path for path in DEMOS.glob("v*") if path.is_dir() and (path / "index.html").exists()),
-        key=version_key,
-        reverse=True,
-    )
-    if not version_dirs:
-        raise SystemExit("No publishable demos found under demos/v*/index.html")
-
     if OUTPUT.exists():
         shutil.rmtree(OUTPUT)
     OUTPUT.mkdir()
-
-    shutil.copytree(DEMOS, OUTPUT / "demos")
-    docs = ROOT / "docs"
-    if docs.exists():
-        shutil.copytree(docs, OUTPUT / "docs")
+    for name in ("demos", "docs", "projects", "site-assets"):
+        ignored = (".DS_Store", "catalog.json", "README.md") if name == "projects" else (".DS_Store",)
+        shutil.copytree(ROOT / name, OUTPUT / name, ignore=shutil.ignore_patterns(*ignored))
     for asset in ROOT.iterdir():
         if asset.is_file() and asset.suffix.lower() in STATIC_EXTENSIONS:
             shutil.copy2(asset, OUTPUT / asset.name)
 
-    versions = [load_version(path) for path in version_dirs]
     projects = load_projects(ROOT)
-    project_sources = ROOT / "projects"
-    shutil.copytree(project_sources, OUTPUT / "projects", ignore=shutil.ignore_patterns("catalog.json", "README.md", ".DS_Store"))
-    admin_preview = OUTPUT / "projects" / "landscape" / "v1.0" / "admin.html"
-    if admin_preview.is_file():
-        admin_html = admin_preview.read_text(encoding="utf-8")
-        sidebar_section = '<div class="menu-label">已有功能参照</div>'
-        trail_link = ('<a class="menu-static" style="display:block;color:inherit;text-decoration:none" '
-                      'href="../../trail-checkin/prototype/?view=admin">智慧步道</a>')
-        admin_preview.write_text(admin_html.replace(sidebar_section, trail_link + sidebar_section, 1), encoding="utf-8")
+    project_by_id = {item["id"]: item for item in projects}
+    versions = {key: project_by_id[key]["current"] for key in ("fitness", "landscape")}
+    fitness = f"demos/{versions['fitness']}/index.html"
+    landscape = f"projects/landscape/{versions['landscape']}"
+    trail = "projects/trail-checkin/prototype/index.html"
+    research = "projects/trail-checkin/research/index.html"
+    backlog = "demos/backlog/index.html"
+    vertical_meta = json.loads((ROOT / fitness).with_name("version.json").read_text(encoding="utf-8"))
+    landscape_meta = json.loads((ROOT / landscape / "version.json").read_text(encoding="utf-8"))
+    landscape_screen = f"{landscape}/{landscape_meta['entry']}"
+    landscape_admin = f"{landscape}/{landscape_meta['admin_entry']}"
+    tracking = f"{landscape}/{landscape_meta['tracking_entry']}"
+    resources = {
+        "fitness": [
+            Entry("屏端原型", fitness + "?view=device", "体验视频屏保、趣运动项目同步等本期内容。"),
+            Entry("管理后台", fitness + "?view=admin", "评审全民健身机屏保管理。"),
+            Entry("评审说明", fitness + "?view=spec", "查看本期范围和评审重点。"),
+            Entry("需求文档", fitness + "?view=docs", "查看本期需求、业务规则与验收。"),
+            Entry("埋点需求", fitness + "?view=tracking", "查阅采集事件与口径。"),
+            Entry("待开发需求池", backlog, "查看尚未排期的需求与演示。"),
+        ],
+        "landscape": [
+            Entry("屏端原型", landscape_screen, "体验横屏首页、运动内容、趣味互动与本站服务。"),
+            Entry("管理后台", landscape_admin, "查看分产品视频管理、公告与智慧步道入口。"),
+            Entry("埋点需求", tracking, "查阅事件、触发时机与验收口径。"),
+        ],
+        "trail-checkin": [
+            Entry("屏端原型", trail, "体验点位地图、运动榜、设备设置和个人数据入口。"),
+            Entry("管理后台", trail + "?view=admin", "上传地图、配置杆间距离和广告屏保。"),
+            Entry("设备运维", trail + "?view=ops", "预览首次绑定、设备自检与同步状态。"),
+            Entry("采购调研", research, "对照采购范围、金额、采集杆参数和原始来源。"),
+        ],
+    }
+    assets = {path.name: sha256(path.read_bytes()).hexdigest()[:10] for path in (OUTPUT / "site-assets").iterdir() if path.is_file()}
+
+    def write(path: str, project: str, source: str | None = None, surface: str = "", guide: str = "", fullscreen: bool = False) -> None:
+        target = OUTPUT / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if source is None:
+            source = target.read_text(encoding="utf-8")
+        target.write_text(add_shell(source, path, projects, project, resources.get(project, []), surface, assets, guide, fullscreen), encoding="utf-8")
+
+    write("index.html", "", render_hub(projects))
+    background = json.loads((ROOT / "projects/landscape/background.json").read_text(encoding="utf-8"))
     for project in projects:
-        target = OUTPUT / "projects" / project["id"]
-        target.mkdir(parents=True, exist_ok=True)
-        if project["id"] == "fitness":
-            # Existing vertical version URLs remain /demos/v*/.
-            content = render_index(versions).replace('href="./demos/', 'href="../../demos/')
-            content = content.replace('<div class="brand">', '<a href="../../">← 项目总览</a><div class="brand">', 1)
-            content = content.replace("产品需求与交互原型<br>统一评审入口", "全民健身机 · 竖屏<br>版本评审")
-        elif project["id"] == "landscape":
-            landscape_versions = sorted(
-                (item for item in (project_sources / "landscape").glob("v*")
-                 if item.is_dir() and (item / "index.html").is_file() and (item / "version.json").is_file()),
-                key=version_key, reverse=True,
-            )
-            if not landscape_versions:
-                raise SystemExit("No publishable landscape prototype found")
-            background = json.loads(
-                (project_sources / "landscape" / "background.json").read_text(encoding="utf-8")
-            )
-            content = render_landscape(project, landscape_versions, background)
-        elif (target / "index.html").is_file():
-            continue  # Preserve standalone project pages copied from projects/.
-        else:
-            content = render_pending(project)
-        (target / "index.html").write_text(content, encoding="utf-8")
-    (OUTPUT / "index.html").write_text(render_hub(projects), encoding="utf-8")
+        key = project["id"]
+        extra = render_landscape_background(background) if key == "landscape" else ""
+        updated = {"fitness": vertical_meta["updated"], "landscape": landscape_meta["updated"]}.get(key, "")
+        write(f"projects/{key}/index.html", key, render_project(project, resources.get(key, []), extra, updated))
+
+    fitness_source = (OUTPUT / fitness).read_text(encoding="utf-8")
+    fitness_source = fitness_source.replace('<p class="nav-label">评审空间</p>', '<p class="nav-label">页面目录</p>')
+    write(fitness, "fitness", fitness_source, surface="fitness",
+          guide="从评审目录切换交互大屏的功能，使用场景模拟调整时间、内容和状态，查看本页需求。管理后台、需求文档和埋点可从项目内导航直接打开。", fullscreen=True)
+    write(backlog, "fitness", surface="backlog",
+          guide="从左侧选择待开发需求，查看对应的屏端或小程序演示，再核对本页规则。", fullscreen=True)
+    write(landscape_screen.split("#")[0], "landscape", surface="landscape",
+          guide="直接点按设备画面，或用页面目录跳转。打开页面功能标注可对照组件和规则，场景模拟用于切换状态。", fullscreen=True)
+    admin_path = landscape_admin.split("#")[0]
+    admin_html = (OUTPUT / admin_path).read_text(encoding="utf-8")
+    sidebar_section = '<div class="menu-label">已有功能参照</div>'
+    trail_link = ('<a class="menu-static" style="display:block;color:inherit;text-decoration:none" '
+                  'href="../../trail-checkin/prototype/?view=admin">智慧步道</a>')
+    write(admin_path, "landscape", admin_html.replace(sidebar_section, trail_link + sidebar_section, 1), surface="admin",
+          guide="从左侧选择内容管理功能。使用场景模拟验证空列表、加载或保存失败。")
+    write(tracking, "landscape", surface="tracking")
+    write(trail, "trail-checkin", surface="trail",
+          guide="点按杆屏体验地图、运动榜与设置。使用场景模拟生成经过事件，或切到管理后台配置地图、距离和广告屏保。", fullscreen=True)
+    write(research, "trail-checkin", surface="research")
+
+    # Apply the shared shell to any other published versions that are reached by old URLs.
+    current_pages = {fitness, backlog, landscape_screen.split("#")[0], admin_path, tracking, trail, research}
+    for directory, project in (("demos", "fitness"), ("projects/landscape", "landscape")):
+        for target in (OUTPUT / directory).glob("v*/index.html"):
+            path = target.relative_to(OUTPUT).as_posix()
+            if path not in current_pages:
+                write(path, project, surface="archive")
     (OUTPUT / ".nojekyll").touch()
-    print(f"Built {len(projects)} projects; retained {len(versions)} vertical version(s): {', '.join(item['name'] for item in versions)}")
+    print(f"Built {len(projects)} projects and their review pages")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,334 @@
+/* Match the workbench around each prototype. Device canvases keep their product styles. */
+body.review-site.review-page {
+  color: var(--site-ink);
+  background: var(--site-bg);
+}
+body.review-site.review-page > main,
+body.review-site.review-page > .review,
+body.review-site.review-page > .layout {
+  font-family: var(--site-font);
+}
+
+.review-site:is(.review-fitness, .review-backlog) {
+  --review-sidebar-width: 210px;
+  display: grid;
+  grid-template-columns: var(--review-sidebar-width) minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  align-items: start;
+}
+.review-site:is(.review-fitness, .review-backlog) > .site-header {
+  grid-column: 1 / -1;
+}
+.review-site:is(.review-fitness, .review-backlog) > .sidebar {
+  position: sticky;
+  top: var(--site-nav-height, 0px);
+  width: auto;
+  height: auto;
+  max-height: calc(100dvh - var(--site-nav-height, 0px));
+  padding: 20px 14px;
+  border-color: var(--site-line);
+  background: var(--site-panel);
+  font-family: var(--site-font);
+}
+.review-site:is(.review-fitness, .review-backlog) > main {
+  min-width: 0;
+  width: auto;
+  margin: 0;
+}
+.review-site:is(.review-fitness, .review-backlog) > .sidebar .brand {
+  display: none;
+}
+.review-site:is(.review-fitness, .review-backlog) > .sidebar .release {
+  margin: 0 0 8px;
+  color: var(--site-accent);
+}
+.review-site:is(.review-fitness, .review-backlog) > .sidebar .nav,
+.review-site:is(.review-fitness, .review-backlog) .prototype-group h3 {
+  color: var(--site-muted);
+}
+.review-site:is(.review-fitness, .review-backlog) > .sidebar .nav:is(:hover, .active),
+.review-site:is(.review-fitness, .review-backlog) .prototype-subnav button:is(:hover, .active) {
+  background: #edf4ff;
+  color: var(--site-accent);
+}
+.review-site:is(.review-fitness, .review-backlog) .nav-label,
+.review-site:is(.review-fitness, .review-backlog) :is(.topbar, .inspector-head) .eyebrow {
+  color: var(--site-muted);
+  letter-spacing: .04em;
+}
+.review-site:is(.review-fitness, .review-backlog) > main > .topbar {
+  min-height: 70px;
+  height: auto;
+  gap: 10px;
+  padding: 13px 24px;
+  background: var(--site-panel);
+  border-color: var(--site-line);
+}
+.review-site:is(.review-fitness, .review-backlog) > main > .workspace {
+  grid-template-columns: minmax(0, 1fr) 300px;
+  min-height: 0;
+}
+.review-site:is(.review-fitness, .review-backlog) .stage-area {
+  min-width: 0;
+  background: #e8eef7;
+}
+.review-site:is(.review-fitness, .review-backlog) :is(.stage-meta, .stage-foot, .inspector-head p, .field-label) {
+  color: var(--site-muted);
+}
+.review-site:is(.review-fitness, .review-backlog) .inspector {
+  background: var(--site-panel);
+  border-color: var(--site-line);
+}
+.review-site:is(.review-fitness, .review-backlog) .inspector .status-box {
+  background: #edf4ff;
+  color: var(--site-muted);
+}
+.review-site:is(.review-fitness, .review-backlog) :is(.docs-page-grid article, .tracking-notes, .tracking-table-wrap) {
+  border-color: var(--site-line);
+  border-radius: var(--site-radius);
+}
+
+.review-site:is(.review-admin, .review-landscape) > .review {
+  color: var(--site-ink);
+  background: var(--site-panel);
+  border-bottom-color: var(--site-line);
+}
+.review-site:is(.review-admin, .review-landscape) > .review small,
+.review-landscape .workspace > .meta,
+.review-landscape .workspace > .underbar {
+  color: var(--site-muted);
+}
+.review-landscape .workspace > .meta b {
+  color: var(--site-ink);
+  font-weight: 700;
+}
+.review-landscape :is(.workspace > .underbar, .workspace > .game-controls, .workspace > .review-notes, .prototype-help-panel, .screen-map),
+.review-admin :is(.review-tools, .help) {
+  background: var(--site-panel);
+  border: 1px solid var(--site-line);
+  border-radius: var(--site-radius);
+}
+.review-landscape .workspace > .underbar,
+.review-admin .review-tools {
+  padding: 10px 14px;
+}
+.review-landscape .review-modal {
+  background: #1425419c;
+}
+.review-landscape .prototype-help-heading {
+  color: var(--site-ink);
+  border-bottom-color: var(--site-line);
+}
+.review-admin .layout {
+  min-height: 0;
+}
+.review-admin .layout > .sidebar,
+.review-trail .shared-admin > .admin-menu {
+  background: var(--site-panel);
+  color: var(--site-ink);
+  border-right: 1px solid var(--site-line);
+}
+.review-admin .sidebar :is(.brand, button, .menu-static),
+.review-trail .shared-admin .admin-menu a {
+  color: var(--site-ink);
+}
+.review-admin .sidebar .menu-label,
+.review-trail .shared-admin .admin-menu small {
+  color: var(--site-muted);
+}
+.review-admin .sidebar :is(button.active, a:hover),
+.review-trail .shared-admin .admin-menu [aria-current] {
+  color: var(--site-accent);
+  background: #edf4ff;
+}
+.review-admin .sidebar a.menu-static {
+  border-radius: 8px;
+}
+.review-admin .shell :is(.topbar, .panel),
+.review-trail .shared-admin :is(.admin-top, .admin-card) {
+  border-color: var(--site-line);
+}
+.review-admin .shell .panel,
+.review-trail .shared-admin .admin-card {
+  border-radius: var(--site-radius);
+}
+.review-admin .shell button.primary,
+.review-trail .shared-admin .admin-save {
+  color: white;
+  background: var(--site-accent);
+  border-color: var(--site-accent);
+  border-radius: 8px;
+}
+
+.review-trail > .workspace {
+  padding-top: 24px;
+}
+.review-trail .workspace-heading :is(.eyebrow, .muted) {
+  color: var(--site-muted);
+}
+.review-trail .workspace .workbench > :is(.preview, .controls),
+.review-trail .workspace .preview > .view-nav {
+  border-color: var(--site-line);
+}
+.review-trail .workspace .workbench > :is(.preview, .controls) {
+  border-radius: var(--site-radius);
+}
+.review-trail .workspace .preview-stage {
+  background: #e8eef7;
+  border-radius: 0 0 var(--site-radius) var(--site-radius);
+}
+.review-trail .controls :is(.feedback, .how-to) {
+  color: var(--site-muted);
+}
+.review-trail .controls .how-to {
+  border-color: var(--site-line);
+}
+
+.review-tracking > main,
+.review-research > main {
+  padding-top: 8px;
+}
+.review-research > main > .hero {
+  padding-top: 20px;
+}
+.review-site:is(.review-tracking, .review-research) main a,
+.review-research main .eyebrow {
+  color: var(--site-accent);
+}
+.review-research :is(.scroll, th, td) {
+  border-color: var(--site-line);
+}
+.review-research th,
+.review-tracking .event[open] > summary {
+  background: #edf4ff;
+}
+.review-site :is(.filters, .review-tools, .scenario, .controls, .inspector) :is(select, input[type="search"]),
+.review-fitness .tracking-toolbar input,
+.review-backlog .tracking-toolbar input {
+  border: 1px solid var(--site-line);
+  border-radius: 8px;
+  color: var(--site-ink);
+  background: var(--site-panel);
+}
+.review-site :is(.scenario, .review-actions, .review-secondary, .review-tools, .screen-map) button,
+.review-site .inspector .scenario-grid button,
+.review-tracking .filters button,
+.review-trail :is(.view-nav, .controls) button {
+  min-height: 36px;
+  color: var(--site-accent);
+  background: var(--site-panel);
+  border: 1px solid var(--site-line);
+  border-radius: 8px;
+  font-weight: 650;
+}
+.review-site :is(.scenario, .review-actions, .review-secondary, .review-tools, .screen-map) button:not(:disabled):hover,
+.review-site .inspector .scenario-grid button:not(:disabled):hover,
+.review-tracking .filters button:not(:disabled):hover,
+.review-trail :is(.view-nav, .controls) button:not(:disabled):hover {
+  border-color: var(--site-accent);
+}
+.review-site :is(.review-actions, .review-secondary, .review-tools) button[aria-expanded="true"],
+.review-site .inspector .scenario-grid button:is([aria-pressed="true"], .active),
+.review-tracking .filters button[aria-pressed="true"],
+.review-trail :is(.view-nav button[aria-pressed="true"], .controls button.primary) {
+  color: white;
+  background: var(--site-accent);
+  border-color: var(--site-accent);
+}
+.review-site :is(.review-actions, .review-secondary, .scenario, .review-tools, .controls, .inspector, .filters) :is(button, select, input):focus-visible,
+.review-trail .view-nav button:focus-visible {
+  outline: 2px solid var(--site-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1150px) {
+  .review-site:is(.review-fitness, .review-backlog) {
+    --review-sidebar-width: 185px;
+  }
+  .review-site:is(.review-fitness, .review-backlog) > main > .workspace {
+    grid-template-columns: minmax(0, 1fr) 265px;
+  }
+  .review-site:is(.review-fitness, .review-backlog) .stage-area.requirements-open .stage-canvas {
+    flex-direction: column;
+    align-items: center;
+  }
+  .review-site:is(.review-fitness, .review-backlog) .stage-area.requirements-open .context-requirements {
+    width: min(438px, 100%);
+    margin-top: 8px;
+  }
+}
+@media (max-width: 850px) {
+  .review-site:is(.review-fitness, .review-backlog) {
+    display: block;
+  }
+  .review-site:is(.review-fitness, .review-backlog) > .sidebar {
+    position: static;
+    width: 100%;
+    max-height: none;
+    padding: 7px 12px;
+    border-right: 0;
+    border-bottom: 1px solid var(--site-line);
+  }
+  .review-site:is(.review-fitness, .review-backlog) > .sidebar > nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 3px 5px;
+  }
+  .review-site:is(.review-fitness, .review-backlog) > .sidebar .nav {
+    width: auto;
+    padding: 7px 8px;
+    margin: 0;
+    gap: 4px;
+  }
+  .review-site:is(.review-fitness, .review-backlog) > .sidebar .nav span {
+    display: inline;
+    font-size: 12px;
+  }
+  .review-site:is(.review-fitness, .review-backlog) > .sidebar nav:has(.nav[data-view="device"].active) > .prototype-subnav {
+    display: flex;
+    width: 100%;
+    order: 1;
+    flex-wrap: wrap;
+    gap: 0 12px;
+    margin: 3px 0 0;
+    padding: 4px 0 0;
+    border: 0;
+    border-top: 1px solid var(--site-line);
+  }
+  .review-site:is(.review-fitness, .review-backlog) .prototype-group {
+    flex: 1 1 140px;
+    margin: 3px 0;
+  }
+  .review-site:is(.review-fitness, .review-backlog) > main > .topbar {
+    padding-inline: 14px;
+  }
+  .review-site:is(.review-fitness, .review-backlog) > main > .workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .review-admin .sidebar a.menu-static {
+    display: block;
+    padding: 8px;
+    white-space: nowrap;
+  }
+}
+@media print {
+  .review-tracking > .site-header,
+  .review-research > .site-header {
+    display: none;
+  }
+}
+
+/* Use the shared project links once; keep each device's own feature navigation. */
+.review-fitness > .sidebar > nav > .nav,
+.review-trail .preview > .view-nav {
+  display: none;
+}
+.review-fitness:not(:has(.nav[data-view="device"].active)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.review-fitness:not(:has(.nav[data-view="device"].active)) > .sidebar {
+  display: none;
+}
+.review-trail .preview-stage {
+  border-radius: var(--site-radius);
+}
