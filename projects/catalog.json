@@ -19,8 +19,8 @@
     "id": "trail-checkin",
     "title": "智慧步道打卡杆",
     "form": "户外打卡杆",
-    "description": "查阅智慧步道采购项目、报价口径、采集杆参数和原始来源。",
-    "status": "采购调研",
-    "current": "采购对照表"
+    "description": "评审打卡杆屏幕、设备运维和跨点记录流程，查阅采购调研资料。",
+    "status": "交互原型",
+    "current": "首期评审"
   }
 ]
