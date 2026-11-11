@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>智慧步道打卡杆 · 首期交互原型</title>
   <link rel="stylesheet" href="../trail.css">
+  <script src="./pole.js" defer></script>
   <script src="./demo.js" defer></script>
 </head>
 <body>
@@ -23,7 +24,6 @@
         <button type="button" data-view="public" aria-pressed="true">市民杆屏</button>
         <button type="button" data-view="ops" aria-pressed="false">设备运维</button>
         <button type="button" data-view="admin" aria-pressed="false">管理后台</button>
-        <button type="button" data-view="phone" aria-pressed="false">小程序</button>
       </nav>
       <div id="preview" class="preview-stage"></div>
     </section>
@@ -44,14 +44,15 @@
       </select>
       <button class="button primary next" id="next" type="button">模拟经过下一点</button>
       <button class="button secondary" id="repeat" type="button">模拟重复识别</button>
+      <button class="button secondary" id="idle" type="button">模拟空闲，进入广告屏保</button>
       <button class="button secondary" id="reset" type="button">重置演示记录</button>
       <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
       <details class="how-to">
         <summary>怎么评审</summary>
         <ol>
-          <li>模拟经过 A 点后，打开小程序查看进度。</li>
-          <li>继续模拟经过，在小程序查看有效路段、里程和用时。</li>
-          <li>切到断网，经过一个点位，再恢复在线，查看补传结果。</li>
+          <li>点按杆屏地图上的点位，查看当前杆和推荐下一点。</li>
+          <li>查看今日榜与本站总榜，试走后演示授权上榜。</li>
+          <li>在管理后台上传地图或广告图并保存，再切到杆屏预览。</li>
           <li>选择初装，在设备运维页完成绑定和自检。</li>
         </ol>
       </details>
