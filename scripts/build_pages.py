@@ -89,6 +89,7 @@ def main() -> None:
         overview = render_project(
             project, resources.get(key, []), extra, updated,
             backlog_entry=backlog_entry if key == "fitness" else None,
+            change_summary=vertical_meta.get("change_summary", "") if key == "fitness" else "",
         )
         write(f"projects/{key}/index.html", key, overview)
 
