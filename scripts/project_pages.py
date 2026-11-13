@@ -56,7 +56,7 @@ def render_hub(projects: list[dict[str, str]]) -> str:
 
 def render_project(
     project: dict[str, str], entries: list[Entry], extra: str = "", updated: str = "",
-    *, backlog_entry: Entry | None = None,
+    *, backlog_entry: Entry | None = None, change_summary: str = "",
 ) -> str:
     path = f"projects/{project['id']}/index.html"
     cards = []
@@ -66,6 +66,9 @@ def render_project(
 <h3>{escape(entry.title)}</h3><p>{escape(entry.description)}</p>
 <span class="site-card-action">打开 <span aria-hidden="true">→</span></span></a>""")
     timestamp = f'<time datetime="{escape(updated)}">更新于 {escape(updated)}</time>' if updated else ""
+    version_title = project["current"] or project["status"]
+    if change_summary:
+        version_title = f"{version_title} · {change_summary}"
     background_link = '<a class="site-heading-link" href="#background">项目背景与产品思考 ↓</a>' if extra else ""
     backlog_section = ""
     if backlog_entry:
@@ -79,7 +82,7 @@ def render_project(
 <p>{escape(project['description'])}</p>{background_link}</header>
 <section class="site-release" aria-labelledby="current-version">
 <header class="site-section-heading"><div><p class="site-kicker">当前评审</p>
-<h2 id="current-version">{escape(project['current'] or project['status'])}</h2></div>{timestamp}</header>
+<h2 id="current-version">{escape(version_title)}</h2></div>{timestamp}</header>
 <div class="site-grid">{''.join(cards)}</div></section>{backlog_section}{extra}""")
 
 
