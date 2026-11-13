@@ -35,6 +35,7 @@ def main() -> None:
     trail = "projects/trail-checkin/prototype/index.html"
     research = "projects/trail-checkin/research/index.html"
     backlog = "demos/backlog/index.html"
+    backlog_entry = Entry("待开发需求池", backlog, "查看全民健身机尚未排期的需求与演示。")
     vertical_meta = json.loads((ROOT / fitness).with_name("version.json").read_text(encoding="utf-8"))
     landscape_meta = json.loads((ROOT / landscape / "version.json").read_text(encoding="utf-8"))
     landscape_screen = f"{landscape}/{landscape_meta['entry']}"
@@ -47,7 +48,6 @@ def main() -> None:
             Entry("评审说明", fitness + "?view=spec", "查看本期范围和评审重点。"),
             Entry("需求文档", fitness + "?view=docs", "查看本期需求、业务规则与验收。"),
             Entry("埋点需求", fitness + "?view=tracking", "查阅采集事件与口径。"),
-            Entry("待开发需求池", backlog, "查看尚未排期的需求与演示。"),
         ],
         "landscape": [
             Entry("屏端原型", landscape_screen, "体验横屏首页、运动内容、趣味互动与本站服务。"),
@@ -68,7 +68,10 @@ def main() -> None:
         target.parent.mkdir(parents=True, exist_ok=True)
         if source is None:
             source = target.read_text(encoding="utf-8")
-        target.write_text(add_shell(source, path, projects, project, resources.get(project, []), surface, assets, guide, fullscreen), encoding="utf-8")
+        navigation = resources.get(project, [])
+        if project == "fitness":
+            navigation = [*navigation, backlog_entry]
+        target.write_text(add_shell(source, path, projects, project, navigation, surface, assets, guide, fullscreen), encoding="utf-8")
 
     write("index.html", "", render_hub(projects))
     background = json.loads((ROOT / "projects/landscape/background.json").read_text(encoding="utf-8"))
@@ -83,7 +86,11 @@ def main() -> None:
                 '摄像头、评分、计时、账号、二维码、媒体、环境及榜单均为模拟。</p></section>'
             )
         updated = {"fitness": vertical_meta["updated"], "landscape": landscape_meta["updated"]}.get(key, "")
-        write(f"projects/{key}/index.html", key, render_project(project, resources.get(key, []), extra, updated))
+        overview = render_project(
+            project, resources.get(key, []), extra, updated,
+            backlog_entry=backlog_entry if key == "fitness" else None,
+        )
+        write(f"projects/{key}/index.html", key, overview)
 
     fitness_source = (OUTPUT / fitness).read_text(encoding="utf-8")
     fitness_source = fitness_source.replace('<p class="nav-label">评审空间</p>', '<p class="nav-label">页面目录</p>')

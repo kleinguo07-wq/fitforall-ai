@@ -54,7 +54,10 @@ def render_hub(projects: list[dict[str, str]]) -> str:
 <section class="site-grid" aria-label="产品项目">{''.join(cards)}</section>""")
 
 
-def render_project(project: dict[str, str], entries: list[Entry], extra: str = "", updated: str = "") -> str:
+def render_project(
+    project: dict[str, str], entries: list[Entry], extra: str = "", updated: str = "",
+    *, backlog_entry: Entry | None = None,
+) -> str:
     path = f"projects/{project['id']}/index.html"
     cards = []
     for index, entry in enumerate(entries):
@@ -64,13 +67,20 @@ def render_project(project: dict[str, str], entries: list[Entry], extra: str = "
 <span class="site-card-action">打开 <span aria-hidden="true">→</span></span></a>""")
     timestamp = f'<time datetime="{escape(updated)}">更新于 {escape(updated)}</time>' if updated else ""
     background_link = '<a class="site-heading-link" href="#background">项目背景与产品思考 ↓</a>' if extra else ""
+    backlog_section = ""
+    if backlog_entry:
+        backlog_section = f"""<section class="site-note" aria-labelledby="project-backlog">
+<p class="site-kicker">项目级</p><h2 id="project-backlog">{escape(backlog_entry.title)}</h2>
+<p>{escape(backlog_entry.description)}</p>
+<a class="site-heading-link" href="{escape(relative_url(path, backlog_entry.path))}">打开需求池 <span aria-hidden="true">→</span></a>
+</section>"""
     return render_page(project["title"], f"""<header class="site-heading">
 <p class="site-kicker">{escape(project['form'])}</p><h1>{escape(project['title'])}</h1>
 <p>{escape(project['description'])}</p>{background_link}</header>
 <section class="site-release" aria-labelledby="current-version">
 <header class="site-section-heading"><div><p class="site-kicker">当前评审</p>
 <h2 id="current-version">{escape(project['current'] or project['status'])}</h2></div>{timestamp}</header>
-<div class="site-grid">{''.join(cards)}</div></section>{extra}""")
+<div class="site-grid">{''.join(cards)}</div></section>{backlog_section}{extra}""")
 
 
 def render_landscape_background(background: dict) -> str:
