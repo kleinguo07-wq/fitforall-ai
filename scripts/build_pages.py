@@ -55,8 +55,10 @@ def main() -> None:
             Entry("埋点需求", tracking, "查阅事件、触发时机与验收口径。"),
         ],
         "trail-checkin": [
-            Entry("屏端原型", trail, "体验点位地图、运动榜、设备设置和个人数据入口。"),
-            Entry("管理后台", trail + "?view=admin", "上传地图、配置杆间距离和广告屏保。"),
+            Entry("屏端原型", trail, "体验点位地图、运动榜、现场核验、设备设置和语音提示。"),
+            Entry("排行榜大屏", trail + "?view=board", "切换榜屏，验证步道榜单和项目注册归属。"),
+            Entry("小程序", trail + "?view=mini", "体验微信账号绑定、项目公告、今日运动、历史记录及日周月榜。"),
+            Entry("管理后台", trail + "?view=admin", "配置步道及设备，体验远控、升级、播报、发布、统计、监测和日志。"),
             Entry("设备运维", trail + "?view=ops", "预览首次绑定、设备自检与同步状态。"),
             Entry("采购调研", research, "对照采购范围、金额、采集杆参数和原始来源。"),
         ],
@@ -116,7 +118,7 @@ def main() -> None:
           guide="从左侧选择内容管理功能。使用场景模拟验证空列表、加载或保存失败。")
     write(tracking, "landscape", surface="tracking")
     write(trail, "trail-checkin", surface="trail",
-          guide="点按杆屏体验地图、运动榜与设置。使用场景模拟生成经过事件，或切到管理后台配置地图、距离和广告屏保。", fullscreen=True)
+          guide="从项目导航切换杆屏、排行榜大屏、小程序、管理后台与设备运维。可在杆屏发起体验注册，在小程序确认绑定，再用场景模拟生成同一账号的运动。后台发布公告、配置榜屏及远控后，切换对应预览查看变化。", fullscreen=True)
     write(research, "trail-checkin", surface="research")
 
     # Apply the shared shell to any other published versions that are reached by old URLs.

@@ -3,10 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>智慧步道打卡杆 · 首期交互原型</title>
-  <link rel="stylesheet" href="../trail.css?v=fixed-pole-height">
-  <script src="./pole.js" defer></script>
-  <script src="./demo.js" defer></script>
+  <title>智慧步道 · 交互原型</title>
+  <link rel="stylesheet" href="../trail.css?v=trail-connected">
+  <link rel="stylesheet" href="./screen.css?v=trail-connected">
+  <link rel="stylesheet" href="./admin.css?v=trail-connected">
+  <link rel="stylesheet" href="./mini.css?v=trail-connected">
+  <script src="./shared.js?v=trail-connected" defer></script>
+  <script src="./pole.js?v=trail-connected" defer></script>
+  <script src="./admin.js?v=trail-connected" defer></script>
+  <script src="./mini.js?v=trail-connected" defer></script>
+  <script src="./demo.js?v=trail-connected" defer></script>
 </head>
 <body>
 <main class="workspace">
@@ -14,21 +20,25 @@
   <header class="workspace-heading">
     <div>
       <p class="eyebrow">首期评审</p>
-      <h1>打卡杆交互原型</h1>
+      <h1>智慧步道交互原型</h1>
     </div>
-    <p class="muted">中城绿谷示意 · 点位、距离和记录均为模拟</p>
+    <p class="muted">点位、账号、运动记录与设备操作均为模拟</p>
   </header>
   <div class="workbench">
     <section class="preview" aria-label="原型预览">
       <nav class="view-nav" aria-label="预览界面">
         <button type="button" data-view="public" aria-pressed="true">市民杆屏</button>
-        <button type="button" data-view="ops" aria-pressed="false">设备运维</button>
+        <button type="button" data-view="board" aria-pressed="false">排行榜大屏</button>
+        <button type="button" data-view="mini" aria-pressed="false">小程序</button>
         <button type="button" data-view="admin" aria-pressed="false">管理后台</button>
+        <button type="button" data-view="ops" aria-pressed="false">设备运维</button>
       </nav>
       <div id="preview" class="preview-stage"></div>
     </section>
     <aside class="controls" aria-labelledby="controls-title">
       <h2 id="controls-title">场景模拟</h2>
+      <label for="demo-trail">模拟步道</label>
+      <select id="demo-trail"></select>
       <label for="route">布点方案</label>
       <select id="route"><option value="four">四杆 · 分段计时</option><option value="two">两杆 · 全程计时</option></select>
       <label for="journey">经过路线</label>
@@ -50,10 +60,10 @@
       <details class="how-to">
         <summary>怎么评审</summary>
         <ol>
-          <li>点按杆屏地图上的点位，查看当前杆和推荐下一点。</li>
-          <li>查看今日榜与本站总榜，试走后演示授权上榜。</li>
-          <li>在管理后台上传地图或广告图并保存，再切到杆屏预览。</li>
-          <li>选择初装，在设备运维页完成绑定和自检。</li>
+          <li>在杆屏「个人数据」开通步道记录，模拟人脸核验，再到小程序确认绑定。</li>
+          <li>模拟经过多个点位，在小程序查看今日、历史与排行榜。</li>
+          <li>在后台配置步道、绑定大屏、发布公告或调整远控，切换预览核对结果。</li>
+          <li>选择断网或初装，在设备运维页查看补传或自检流程。</li>
         </ol>
       </details>
     </aside>
