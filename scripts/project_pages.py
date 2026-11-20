@@ -96,8 +96,8 @@ def render_landscape_background(background: dict) -> str:
 <h2 id="background-title">项目背景与产品思考</h2>
 <p class="site-kicker">更新于 {escape(background['updated'])}</p>
 <h3>产品定位</h3><p>{escape(background['summary'])}</p>
-<h3>产品亮点</h3><div class="site-note-grid">{items("highlights")}</div>
-<h3>持续思考</h3><div class="site-note-grid">{items("reflections")}</div>
+<h3>v1.0 方案范围</h3><div class="site-note-grid">{items("highlights")}</div>
+<h3>产品思考</h3><div class="site-note-grid">{items("reflections")}</div>
 <p class="site-callout">{escape(background['status_note'])}</p></section>"""
 
 
