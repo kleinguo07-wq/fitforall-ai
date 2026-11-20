@@ -31,13 +31,17 @@ const conditions = {
   unbound: { label: "点位调试中", sign: "点位调试中", camera: "待自检", network: "在线" },
 };
 
+const initialView = new URLSearchParams(location.search).get("view");
 const state = {
-  view: new URLSearchParams(location.search).get("view") === "admin" ? "admin" : "public",
+  view: ["public", "board", "ops", "admin", "mini"].includes(initialView) ? initialView : "public",
+  trail: createDemoTrailState(),
+  miniPage: "today",
   polePage: "map",
   mapPoint: "B",
   rankPeriod: "today",
   faceVerified: false,
-  ranked: false,
+  get ranked() { return Boolean(this.trail.rankedProjects[activeTrail().project]); },
+  set ranked(value) { this.trail.rankedProjects[activeTrail().project] = value; },
   staff: false,
   settings: { network: "以太网", volume: 60, brightness: 85 },
   configuredDistances: {},
@@ -56,6 +60,7 @@ const state = {
 };
 
 const preview = document.getElementById("preview");
+const trailSelect = document.getElementById("demo-trail");
 const routeSelect = document.getElementById("route");
 const journeySelect = document.getElementById("journey");
 const pointSelect = document.getElementById("point");
@@ -66,7 +71,9 @@ const feedback = document.getElementById("feedback");
 
 function route() {
   const selected = routes[state.route];
-  return { ...selected, distances: state.configuredDistances[state.route] || selected.distances };
+  const distance = activeTrail().length || 880;
+  const defaults = distance === 880 ? selected.distances : selected.distances.map((meters) => Math.max(1, Math.round(meters * distance / 880)));
+  return { ...selected, distances: state.configuredDistances[state.route] || defaults };
 }
 
 function journey() {
@@ -79,7 +86,7 @@ function clockTime(minute) {
 }
 
 function canRecord() {
-  return state.condition === "online" || state.condition === "offline";
+  return activeTrail().enabled && state.trail.control.collecting && ["online", "offline"].includes(state.condition);
 }
 
 function setOptions(select, entries, value) {
@@ -94,18 +101,21 @@ function deviceOps() {
   const last = sent.at(-1);
   if (state.condition === "unbound") {
     return `<article class="surface"><p class="eyebrow">授权运维 · 演示</p><h2>首次安装</h2>
-      <dl class="facts"><dt>绑定目标</dt><dd>中城绿谷 · ${state.point} 点</dd><dt>摄像头</dt><dd>本地采集模块</dd><dt>当前进度</dt><dd>${{ unbound: "等待绑定", bound: "已绑定，等待自检", checked: "自检通过，等待启用" }[state.setup]}</dd></dl>
+      <dl class="facts"><dt>绑定目标</dt><dd>${escapeDemo(activeTrail().name)} · ${state.point} 点</dd><dt>摄像头</dt><dd>本地采集模块</dd><dt>当前进度</dt><dd>${{ unbound: "等待绑定", bound: "已绑定，等待自检", checked: "自检通过，等待启用" }[state.setup]}</dd></dl>
       <button type="button" class="button secondary" data-action="bind" ${state.setup !== "unbound" ? "disabled" : ""}>绑定并拉取配置</button>
       <button type="button" class="button secondary" data-action="check" ${state.setup !== "bound" ? "disabled" : ""}>设备自检</button>
       <button type="button" class="button primary" data-action="enable" ${state.setup !== "checked" ? "disabled" : ""}>启用并返回首页</button>
     </article>`;
   }
   return `<article class="surface"><p class="eyebrow">授权运维 · 演示</p><h2>${state.point} 点设备状态</h2>
-    <dl class="facts"><dt>配置</dt><dd>中城绿谷 · ${state.route === "four" ? "四杆" : "两杆"} · 已加载</dd>
+    <dl class="facts"><dt>配置</dt><dd>${escapeDemo(activeTrail().name)} · ${state.route === "four" ? "四杆" : "两杆"} · 已加载</dd>
     <dt>摄像头</dt><dd>${info.camera}</dd><dt>网络</dt><dd>${info.network}</dd><dt>校时</dt><dd>正常（演示）</dd>
+    <dt>设备箱体</dt><dd>${state.condition === "offline" ? "上次上报 39 ℃" : "39 ℃（模拟）"}</dd>
+    <dt>园区天气</dt><dd>多云 · 17 ℃（模拟天气源）</dd>
+    <dt>运行版本</dt><dd>${escapeDemo(state.trail.control.version)}</dd>
     <dt>最近已同步</dt><dd>${last ? clockTime(last.minute) : "暂无"}</dd><dt>待传事件</dt><dd>${pending} 条</dd>
     <dt>测试经过</dt><dd>${state.testCount} 次，仅用于调试</dd></dl>
-    <button type="button" class="button secondary" data-action="test" ${state.condition === "fault" ? "disabled" : ""}>测试一次经过</button>
+    <button type="button" class="button secondary" data-action="test" ${canRecord() ? "" : "disabled"}>测试一次经过</button>
     <button type="button" class="button secondary" data-action="retry">重试同步</button>
     <button type="button" class="button primary" data-action="home">返回市民首页</button>
   </article>`;
@@ -122,10 +132,12 @@ function confirmedSegments() {
     if (!previous) continue;
     const from = points.indexOf(previous.point);
     const to = points.indexOf(pass.point);
-    if (Math.abs(from - to) !== 1) continue;
+    if (Math.abs(from - to) !== 1 || pass.minute <= previous.minute) continue;
     const index = Math.min(from, to);
     segments.push({
       user: pass.user,
+      from: previous.point,
+      to: pass.point,
       label: `${previous.point} → ${pass.point}`,
       distance: distances[index],
       duration: pass.minute - previous.minute,
@@ -135,15 +147,17 @@ function confirmedSegments() {
   return segments;
 }
 
-const views = { public: publicScreen, ops: deviceOps, admin: adminScreen };
+const views = { public: publicScreen, board: rankingScreen, ops: deviceOps, admin: adminScreen, mini: miniScreen };
 
 function render() {
+  document.querySelector(".workbench").dataset.surface = state.view;
   for (const button of document.querySelectorAll("[data-view]")) {
     button.setAttribute("aria-pressed", String(button.dataset.view === state.view));
   }
   preview.innerHTML = views[state.view]();
   drawParkMap();
   refreshIdleTimer();
+  setOptions(trailSelect, state.trail.trails.map((trail) => [trail.id, `${state.trail.projects[trail.project]} · ${trail.name}`]), activeTrail().id);
   const next = journey().points[state.passes.length];
   nextButton.textContent = next ? `模拟经过 ${next} 点` : "本次演示已走完";
   nextButton.disabled = !next || !canRecord();
@@ -168,25 +182,62 @@ function sync() {
 
 function resetJourney() {
   state.passes = [];
+  state.trail.journeyId += 1;
   state.testCount = 0;
   state.notice = "演示记录已重置。";
 }
 
+function archiveDemoJourney() {
+  const completed = currentWorkout();
+  if (completed) state.trail.completed.push(completed);
+  state.trail.passHistory.push(...state.passes.filter((pass) => pass.synced));
+  resetJourney();
+}
+
+function refreshChoices() {
+  setOptions(journeySelect, Object.entries(route().journeys).map(([id, item]) => [id, item.name]), state.journey);
+  setOptions(pointSelect, route().points.map((point) => [point, `${point} 点`]), state.point);
+}
+
+function selectDemoTrail(id) {
+  if (id === activeTrail().id || !state.trail.trails.some((trail) => trail.id === id)) return;
+  archiveDemoJourney();
+  const { control, voice, lastVoice } = state.trail;
+  state.trail.trailSettings[activeTrail().id] = {
+    park: state.park, distances: state.configuredDistances, settings: state.settings, device: { control, voice, lastVoice },
+  };
+  state.trail.activeTrail = id;
+  const saved = state.trail.trailSettings[id];
+  state.park = saved?.park || { map: null, ad: null, adEnabled: false, idleSeconds: 60 };
+  state.configuredDistances = saved?.distances || {};
+  state.settings = saved?.settings || { network: "以太网", volume: 60, brightness: 85 };
+  Object.assign(state.trail, saved?.device || createDemoDeviceState());
+  state.settingsDraft = null;
+  state.configMessage = "";
+  state.mapPoint = state.point;
+  if (state.polePage === "ad") state.polePage = "map";
+  state.notice = `当前模拟步道为${activeTrail().name}。`;
+}
+
+trailSelect.addEventListener("change", () => {
+  selectDemoTrail(trailSelect.value);
+  render();
+});
+
 routeSelect.addEventListener("change", () => {
+  archiveDemoJourney();
   state.route = routeSelect.value;
   state.journey = "through";
   state.point = route().points.includes("B") ? "B" : "A";
   state.mapPoint = state.point;
   state.setup = "unbound";
-  setOptions(journeySelect, Object.entries(route().journeys).map(([id, item]) => [id, item.name]), state.journey);
-  setOptions(pointSelect, route().points.map((point) => [point, `${point} 点`]), state.point);
-  resetJourney();
+  refreshChoices();
   render();
 });
 
 journeySelect.addEventListener("change", () => {
+  archiveDemoJourney();
   state.journey = journeySelect.value;
-  resetJourney();
   render();
 });
 
@@ -205,6 +256,7 @@ conditionSelect.addEventListener("change", () => {
     state.polePage = "map";
   }
   const count = sync();
+  if (count) logDemo("系统日志", `补传 ${count} 条点位事件`, activeTrail().name);
   state.notice = count ? `已补传 ${count} 条，按原经过时间计算。` : conditions[state.condition].label;
   render();
 });
@@ -215,8 +267,10 @@ nextButton.addEventListener("click", () => {
   const point = example.points[position];
   if (!point || !canRecord()) return;
   const pass = {
-    id: position,
+    id: `${state.trail.journeyId}-${position + 1}`,
     point,
+    project: activeTrail().project,
+    trailId: activeTrail().id,
     user: example.users?.[position] ?? "演示用户",
     minute: example.minutes[position],
     synced: state.condition === "online",
@@ -225,6 +279,12 @@ nextButton.addEventListener("click", () => {
   state.point = point;
   state.mapPoint = point;
   state.notice = pass.synced ? `${point} 点事件已同步，经过时间 ${clockTime(pass.minute)}。` : `${point} 点事件已保存在待传队列。`;
+  if (pass.synced) logDemo("系统日志", `收到过点事件 ${pass.id}`, `${activeTrail().name} · ${point} 点`);
+  const voice = state.trail.voice;
+  const time = clockTime(pass.minute);
+  if (voice.enabled && ["pass", "arrival"].includes(voice.event) && (voice.start <= voice.end ? time >= voice.start && time <= voice.end : time >= voice.start || time <= voice.end)) {
+    state.trail.lastVoice = voice.text;
+  }
   render();
 });
 
@@ -236,6 +296,8 @@ repeatButton.addEventListener("click", () => {
 });
 
 document.getElementById("reset").addEventListener("click", () => {
+  state.trail.completed = [];
+  state.trail.passHistory = [];
   resetJourney();
   render();
 });
@@ -251,13 +313,21 @@ document.querySelector(".view-nav").addEventListener("click", (event) => {
 });
 
 preview.addEventListener("click", (event) => {
+  const adminButton = event.target.closest("[data-admin-action]");
+  if (adminButton && handleAdminAction(adminButton)) {
+    const replacement = Array.from(preview.querySelectorAll("[data-admin-action]")).find((control) =>
+      control.dataset.adminAction === adminButton.dataset.adminAction && control.dataset.value === adminButton.dataset.value
+    );
+    replacement?.focus({ preventScroll: true });
+    return;
+  }
   const button = event.target.closest("[data-action]");
   if (!button) return;
   if (["place-marker", "apply-marker"].includes(button.dataset.action)) {
-    setMapMarker(event, button);
+    if (adminCanEdit()) setMapMarker(event, button);
     return;
   }
-  if (handlePoleAction(button)) {
+  if (handleMiniAction(button) || handlePoleAction(button)) {
     render();
     const sameControl = Array.from(preview.querySelectorAll("[data-action]")).find((control) =>
       control.dataset.action === button.dataset.action && control.dataset.value === button.dataset.value && !control.disabled
@@ -302,7 +372,14 @@ preview.addEventListener("click", (event) => {
   replacement.focus({ preventScroll: true });
 });
 
+preview.addEventListener("submit", (event) => {
+  if (handleAdminSubmit(event.target, event.submitter) || handleMiniSubmit(event)) event.preventDefault();
+});
+preview.addEventListener("change", (event) => {
+  handleAdminChange(event);
+  if (typeof handleMiniChange === "function") handleMiniChange(event);
+});
 wirePoleForms();
-setOptions(journeySelect, Object.entries(route().journeys).map(([id, item]) => [id, item.name]), state.journey);
-setOptions(pointSelect, route().points.map((point) => [point, `${point} 点`]), state.point);
+refreshChoices();
+logDemo("登录日志", "登录后台演示账号", "社会体育管理后台");
 render();

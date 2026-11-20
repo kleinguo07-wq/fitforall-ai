@@ -39,6 +39,9 @@ h1, h2, h3, p { margin: 0; }
 .workspace-heading h1 { font-size: clamp(1.75rem,4vw,2.8rem); line-height: 1.2; }
 .workspace-heading .muted { font-size: .85rem; }
 .workbench { display: grid; grid-template-columns: minmax(0,1fr) minmax(265px,320px); align-items: start; gap: 20px; }
+.workbench[data-surface="admin"] { grid-template-columns: minmax(0,1fr); }
+.workbench[data-surface="admin"] .preview-stage { padding: clamp(8px, 1.5vw, 18px); }
+.workbench[data-surface="admin"] > .controls { max-width: 480px; }
 .preview, .controls { border: 1px solid var(--line); border-radius: 16px; background: #fff; }
 .view-nav { display: flex; flex-wrap: wrap; gap: 5px; padding: 10px; border-bottom: 1px solid var(--line); }
 .view-nav button { border: 0; background: transparent; padding: 9px 13px; border-radius: 8px; color: var(--ink); font-weight: 650; }

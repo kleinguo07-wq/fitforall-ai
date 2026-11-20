@@ -27,7 +27,7 @@
     },
     trail: {
       defaultView: "public",
-      triggers: Object.fromEntries(["public", "ops", "admin"].map((view) => [view, `.view-nav [data-view="${view}"]`])),
+      triggers: Object.fromEntries(["public", "board", "mini", "ops", "admin"].map((view) => [view, `.view-nav [data-view="${view}"]`])),
       selected() {
         return document.querySelector('.view-nav [aria-pressed="true"]')?.dataset.view;
       },
