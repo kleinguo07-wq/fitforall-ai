@@ -25,7 +25,8 @@ def add_internal_access(source: str, page: str, asset_versions: dict[str, str]) 
     dialog = '''<dialog id="internal-access" aria-labelledby="internal-access-title" closedby="none" open>
 <h1 id="internal-access-title">内部访问</h1>
 <form>
-<input type="password" aria-label="访问密码" aria-describedby="internal-access-message" placeholder="请输入访问密码" autocomplete="current-password" required autofocus>
+<input type="password" aria-label="访问密码" aria-describedby="internal-access-hint internal-access-message" placeholder="请输入访问密码" autocomplete="current-password" required autofocus>
+<p id="internal-access-hint">提示 <strong>dabai</strong></p>
 <p id="internal-access-message" role="alert"></p>
 <button type="submit">进入</button>
 </form>
@@ -57,6 +58,7 @@ def main() -> None:
     landscape = f"projects/landscape/{versions['landscape']}"
     trail = "projects/trail-checkin/prototype/index.html"
     research = "projects/trail-checkin/research/index.html"
+    analytics = "projects/fitness/analytics/index.html"
     backlog = "demos/backlog/index.html"
     backlog_entry = Entry("待开发需求池", backlog, "查看全民健身机尚未排期的需求与演示。")
     vertical_meta = json.loads((ROOT / fitness).with_name("version.json").read_text(encoding="utf-8"))
@@ -73,7 +75,7 @@ def main() -> None:
             Entry("埋点需求", fitness + "?view=tracking", "查阅采集事件与口径。"),
             Entry(
                 "埋点数据看板",
-                "projects/fitness/analytics/index.html",
+                analytics,
                 "查看社体屏的每日趋势、事件排行和属性分布。",
             ),
         ],
@@ -130,6 +132,11 @@ def main() -> None:
     fitness_source = fitness_source.replace('<p class="nav-label">评审空间</p>', '<p class="nav-label">页面目录</p>')
     write(fitness, "fitness", fitness_source, surface="fitness",
           guide="从评审目录切换交互大屏的功能，使用场景模拟调整时间、内容和状态，查看本页需求。管理后台、需求文档和埋点可从项目内导航直接打开。", fullscreen=True)
+    analytics_source = (OUTPUT / analytics).read_text(encoding="utf-8")
+    analytics_source = analytics_source.replace(
+        '<div id="root"', '<h1 class="analytics-page-title">社体屏埋点分析</h1>\n<div id="root"', 1
+    )
+    write(analytics, "fitness", analytics_source, surface="analytics")
     write(backlog, "fitness", surface="backlog",
           guide="从左侧选择待开发需求，查看对应的屏端或小程序演示，再核对本页规则。", fullscreen=True)
     screen_path = landscape_screen.split("#")[0]
