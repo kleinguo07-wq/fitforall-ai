@@ -48,6 +48,11 @@ def main() -> None:
             Entry("评审说明", fitness + "?view=spec", "查看本期范围和评审重点。"),
             Entry("需求文档", fitness + "?view=docs", "查看本期需求、业务规则与验收。"),
             Entry("埋点需求", fitness + "?view=tracking", "查阅采集事件与口径。"),
+            Entry(
+                "埋点数据看板",
+                "projects/fitness/analytics/index.html",
+                "查看社体屏的每日趋势、事件排行和属性分布。",
+            ),
         ],
         "landscape": [
             Entry("屏端原型", landscape_screen, "体验横屏首页、运动内容、趣味互动与本站服务。"),
