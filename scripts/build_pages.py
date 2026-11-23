@@ -9,11 +9,34 @@ from pathlib import Path
 import re
 import shutil
 
-from project_pages import Entry, add_shell, load_projects, render_hub, render_landscape_background, render_project
+from project_pages import Entry, add_shell, load_projects, relative_url, render_hub, render_landscape_background, render_project
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "_site"
 STATIC_EXTENSIONS = {".gif", ".jpeg", ".jpg", ".png", ".svg", ".webp"}
+
+
+def add_internal_access(source: str, page: str, asset_versions: dict[str, str]) -> str:
+    def asset(name: str) -> str:
+        return relative_url(page, f"site-assets/{name}") + "?v=" + asset_versions[name]
+
+    assets = (f'<link rel="stylesheet" href="{asset("internal-access.css")}">'
+              f'<script src="{asset("internal-access.js")}"></script>')
+    dialog = '''<dialog id="internal-access" aria-labelledby="internal-access-title" closedby="none" open>
+<h1 id="internal-access-title">内部访问</h1>
+<form>
+<input type="password" aria-label="访问密码" aria-describedby="internal-access-message" placeholder="请输入访问密码" autocomplete="current-password" required autofocus>
+<p id="internal-access-message" role="alert"></p>
+<button type="submit">进入</button>
+</form>
+<noscript><p>请启用 JavaScript 后输入密码。</p></noscript>
+</dialog>'''
+    source, html_count = re.subn(r"<html\b", "<html data-internal-access-locked", source, count=1, flags=re.I)
+    source, head_count = re.subn(r"</head>", lambda match: assets + match[0], source, count=1, flags=re.I)
+    source, body_count = re.subn(r"<body\b[^>]*>", lambda match: match[0] + dialog, source, count=1, flags=re.I)
+    if not (html_count and head_count and body_count):
+        raise ValueError(f"Cannot add the internal access prompt to {page}")
+    return source
 
 
 def main() -> None:
@@ -136,6 +159,10 @@ def main() -> None:
             path = target.relative_to(OUTPUT).as_posix()
             if path not in current_pages:
                 write(path, project, surface="archive")
+    for target in OUTPUT.rglob("*.html"):
+        path = target.relative_to(OUTPUT).as_posix()
+        source = target.read_text(encoding="utf-8")
+        target.write_text(add_internal_access(source, path, assets), encoding="utf-8")
     (OUTPUT / ".nojekyll").touch()
     print(f"Built {len(projects)} projects and their review pages")
 

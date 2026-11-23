@@ -1,0 +1,51 @@
+html[data-internal-access-locked] body {
+  overflow: hidden !important;
+}
+
+html[data-internal-access-locked] body > :not(#internal-access) {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+html:not([data-internal-access-locked]) #internal-access,
+#internal-access:not([open]) {
+  display: none !important;
+}
+
+#internal-access {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  box-sizing: border-box;
+  width: min(400px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: clamp(20px, 6vw, 32px);
+  border: 1px solid #d5dfec;
+  border-radius: 16px;
+  color: #15243d;
+  background: #fff;
+  box-shadow: 0 16px 48px #20375c26;
+  font: 16px / 1.5 system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+#internal-access::backdrop { background: #e9eff8; }
+#internal-access h1 { margin: 0 0 16px; font-size: 22px; line-height: 1.25; }
+#internal-access form { display: grid; gap: 10px; margin: 0; }
+#internal-access input, #internal-access button {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid #a3b4cb;
+  border-radius: 8px;
+  font: inherit;
+}
+#internal-access input { color: #15243d; background: #fff; }
+#internal-access button { color: #fff; background: #1753bd; border-color: #1753bd; font-weight: 650; cursor: pointer; }
+#internal-access button:disabled { opacity: .65; cursor: wait; }
+#internal-access :is(input, button):focus-visible { outline: 2px solid #225ec3; outline-offset: 2px; }
+#internal-access-message { margin: 0; color: #a21d29; font-size: 14px; }
+#internal-access-message:empty { display: none; }
