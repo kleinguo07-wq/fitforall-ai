@@ -198,6 +198,27 @@ body.review-site.review-page > .layout {
 .review-research :is(.scroll, th, td) {
   border-color: var(--site-line);
 }
+.review-analytics > .analytics-page-title {
+  width: min(100% - 36px, 1450px);
+  margin: 20px auto 0;
+  color: var(--site-ink);
+  font: 700 clamp(20px, 2.4vw, 27px)/1.25 var(--site-font);
+}
+.review-analytics #root .dashboard-root {
+  --dashboard-topbar-base-height: 0px;
+}
+.review-analytics .dashboard-root > .dashboard-topbar {
+  position: static;
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  backdrop-filter: none;
+}
+.review-analytics .dashboard-root > .dashboard-topbar:not(:has(> .dashboard-tabs-collapse.is-open)),
+.review-analytics .dashboard-root > .dashboard-topbar > .dashboard-topbar-inner,
+.review-analytics .um-snapshot-context > a[href="../"] {
+  display: none;
+}
 .review-research th,
 .review-tracking .event[open] > summary {
   background: #edf4ff;
