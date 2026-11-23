@@ -93,8 +93,11 @@ def main() -> None:
                 '摄像头、评分、计时、账号、二维码、媒体、环境及榜单均为模拟。</p></section>'
             )
         updated = {"fitness": vertical_meta["updated"], "landscape": landscape_meta["updated"]}.get(key, "")
+        entries = resources.get(key, [])
+        if key == "fitness" and versions["fitness"] == "v1.1":
+            entries = [*entries, Entry("发版简介", fitness + "?view=docs#release-intro", "查看本版本的主要更新。")]
         overview = render_project(
-            project, resources.get(key, []), extra, updated,
+            project, entries, extra, updated,
             backlog_entry=backlog_entry if key == "fitness" else None,
             change_summary=vertical_meta.get("change_summary", "") if key == "fitness" else "",
         )
