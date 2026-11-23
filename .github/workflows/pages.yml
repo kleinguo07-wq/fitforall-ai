@@ -133,6 +133,8 @@ jobs:
           path: _site
 
   deploy:
+    if: >-
+      !cancelled() && needs.build.result == 'success'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
