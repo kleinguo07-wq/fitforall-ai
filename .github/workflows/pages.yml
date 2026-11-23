@@ -15,23 +15,114 @@ on:
       - "*.webp"
       - "*.svg"
       - ".github/workflows/pages.yml"
+  schedule:
+    - cron: "0 9 * * *"
+      timezone: Asia/Shanghai
   workflow_dispatch:
+    inputs:
+      refresh_analytics:
+        description: Refresh the Analytics data before publishing
+        type: boolean
+        default: false
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  build:
+  refresh-analytics:
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.refresh_analytics))
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Check out repository
+      - name: Check out current main
         uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Refresh public analytics aggregate
+        env:
+          UMENG_API_KEY: ${{ secrets.UMENG_API_KEY }}
+          UMENG_API_SECURITY: ${{ secrets.UMENG_API_SECURITY }}
+          UMENG_APPKEY: ${{ secrets.UMENG_APPKEY }}
+        run: python3 scripts/umeng/refresh_dashboard.py
+      - name: Save the refreshed public snapshot
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          import re
+          import subprocess
+
+          directory = Path("projects/fitness/analytics")
+          index = directory / "index.html"
+          name_pattern = re.compile(r"snapshot\.[a-f0-9]{64}\.json")
+          snapshots = list(directory.glob("snapshot.*.json"))
+          if not 1 <= len(snapshots) <= 2:
+              raise SystemExit("Expected one or two canonical analytics snapshots.")
+          if any(path.is_symlink() or not path.is_file() for path in (index, *snapshots)):
+              raise SystemExit("Analytics files must be regular files.")
+          for snapshot in snapshots:
+              digest = hashlib.sha256(snapshot.read_bytes()).hexdigest()
+              if snapshot.name != f"snapshot.{digest}.json":
+                  raise SystemExit("Analytics snapshot filename does not match its contents.")
+          references = set(re.findall(rb"snapshot\.[a-f0-9]{64}\.json", index.read_bytes()))
+          if len(references) != 1 or not references.issubset({path.name.encode() for path in snapshots}):
+              raise SystemExit("Analytics index and snapshot do not match.")
+
+          def git_paths(*arguments):
+              output = subprocess.check_output(["git", *arguments], text=True)
+              return set(output.rstrip("\0").split("\0")) if output else set()
+
+          tracked = git_paths("ls-files", "-z", "--", str(directory))
+          old_snapshots = {
+              path for path in tracked
+              if Path(path).parent == directory and name_pattern.fullmatch(Path(path).name)
+          }
+          allowed = {str(index), *(str(path) for path in snapshots), *old_snapshots}
+          subprocess.run(["git", "add", "-A", "--", *sorted(allowed)], check=True)
+          staged = git_paths("diff", "--cached", "--name-only", "--no-renames", "-z")
+          if not staged.issubset(allowed):
+              raise SystemExit("Found changes outside the public analytics files.")
+          PY
+          if git diff --cached --quiet; then
+            printf '%s\n' 'Public analytics snapshot is unchanged.'
+            exit 0
+          fi
+          base=$(git rev-parse HEAD)
+          remote_head=$(git ls-remote --exit-code origin refs/heads/main | cut -f1)
+          if [[ "$remote_head" != "$base" ]]; then
+            printf '%s\n' '::error::Main changed during the analytics refresh. Run the workflow again from current main.'
+            exit 1
+          fi
+          git -c user.name='github-actions[bot]' \
+              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              commit --quiet -m 'Refresh public analytics snapshot'
+          git push --quiet origin HEAD:refs/heads/main
+          printf 'Public analytics snapshot saved at %s.\n' "$(git rev-parse --short HEAD)"
+
+  build:
+    needs: refresh-analytics
+    if: >-
+      !cancelled() && github.ref == 'refs/heads/main' &&
+      (needs.refresh-analytics.result == 'success' || needs.refresh-analytics.result == 'skipped')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      # A queued push may predate a refresh commit. Build from the current ref.
+      - name: Check out current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Build version workspace
@@ -47,6 +138,9 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      pages: write
+      id-token: write
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
