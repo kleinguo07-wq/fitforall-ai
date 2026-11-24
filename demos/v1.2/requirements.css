@@ -10,3 +10,21 @@
 .requirements-table td:first-child { min-width: 7rem; }
 .requirements-copy pre { overflow-x: auto; padding: 1rem; border-radius: 8px; background: #edf4ff; font-size: 0.85rem; }
 .requirements-copy summary { cursor: pointer; font-weight: 650; }
+
+@media (max-width: 540px) {
+  .requirements-table:not(.version-scope) table { min-width: 32rem; }
+  .requirements-table.version-scope { overflow: visible; }
+  .version-scope thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    clip-path: inset(50%);
+    overflow: hidden;
+  }
+  .version-scope :is(table, tbody, tr, td) { display: block; }
+  .version-scope tbody { display: grid; gap: 0.65rem; }
+  .version-scope tr { padding: 0.7rem 0.85rem; border: 1px solid var(--site-line); border-radius: 8px; }
+  .version-scope td { min-width: 0; padding: 0.12rem 0; border: 0; }
+  .version-scope td:first-child { font-weight: 700; }
+  .version-scope td:last-child { margin-top: 0.2rem; }
+}
