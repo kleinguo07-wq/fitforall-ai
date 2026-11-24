@@ -62,6 +62,7 @@
 .settlement-primary dt{color:#dae7da}
 .settlement-unit{font-size:17px;margin-left:4px;font-weight:500}
 .settlement-charts{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.settlement-charts > :only-child{grid-column:1/-1}
 .settlement-trend{position:relative;height:112px;margin:12px 24px 6px 0;border-bottom:1px solid var(--line)}
 .settlement-trend i{position:absolute;width:9px;height:9px;background:var(--green);border-radius:50%;transform:translate(-50%,50%)}
 .settlement-trend span{position:absolute;font-size:17px;transform:translate(-50%,-100%);color:var(--forest)}
@@ -238,6 +239,7 @@ function settlementActions(returnPage){
 
 function fitnessReport(){
   const item=resource();
+  const recentScores=state.scene==='noHistory'?[]:[18,21,24];
   return heading('体能单项结算报告',`${esc(item.title)} · 示例成绩`,'resourceDetail')+`
     <div class="settlement-layout">
       <div class="settlement-content">
@@ -256,10 +258,10 @@ function fitnessReport(){
             </div>
             <div class="settlement-times" aria-hidden="true"><span>10秒</span><span>20秒</span><span>30秒</span><span>40秒</span></div>
           </section>
-          <section class="panel">
+          ${recentScores.length?`<section class="panel">
             <h2>近期成绩</h2>
-            ${state.scene==='noHistory'?'<p class="hint">暂无近期成绩</p>':`<div class="settlement-recent">${[18,21,24].map((value,index)=>`<div><span>${index===2?'本次':'前'+(2-index)+'次'}</span><i style="width:${value/24*100}%"></i><b>${value} 次</b></div>`).join('')}</div>`}
-          </section>
+            <div class="settlement-recent">${recentScores.map((value,index)=>`<div><span>${index===2?'本次':'前'+(2-index)+'次'}</span><i style="width:${value/24*100}%"></i><b>${value} 次</b></div>`).join('')}</div>
+          </section>`:''}
         </div>
         ${settlementActions('resourceDetail')}
       </div>
@@ -599,7 +601,7 @@ function prototypeHelpItems(){
     const fitness=state.page==='fitnessReport';
     add('settlement-overview','.settlement-content>section:first-child',fitness?'本次体能成绩':'本次跟练成绩',
       fitness?'展示项目成绩、运动消耗和耗时。':'展示运动评分、3星评价、运动时长、两类动作评价计数及疲劳程度。','展示一位参与者的示例数据。',fitness?'正式数据由竖屏对应报告的结算口径提供。':'沿用现有跟练报告字段，不再展示累计分、消耗或完成组数；样例不代表真实评分算法。');
-    if(fitness)add('settlement-charts','.settlement-charts','运动曲线与近期成绩','展示本次运动过程和可用的近期成绩。','可切换演示状态查看暂无近期成绩。');
+    if(fitness)add('settlement-charts','.settlement-charts',state.scene==='noHistory'?'运动曲线':'运动曲线与近期成绩','运动曲线展示本次运动过程。有本人同项目的可展示记录时，右侧展示近期成绩。','可切换演示状态核对无近期成绩时的布局。','无可展示的近期成绩时隐藏整张卡片，运动曲线占满该行。');
     else {
       const example=followReportExample();
       add('settlement-follow-score','.follow-report-score','运动评分与3星评价','展示当前报告的运动评分及0至3颗亮星。','通过设备外演示状态切换三类结算样例。','很好/不错为70分、2星；完美/真棒为95分、3星；无评价仍展示10分、0星，不能把无评价等同于没有评分。星级阈值不在原型另设。');
