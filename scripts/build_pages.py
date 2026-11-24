@@ -113,7 +113,7 @@ def main() -> None:
         if key == "landscape":
             extra = render_landscape_background(background) + (
                 '<section class="site-note"><h2>评审说明</h2>'
-                '<p>屏端可使用页面标注核对功能、操作和规则。AI 跟练和体能训练展示内容选择与详情，'
+                '<p>屏端可使用页面标注核对功能、操作和规则。AI 跟练和体能训练展示内容选择、详情和结算示例，'
                 '运动过程沿用原产品的评审说明。首期趣味运动演示单人切水果，运动视频保留观看流程。'
                 '摄像头、评分、计时、账号、二维码、媒体、环境及榜单均为模拟。</p></section>'
             )

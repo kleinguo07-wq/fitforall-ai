@@ -50,13 +50,46 @@
 .device-settings-icon svg{width:26px;height:26px}
 .device-settings-icon:hover{background:#e2ead6}
 .record-qr-dialog{text-align:center}
+.settlement-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:24px;align-items:start}
+.settlement-content{display:grid;gap:18px;min-width:0}
+.settlement-content h2,.settlement-qr h2{margin:0 0 14px;font-size:25px}
+.settlement-layout .panel{padding:22px}
+.settlement-metrics{display:flex;gap:12px;margin:0}
+.settlement-metrics>div{flex:1;min-width:0;background:#edf2e8;border-radius:8px;padding:14px 16px}
+.settlement-metrics dt{font-size:18px;color:var(--muted)}
+.settlement-metrics dd{font-size:32px;font-weight:650;margin:6px 0 0;font-variant-numeric:tabular-nums;white-space:nowrap}
+.settlement-metrics .settlement-primary{background:var(--forest);color:white}
+.settlement-primary dt{color:#dae7da}
+.settlement-unit{font-size:17px;margin-left:4px;font-weight:500}
+.settlement-charts{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.settlement-trend{position:relative;height:112px;margin:12px 24px 6px 0;border-bottom:1px solid var(--line)}
+.settlement-trend i{position:absolute;width:9px;height:9px;background:var(--green);border-radius:50%;transform:translate(-50%,50%)}
+.settlement-trend span{position:absolute;font-size:17px;transform:translate(-50%,-100%);color:var(--forest)}
+.settlement-trend b{position:absolute;inset:0;background:var(--green);clip-path:polygon(0 81%,33% 66%,66% 51%,100% 33%,100% 35%,66% 53%,33% 68%,0 83%)}
+.settlement-times{display:flex;justify-content:space-between;color:var(--muted);font-size:17px}
+.settlement-recent{display:grid;gap:8px}
+.settlement-recent div{display:grid;grid-template-columns:4em 1fr 3em;align-items:center;gap:8px;font-size:17px}
+.settlement-recent i{height:9px;background:var(--green);border-radius:6px}
+.settlement-qr{text-align:center}
+.settlement-qr .mini-qr{width:155px;height:155px;margin:10px auto}
+.settlement-qr p{font-size:18px;margin:8px 0}
+.settlement-actions{display:flex;justify-content:flex-end;gap:12px}
+.settlement-score{background:#ecf2e7;border:1px solid #d2dfcc;padding:26px;border-radius:10px;margin-bottom:20px}
+.settlement-score span{display:block;color:var(--muted);font-size:21px}
+.settlement-score strong{font-size:76px;line-height:1.15;font-variant-numeric:tabular-nums}
+.settlement-score small{font-size:24px;margin-left:8px}
+.settlement-stars{font-size:30px;letter-spacing:5px;color:#946831;margin-top:4px}
+.follow-settlement-metrics{margin-top:14px}
+.settlement-layout .settlement-score{padding:16px;margin-bottom:14px}
+.settlement-layout .settlement-score strong{font-size:62px}
+.settlement-fruit .settlement-metrics{margin-bottom:14px}
 </style></head><body>
 <header class="review"><div class="review-left"><div class="review-brand"><b>公园横屏 / 交互原型</b><small>v1.0方案定版 · 公开评审原型 · 2026.11.04</small></div><nav class="review-secondary" aria-label="项目与说明"><a class="tool" href="../">返回横屏项目</a><a class="tool" href="../../../">项目总览</a><button class="tool" id="notes-toggle">整体说明</button></nav></div><div class="review-actions"><button class="tool" id="map-toggle">页面总览</button><button class="tool" id="help-toggle" aria-expanded="false" aria-controls="prototype-help-panel">原型说明</button><button class="tool" id="fullscreen">全屏查看</button></div></header>
-<main class="workspace"><div class="meta"><b id="screen-label">01 / 首页</b><span>身份、上报、运动、环境与小程序均为模拟 · 未接入真实服务</span></div><div class="prototype-review-layout" id="prototype-review-layout"><div class="device"><div class="viewport"><div class="screen" id="app"></div><div class="prototype-help-layer" id="prototype-help-layer" hidden></div></div></div><aside class="prototype-help-panel" id="prototype-help-panel" aria-label="当前页面原型说明" hidden><div class="prototype-help-heading"><div><span>逐项功能说明</span><h2 id="prototype-help-title"></h2></div><button class="help-close" id="help-close" aria-label="关闭原型说明">×</button></div><p class="prototype-help-intro">点击画面编号或下方条目，对照查看操作与规则。阅读期间，推荐轮换和运动计时暂缓。</p><div class="prototype-help-list" id="prototype-help-list"></div></aside></div><div class="underbar"><span>16:9 设备界面 · 点击按钮体验流程 · 设备外控件仅用于评审</span><div class="scenario"><label for="scenario">演示状态</label><select id="scenario"></select><button class="tool" id="reset">重置演示</button></div></div><section class="review-notes" id="notes"><h2>整体说明</h2><p>本页为公园横屏 v1.0 交互原型，不代表已部署产品。用户账号体系与横屏多人检测复用教学屏体验，共用过程不另行设计；教学屏参照版本、账号接口、横屏实际人数与场地能力需联调及实机验收。AI跟练和体能训练的运动过程沿用原产品，本原型展示到详情选择为止。每次运动逐人通过人脸登录或注册关联数据，结束自动上报，设备不保留登录态。人脸、注册、上报、相机、评分、小程序和媒体均未接入真实服务。</p><ul><li>体能以教学屏61项名称为基础，原表9项有ID补充记录单列；一期12项选型候选，全身2、上肢3、核心3、下肢4，其余58项转后续，不新增或改编。JSON仅有名称，分类、朝向、强度、素材及判定需核对原示范。</li><li>公园环境、开放安排、排行榜昵称、时长与估算消耗均为模拟；小程序码不可扫码。</li><li>点击“原型说明”可查看当前页面逐功能编号、用途、操作及规则；说明随页面和弹窗切换，阅读时暂停演示计时与首页轮换，关闭后继续。</li><li>AI跟练和体能训练的站位、运动中、暂停、结果和领取按原产品执行，需求保留文字说明，原型不另作设计；详情开始按钮仅表示入口位置。</li><li>趣味运动保留站位、互动、暂停、退出确认及结果演示；结束按用户自动上报，结果页直接展示通用微信小程序查询码，登录后查看自己的记录，无需主动清除信息，运动视频保留观看流程。</li><li>本站服务标题右侧的齿轮打开设备设置。正式产品复用教学屏设置功能、权限和配置规则。原型演示导航位置切换，默认在右侧；进入大模块列表自动收起，首页默认展开。公告名称和显示开关可由后台配置，首页底部左侧仅一条只读公告，超长内容滚动，不提供公告列表或详情页；弱提示右置；榜单与查询采用图标加文字。</li><li>首页推荐每20秒更新；交互时暂停，更新前5秒显示提示。课程支持分类与分页，不提供搜索输入；体能按训练部位分类并分页。</li><li>一期趣味运动聚焦单人切水果，其余候选后续迭代；热身移至下一期，本期隐藏入口；复用成熟内容完成0到1，社会体育统一账号跨横屏、竖屏及小程序通用，真实账号接口仍待联调。模拟输入不代表真实识别，水果连切和果心加分仍待真实判定。</li><li>完整排行榜可切换本站今日运动时长榜与卡路里消耗榜，默认时长；两榜独立排序，同值并列。估算消耗以整千卡展示，正式算法与单位仍待核验；暂停、离区与纯观看不累计。</li></ul></section></main><div class="review-modal" id="map"><section class="screen-map"><div class="row between"><h2>页面总览 / 点击进入</h2><button class="tool" id="map-close">关闭</button></div><div class="map-grid" id="map-grid"></div></section></div>
+<main class="workspace"><div class="meta"><b id="screen-label">01 / 首页</b><span>身份、上报、运动、环境与小程序均为模拟 · 未接入真实服务</span></div><div class="prototype-review-layout" id="prototype-review-layout"><div class="device"><div class="viewport"><div class="screen" id="app"></div><div class="prototype-help-layer" id="prototype-help-layer" hidden></div></div></div><aside class="prototype-help-panel" id="prototype-help-panel" aria-label="当前页面原型说明" hidden><div class="prototype-help-heading"><div><span>逐项功能说明</span><h2 id="prototype-help-title"></h2></div><button class="help-close" id="help-close" aria-label="关闭原型说明">×</button></div><p class="prototype-help-intro">点击画面编号或下方条目，对照查看操作与规则。阅读期间，推荐轮换和运动计时暂缓。</p><div class="prototype-help-list" id="prototype-help-list"></div></aside></div><div class="underbar"><span>16:9 设备界面 · 点击按钮体验流程 · 设备外控件仅用于评审</span><div class="scenario"><label for="scenario">演示状态</label><select id="scenario"></select><button class="tool" id="reset">重置演示</button></div></div><section class="review-notes" id="notes"><h2>整体说明</h2><p>本页为公园横屏 v1.0 交互原型，不代表已部署产品。用户账号体系与横屏多人检测复用教学屏体验，共用过程不另行设计；教学屏参照版本、账号接口、横屏实际人数与场地能力需联调及实机验收。AI跟练和体能训练的运动过程沿用原产品，原型提供独立结算报告示例。每次运动逐人通过人脸登录或注册关联数据，结束自动上报，设备不保留登录态。人脸、注册、上报、相机、评分、小程序和媒体均未接入真实服务。</p><ul><li>体能以教学屏61项名称为基础，原表9项有ID补充记录单列；一期12项选型候选，全身2、上肢3、核心3、下肢4，其余58项转后续，不新增或改编。JSON仅有名称，分类、朝向、强度、素材及判定需核对原示范。</li><li>公园环境、开放安排、排行榜昵称、时长与估算消耗均为模拟；小程序码不可扫码。</li><li>点击“原型说明”可查看当前页面逐功能编号、用途、操作及规则；说明随页面和弹窗切换，阅读时暂停演示计时与首页轮换，关闭后继续。</li><li>AI跟练和体能训练详情下方可查看结算示例。两类报告参考全民健身机竖屏对应结构，示例展示模拟数据。</li><li>趣味运动按项目使用专属报告。切水果结算展示总分、切中水果数、果心切次数和最高同手连切。结束按用户自动上报，结果页直接展示通用微信小程序查询码，登录后查看自己的记录，无需主动清除信息，运动视频保留观看流程。</li><li>本站服务标题右侧的齿轮打开设备设置。正式产品复用教学屏设置功能、权限和配置规则。原型演示导航位置切换，默认在右侧；进入大模块列表自动收起，首页默认展开。公告名称和显示开关可由后台配置，首页底部左侧仅一条只读公告，超长内容滚动，不提供公告列表或详情页；弱提示右置；榜单与查询采用图标加文字。</li><li>首页推荐每20秒更新；交互时暂停，更新前5秒显示提示。课程支持分类与分页，不提供搜索输入；体能按训练部位分类并分页。</li><li>一期趣味运动聚焦单人切水果，其余候选后续迭代；热身移至下一期，本期隐藏入口；复用成熟内容完成0到1，社会体育统一账号跨横屏、竖屏及小程序通用，真实账号接口仍待联调。模拟输入不代表真实识别，水果连切和果心加分仍待真实判定。</li><li>完整排行榜可切换本站今日运动时长榜与卡路里消耗榜，默认时长；两榜独立排序，同值并列。估算消耗以整千卡展示，正式算法与单位仍待核验；暂停、离区与纯观看不累计。</li></ul></section></main><div class="review-modal" id="map"><section class="screen-map"><div class="row between"><h2>页面总览 / 点击进入</h2><button class="tool" id="map-close">关闭</button></div><div class="map-grid" id="map-grid"></div></section></div>
 <script>
 'use strict';
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const pages=[['home','首页'],['library','内容 · 分类目录'],['resourceDetail','内容 · 项目详情'],['resourcePlaying','运动视频 · 播放中'],['resourceResult','运动视频 · 观看结束'],['courses','跟练 · 选择课程'],['detail','跟练 · 课程详情与模式'],['games','趣味运动 · 选择玩法'],['gameRules','趣味运动 · 玩法说明'],['gamePrepare','趣味运动 · 运动准备'],['gamePlaying','趣味运动 · 正在互动'],['gameResult','趣味运动 · 本局结果'],['board','本站服务'],['rankings','本站服务 · 排行榜'],['records','本站服务 · 运动记录']];
+const pages=[['home','首页'],['library','内容 · 分类目录'],['resourceDetail','内容 · 项目详情'],['resourcePlaying','运动视频 · 播放中'],['resourceResult','运动视频 · 观看结束'],['courses','跟练 · 选择课程'],['detail','跟练 · 课程详情与模式'],['games','趣味运动 · 选择玩法'],['gameRules','趣味运动 · 玩法说明'],['gamePrepare','趣味运动 · 运动准备'],['gamePlaying','趣味运动 · 正在互动'],['gameResult','趣味运动 · 本局结果'],['board','本站服务'],['rankings','本站服务 · 排行榜'],['records','本站服务 · 运动记录'],['fitnessReport','体能单项 · 结算示例'],['followReport','AI跟练 · 结算示例']];
 const categories=["健身气功", "健身体操", "专项提升"];
 const catalogue={"健身气功":[{"id":"baduan-easy","title":"八段锦 简易版","family":"八段锦","duration":null,"label":"健身气功","segments":[]},{"id":"baduan-standard","title":"八段锦","family":"八段锦","duration":null,"label":"健身气功","segments":[]},{"id":"taiji-eight","title":"八式太极拳","family":"太极拳","duration":null,"label":"健身气功","segments":[]},{"id":"wuqin-standard","title":"五禽戏","family":"五禽戏","duration":null,"label":"健身气功","segments":[{"title":"预备势（起势调息）","description":"自然站立，放松肩颈，调整呼吸，为整套练习做好准备。","duration":null},{"title":"第一式·虎举","description":"双手上举，撑掌握拳，伸展肩臂与躯干，感受全身向上舒展。","duration":null},{"title":"第二式·虎扑","description":"引腰伸背，双手前扑，配合身体起伏，活动腰背与肩臂。","duration":null},{"title":"第三式·鹿抵","description":"转腰回望，双手呈鹿角状伸展，活动腰部，练习转体协调。","duration":null},{"title":"第四式·鹿奔","description":"双臂前伸，拱背后坐，舒展肩背，感受躯干的屈伸变化。","duration":null},{"title":"第五式·熊运","description":"双手置于腹前，随腰腹缓缓转动，动作圆活连贯。","duration":null},{"title":"第六式·熊晃","description":"左右迈步，身体随重心转换自然晃动，练习步伐与躯干协调。","duration":null},{"title":"第七式·猿提","description":"提踵耸肩，收腹提手，再缓缓放松，练习身体提起与落下的控制。","duration":null},{"title":"第八式·猿摘","description":"转头顾盼，上步摘果，配合手眼与步伐变化，练习动作协调。","duration":null},{"title":"第九式·鸟伸","description":"双臂后伸，一腿向后抬起，舒展肩胸，练习单腿支撑。","duration":null},{"title":"第十式·鸟飞","description":"双臂如展翅般起落，配合交替提腿，练习身体平衡与动作协调。","duration":null},{"title":"收势（引气归元）","description":"双手缓缓上举、下落，呼吸自然，放松身体，平稳结束练习。","duration":null}]},{"id":"yijin-standard","title":"易筋经","family":"易筋经","duration":null,"label":"健身气功","segments":[{"title":"韦驮献杵","description":"双手由胸前合掌，逐步向两侧伸展、向上托举，舒展肩胸与全身。","duration":null},{"title":"摘星换斗势","description":"一手上托，一手置于背后，配合转头回望，伸展躯干，活动肩背。","duration":null},{"title":"倒拽九牛尾势","description":"两脚前后站立，双臂随转体交替牵拉，活动肩臂与腰背。","duration":null},{"title":"出爪亮翅势","description":"双掌向前推出，再缓缓收回，配合展肩扩胸，练习肩臂伸展与控制。","duration":null},{"title":"九鬼拔马刀势","description":"双手分别置于颈后与背后，配合转体俯身，伸展肩背与腰部。","duration":null},{"title":"三盘落地势","description":"两脚开立，屈膝下蹲，双掌下按再翻掌托起，练习下肢支撑与身体起落。","duration":null},{"title":"青龙探爪势","description":"单手向侧方探出，随转腰俯身划弧，活动腰背，练习上下肢协调。","duration":null},{"title":"卧虎扑食势","description":"前腿屈膝，后腿伸展，双手向前下方探按，配合身体起伏，练习四肢支撑。","duration":null},{"title":"打躬势","description":"双手扶于脑后，缓缓俯身，再逐节起身，感受腰背的屈伸与舒展。","duration":null},{"title":"掉尾势","description":"俯身垂手，配合抬头与左右回望，轻摆臀部，活动躯干，动作柔和连贯。","duration":null},{"title":"收势","description":"身体缓缓直立，双臂随动作抬起、落下，呼吸自然，放松全身，平稳结束练习。","duration":null}]}],"专项提升":[{"id":"special-0","title":"跳绳初级训练","family":"跳绳","duration":null,"label":"专项提升","segments":[]},{"id":"special-1","title":"仰卧起坐初级训练","family":"仰卧起坐","duration":null,"label":"专项提升","segments":[]},{"id":"special-2","title":"俯卧撑初级训练","family":"俯卧撑","duration":null,"label":"专项提升","segments":[]},{"id":"special-3","title":"引体向上初级训练","family":"引体向上","duration":null,"label":"专项提升","segments":[]},{"id":"special-4","title":"跳绳中级训练","family":"跳绳","duration":null,"label":"专项提升","segments":[]},{"id":"special-5","title":"跳绳高级训练","family":"跳绳","duration":null,"label":"专项提升","segments":[]},{"id":"special-6","title":"立定跳远初级训练","family":"立定跳远","duration":null,"label":"专项提升","segments":[]},{"id":"special-7","title":"立定跳远中级训练","family":"立定跳远","duration":null,"label":"专项提升","segments":[]}],"健身体操":[{"id":"gym-0","title":"舞动青春","family":"广播体操","duration":null,"label":"健身体操","segments":[]},{"id":"gym-1","title":"希望风帆","family":"广播体操","duration":null,"label":"健身体操","segments":[]},{"id":"gym-2","title":"旭日东升","family":"广播体操","duration":null,"label":"健身体操","segments":[]},{"id":"gym-3","title":"英雄少年","family":"广播体操","duration":null,"label":"健身体操","segments":[]}]};
 const pageSize=6;
@@ -70,7 +103,7 @@ let timer,toastTimer,homeRecommendationTimer;
 let homeQuickPressed=false,homeQuickElapsed=0,homeQuickLastTick=null;
 const HOME_ROTATION_MS=20000,homeQuickIndices=[0,0,0];
 const btn=(label,action,cls='',extra='')=>`<button class="button ${cls}" data-action="${action}" ${extra}>${label}</button>`;
-function nav(page,resetScene=true){if(['library','resourceDetail','resourcePlaying','resourceResult'].includes(page)&&(state.resourceCategory==='warmup'||resource().category==='warmup')){state.resourceCategory='fitness';state.resourceId='fitness-1';page='library';}if(['courses','library','games','board'].includes(page))state.dockCollapsed=true;else if(page==='home')state.dockCollapsed=false;const previousScene=state.scene;if(['prepare','training','results','video'].includes(page))page='detail';if(page==='resourcePrepare'){state.resourceCategory='fitness';if(resource().category!=='fitness')state.resourceId='fitness-1';page='resourceDetail';}if(['resourcePlaying','resourceResult'].includes(page)&&resource().category!=='media')page='resourceDetail';if(!pages.some(p=>p[0]===page))page='home';if(page==='rankings'&&state.page!==page)state.rankingMetric='duration';if(state.page==='gamePlaying'&&page!=='gamePlaying')completeDemoGameSession();if(page==='gamePrepare'){state.gameSession=null;state.gameReport=null;}state.page=page;state.modal=null;if(resetScene)state.scene='normal';if(page==='gamePlaying')initializeGame(previousScene);if(page==='gameResult')completeDemoGameSession();if(page==='resourcePlaying')state.paused=false;if(page==='home'){state.gameSession=null;state.resourceElapsed=0;state.paused=false;state.ready=1;state.followMode='single';}history.replaceState(null,'','#'+page);render();}
+function nav(page,resetScene=true){if(['library','resourceDetail','resourcePlaying','resourceResult'].includes(page)&&(state.resourceCategory==='warmup'||resource().category==='warmup')){state.resourceCategory='fitness';state.resourceId='fitness-1';page='library';}if(['courses','library','games','board'].includes(page))state.dockCollapsed=true;else if(page==='home')state.dockCollapsed=false;const previousScene=state.scene;if(page==='fitnessReport'&&resource().category!=='fitness'){state.resourceCategory='fitness';state.resourceId='fitness-1';state.resourceReturn='library';}if(['prepare','training','results','video'].includes(page))page='detail';if(page==='resourcePrepare'){state.resourceCategory='fitness';if(resource().category!=='fitness')state.resourceId='fitness-1';page='resourceDetail';}if(['resourcePlaying','resourceResult'].includes(page)&&resource().category!=='media')page='resourceDetail';if(!pages.some(p=>p[0]===page))page='home';if(page==='rankings'&&state.page!==page)state.rankingMetric='duration';if(state.page==='gamePlaying'&&page!=='gamePlaying')completeDemoGameSession();if(page==='gamePrepare'){state.gameSession=null;state.gameReport=null;}state.page=page;state.modal=null;if(resetScene)state.scene='normal';if(page==='gamePlaying')initializeGame(previousScene);if(page==='gameResult')completeDemoGameSession();if(page==='resourcePlaying')state.paused=false;if(page==='home'){state.gameSession=null;state.resourceElapsed=0;state.paused=false;state.ready=1;state.followMode='single';}history.replaceState(null,'','#'+page);render();}
 
 function chapterName(seg){return seg.title.replace(/[（(]示例[）)]/g,'')}
 
@@ -149,7 +182,98 @@ function gamePrepare(){const g=game(),n=gameCount(),bound=['none','identityPendi
 
 function gamePlaying(){const g=game(),n=gameCount();return `<div class="row between" style="margin-bottom:22px"><div class="row"><h2 style="margin:0">${g.title}</h2><span class="tag">${g.mode}</span></div><span class="hint">${state.scene==='lost'?'有参与者离开区域 · 本场暂停':state.paused?'已暂停 · 不计时、不计分':g.kind==='rhythm'?'看准拍点，再挥动手臂':g.kind==='pose'?'跟随提示，保持动作':'保持在自己的区域'}</span></div><section class="playfield"><div class="game-scorebar"><span>${g.mode==='双人PK'||g.mode==='分队PK'?'本局累计':n===1?'本轮完成':'共同完成'} <b id="game-score">${state.gameScore}</b> 次</span><span>剩余 <b id="game-time">${state.gameTime}</b> 秒</span><span>${n}人 · ${g.mode==='分队PK'?'2对2':g.mode}</span></div><div class="play-lanes" id="play-lanes" style="--players:${n}">${Array.from({length:n},(_,i)=>gameLane(i)).join('')}</div></section>`}
 function gameLane(i){const g=game(),score=state.gameScores[i]||0,seq=state.gameTurns[i]||0,disabled=state.paused||state.scene==='lost'?'disabled':'',header=`<div class="lane-label"><span>${i+1}号 ${g.mode==='分队PK'?(i<2?'· A队':'· B队'):''}</span><b id="lane-score-${i}">${score}次</b></div>`;let body='';const positions=[[22,22],[63,45],[42,66],[71,23],[18,66]];if(g.kind==='collect'){const dots=state.mazeDots[i]||[],pos=state.mazePos[i]||[0,0];body=`<div class="maze-board">${Array.from({length:35},(_,cell)=>{const x=cell%7,y=Math.floor(cell/7),wall=mazeWall(x,y),dot=dots.includes(cell),player=x===pos[0]&&y===pos[1];return `<span class="maze-cell ${wall?'wall':''}">${player?'<i class="maze-explorer"></i>':dot?'<i class="maze-dot"></i>':''}</span>`}).join('')}</div><div class="lane-instruction">小幅侧移，带角色收集星点</div>`;}else if(g.kind==='pose'){const hold=state.poseRemaining[i]||0;body=`<div class="pose-figure">${gameArt('pose')}</div><div class="lane-instruction">双臂抬起，舒展站立</div><button class="pose-trigger" data-pose="${i}" ${disabled}>${hold?'保持中 · '+hold+'秒':'保持3秒'}</button>`;}else if(g.kind==='dodge'){const safe=seq%2===0?'left':'right';body=`<div class="dodge-board"><div class="obstacle ${safe==='left'?'right':'left'}">障碍</div><button class="dodge-safe ${safe}" data-game-hit="${i}" ${disabled}>${safe==='left'?'← 向左':'向右 →'}</button></div><div class="lane-instruction">向空的一侧小幅侧移</div>`;}else if(g.kind==='rhythm'){const relayTurn=Math.floor((g.seconds-state.gameTime)/2)%gameCount(),allowed=g.id!=='beat-team'||i===relayTurn,open=state.gameTime%2===0&&allowed;body=`<div class="rhythm-pulse ${open?'open':''}"><span>${!allowed?'等待接力':open?'现在击拍':'等待拍点'}</span></div><button class="beat-trigger" data-game-hit="${i}" ${disabled||(!allowed?'disabled':'')}>挥拍</button><div class="lane-instruction">绿圈亮起时命中</div>`;}else{let targets=g.kind==='slice'?3:1;body=`<div class="target-court ${g.kind==='goal'?'goal-court':''}">${Array.from({length:targets},(_,j)=>{const [x,y]=positions[(seq+j)%positions.length];return `<button class="motion-target ${g.kind}" data-game-hit="${i}" data-target="${j}" style="left:${x}%;top:${y}%" ${disabled} aria-label="${i+1}号${g.kind==='slice'?'切水果':g.kind==='goal'?'挡球':g.kind==='mole'?'打地鼠':'触达目标'}">${g.kind==='slice'?'<span class="fruit-leaf"></span><span class="fruit-cut"></span>':g.kind==='goal'?'<span class="ball-center"></span>':g.kind==='mole'?'<span class="mole-eyes">··</span>':'触达'}</button>`}).join('')}</div><div class="lane-instruction">${g.kind==='slice'?'挥臂切果，连续命中':g.kind==='goal'?'伸手挡球，不必跳跃':g.kind==='mole'?'伸手击中冒出的目标':'伸手触达亮起的目标'}</div>`;}return `<section class="play-lane ${i===state.gameActivePlayer?'selected':''}" data-lane="${i}">${header}<div class="lane-body">${body}</div><div class="lane-feedback" id="lane-feedback-${i}">${state.gameFeedback[i]||'等待动作'}</div></section>`}
-function gameResult(){const g=game(),n=gameCount(),scores=state.gameScores.slice(0,n),pk=g.mode==='双人PK'||g.mode==='分队PK',a=g.mode==='分队PK'?(scores[0]+scores[1]):scores[0],b=g.mode==='分队PK'?(scores[2]+scores[3]):scores[1],outcome=pk?(a===b?'这一局，双方打平':(a>b?(g.mode==='分队PK'?'A队':'1号'):(g.mode==='分队PK'?'B队':'2号'))+'领先'):state.gameScore>=g.goal?(n===1?'本轮完成':'共同挑战完成'):'完成一局，继续加油';return heading(outcome,g.title+' · '+g.mode,'games')+`<div class="game-result-layout"><section class="panel"><span class="eyebrow">${pk?'对局结果':'本场结果'}</span><h2>${state.gameScore} 次有效完成</h2><div class="game-results-people">${scores.map((v,i)=>`<div><span>${i+1}号${g.mode==='分队PK'?' / '+(i<2?'A队':'B队'):''}</span><b>${v}次</b></div>`).join('')}</div><p class="hint">${pk?'只比较本局同规则的结果，不与其他项目混排。':(n===1?'':'共同结果为各参与者之和。')}<br></p><p class="result-report-status ${demoReportState().status}" data-report-status="${demoReportState().status}">${demoReportState().text}</p></section><section class="panel game-result-actions"><div class="result-records"><h2>我的运动记录</h2>${qrMarkup()}<b>微信扫码查看</b><p class="hint">登录小程序，查看自己的运动记录</p></div><div class="result-replay-actions">${btn(n===1?'再玩一次':'同组再玩','gamePrepare','primary')}${btn('更多'+g.category+'项目','games')}</div></section></div>`}
+function gameResult(){const g=game();if(g.id==='fruit-solo')return fruitSettlement();const n=gameCount(),scores=state.gameScores.slice(0,n),pk=g.mode==='双人PK'||g.mode==='分队PK',a=g.mode==='分队PK'?(scores[0]+scores[1]):scores[0],b=g.mode==='分队PK'?(scores[2]+scores[3]):scores[1],outcome=pk?(a===b?'这一局，双方打平':(a>b?(g.mode==='分队PK'?'A队':'1号'):(g.mode==='分队PK'?'B队':'2号'))+'领先'):state.gameScore>=g.goal?(n===1?'本轮完成':'共同挑战完成'):'完成一局，继续加油';return heading(outcome,g.title+' · '+g.mode,'games')+`<div class="game-result-layout"><section class="panel"><span class="eyebrow">${pk?'对局结果':'本场结果'}</span><h2>${state.gameScore} 次有效完成</h2><div class="game-results-people">${scores.map((v,i)=>`<div><span>${i+1}号${g.mode==='分队PK'?' / '+(i<2?'A队':'B队'):''}</span><b>${v}次</b></div>`).join('')}</div><p class="hint">${pk?'只比较本局同规则的结果，不与其他项目混排。':(n===1?'':'共同结果为各参与者之和。')}<br></p><p class="result-report-status ${demoReportState().status}" data-report-status="${demoReportState().status}">${demoReportState().text}</p></section><section class="panel game-result-actions"><div class="result-records"><h2>我的运动记录</h2>${qrMarkup()}<b>微信扫码查看</b><p class="hint">登录小程序，查看自己的运动记录</p></div><div class="result-replay-actions">${btn(n===1?'再玩一次':'同组再玩','gamePrepare','primary')}${btn('更多'+g.category+'项目','games')}</div></section></div>`}
+function settlementMetrics(metrics, primary=true){
+  return `<dl class="settlement-metrics">${metrics.map(([label,value,unit],index)=>`
+    <div class="${index===0&&primary?'settlement-primary':''}">
+      <dt>${label}</dt><dd>${value}${unit?`<small class="settlement-unit">${unit}</small>`:''}</dd>
+    </div>`).join('')}</dl>`;
+}
+
+function settlementQuery(card=true){
+  return `<section class="${card?'panel ':''}settlement-qr">
+    <h2>我的运动记录</h2>${qrMarkup()}<p>微信扫码，在小程序中查看</p>
+  </section>`;
+}
+
+function settlementActions(returnPage){
+  return `<div class="settlement-actions">${btn('返回首页','home')}${btn('返回项目详情',returnPage,'primary')}</div>`;
+}
+
+function fitnessReport(){
+  const item=resource();
+  return heading('体能单项结算报告',`${esc(item.title)} · 示例成绩`,'resourceDetail')+`
+    <div class="settlement-layout">
+      <div class="settlement-content">
+        <section class="panel"><h2>本次运动</h2>
+          ${settlementMetrics([['运动成绩',24,'次'],['运动消耗',8,'千卡'],['运动耗时','00:40','']])}
+        </section>
+        <div class="settlement-charts">
+          <section class="panel">
+            <h2>运动曲线 <small class="settlement-unit">累计次数</small></h2>
+            <div class="settlement-trend" role="img" aria-label="10秒5次，20秒11次，30秒17次，40秒24次">
+              <b></b>
+              <i style="left:0;bottom:18%"></i><span style="left:0;bottom:23%">5</span>
+              <i style="left:33%;bottom:33%"></i><span style="left:33%;bottom:38%">11</span>
+              <i style="left:66%;bottom:48%"></i><span style="left:66%;bottom:53%">17</span>
+              <i style="left:100%;bottom:66%"></i><span style="left:100%;bottom:71%">24</span>
+            </div>
+            <div class="settlement-times" aria-hidden="true"><span>10秒</span><span>20秒</span><span>30秒</span><span>40秒</span></div>
+          </section>
+          <section class="panel">
+            <h2>近期成绩</h2>
+            ${state.scene==='noHistory'?'<p class="hint">暂无近期成绩</p>':`<div class="settlement-recent">${[18,21,24].map((value,index)=>`<div><span>${index===2?'本次':'前'+(2-index)+'次'}</span><i style="width:${value/24*100}%"></i><b>${value} 次</b></div>`).join('')}</div>`}
+          </section>
+        </div>
+        ${settlementActions('resourceDetail')}
+      </div>
+      ${settlementQuery()}
+    </div>`;
+}
+
+function followReport(){
+  const course=selectedCourse();
+  const section=state.playback==='chapter'?course.segments[state.chapter]:null;
+  const actionReview=state.scene==='actionReview';
+  const mode=state.followMode==='multi'?'多人跟练 · 单个参与者示例':'单人跟练 · 示例成绩';
+  return heading('AI 跟练结算报告',`${esc(course.title)} · ${section?esc(chapterName(section)):'整套跟练'} · ${mode}`,'detail')+`
+    <div class="settlement-layout">
+      <div class="settlement-content">
+        <section class="panel">
+          <div class="settlement-score">
+            <span>${actionReview?'动作平均分':'累计分'}</span>
+            <strong>${actionReview?'91':'860'}</strong><small>分</small>
+            ${actionReview?'':'<div class="settlement-stars" aria-label="四星">★★★★☆</div>'}
+          </div>
+          ${actionReview?settlementMetrics([['完美',6,'次'],['真棒',2,'次'],['很好',1,'次'],['不错',1,'次']],false):''}
+          <div class="follow-settlement-metrics">
+            ${settlementMetrics(actionReview?[['累计分',910,'分'],['完成度',100,'%'],['运动时长','01:30','']]:
+              [['运动消耗',12,'千卡'],['运动时长','01:30',''],['完成动作',10,'组']],false)}
+          </div>
+        </section>
+        ${settlementActions('detail')}
+      </div>
+      ${settlementQuery()}
+    </div>`;
+}
+
+function fruitSettlement(){
+  const g=game();
+  const cutCount=state.gameReport?.records[0]?.count??0;
+  const report=demoReportState();
+  return heading(g.title+' · 结算报告',state.gameReport?'本局结果':'报告示例','games')+`
+    <div class="game-result-layout settlement-fruit">
+      <section class="panel">
+        <div class="settlement-score"><span>本局总分</span><strong>${cutCount*10}</strong><small>分</small></div>
+        ${settlementMetrics([['切中水果数',cutCount,'个'],['果心切次数','—',''],['最高同手连切','—','']],false)}
+        ${state.gameReport?`<p class="result-report-status ${report.status}" data-report-status="${report.status}">${report.text}</p>`:''}
+      </section>
+      <section class="panel game-result-actions">${settlementQuery(false)}
+        <div class="result-replay-actions">${btn('再玩一次','gamePrepare','primary')}${btn('返回趣味运动','games')}</div>
+      </section>
+    </div>`;
+}
+
 function mazeWall(x,y){return (x===2&&(y===1||y===2))||(x===4&&(y===2||y===3))}
 function mazeMove(dx,dy){if(prototypeHelpState.open||state.page!=='gamePlaying'||state.paused||game().kind!=='collect')return;const i=state.gameActivePlayer,pos=state.mazePos[i],x=Math.max(0,Math.min(6,pos[0]+dx)),y=Math.max(0,Math.min(4,pos[1]+dy));if(mazeWall(x,y))return;state.mazePos[i]=[x,y];const id=y*7+x;if(state.mazeDots[i].includes(id)){state.mazeDots[i]=state.mazeDots[i].filter(v=>v!==id);addGamePoint(i,'采集 +1');if(!state.mazeDots[i].length)state.mazeDots[i]=[3,6,13,20,27,34];}refreshGameLanes()}
 function completeDemoGameSession(){if(!state.gameSession)return;const session=state.gameSession;let report=state.reportQueue.find(r=>r.sessionId===session.sessionId);if(!report){report={sessionId:session.sessionId,status:'reported',records:session.participants.map(p=>({userId:p.userId,slot:p.slot,count:state.gameScores[p.slot-1]||0,status:'reported'}))};state.reportQueue.push(report)}state.gameReport=report;state.gameSession=null;}
@@ -194,7 +318,7 @@ $('#app').addEventListener('click',resourceAction);
 
 
 const moduleItems=[["home","首页","M3 11 12 3l9 8M5 10v11h5v-7h4v7h5V10"],["follow","AI跟练","M8 5a3 3 0 1 0 0 .1M4 11h8l5 5M8 11v6l-4 5M8 17l6 5M15 3h6v7h-5"],["games","趣味运动","M8 7h8a5 5 0 0 1 5 5v6a2 2 0 0 1-3 1l-3-3H9l-3 3a2 2 0 0 1-3-1v-6a5 5 0 0 1 5-5M8 10v5M5.5 12.5h5M16 11h.1M18 14h.1"],["fitness","体能训练","M3 9v6M6 6v12M6 12h12M18 6v12M21 9v6"],["media","运动视频","M4 5h16v14H4zM10 9l5 3-5 3z"],["services","本站服务","M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"]];
-function activeModule(){if(state.page==='home')return'home';if(['courses','detail'].includes(state.page))return'follow';if(state.page.startsWith('game'))return'games';if(state.page==='library')return state.resourceCategory;if(state.page.startsWith('resource'))return resource().category;return'services'}
+function activeModule(){if(state.page==='home')return'home';if(['courses','detail','followReport'].includes(state.page))return'follow';if(state.page==='fitnessReport')return'fitness';if(state.page.startsWith('game'))return'games';if(state.page==='library')return state.resourceCategory;if(state.page.startsWith('resource'))return resource().category;return'services'}
 function moduleDock(){const active=activeModule();return `<button class="dock-toggle" data-action="dockToggle" aria-expanded="${!state.dockCollapsed}" aria-label="${state.dockCollapsed?'展开模块导航':'收起模块导航'}">${state.dockCollapsed?'菜单':'收起'}</button><nav class="module-dock" aria-label="模块导航" ${state.dockCollapsed?'hidden':''}>${moduleItems.map(([id,title,path])=>`<button class="dock-item ${id===active?'active':''} ${id==='services'?'service':''}" data-module="${id}" ${id===active?'aria-current="page"':''} title="${title}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${path}"/></svg><span>${title}</span></button>`).join('')}</nav>`}
 function clearLocalSession(){Object.assign(state,{modal:null,paused:false,verified:false,saved:false,savedPeople:[],ready:1,resourceElapsed:0,gameScore:0,gameScores:[0,0,0,0],gameTime:60,pendingModule:null})}
 function activateModule(id){if(id==='warmup')id='fitness';clearLocalSession();if(['fitness','warmup','media'].includes(id)){state.resourceCategory=id;state.resourcePage=0;nav('library')}else nav(({home:'home',follow:'courses',games:'games',services:'board'})[id]||'home')}
@@ -202,9 +326,29 @@ function switchModule(id){if(!moduleItems.some(x=>x[0]===id))return;if(['gamePla
 $('#app').addEventListener('click',e=>{const b=e.target.closest('[data-module]');if(b&&!b.disabled)switchModule(b.dataset.module)});
 
 function renderStationReview(){let el=$('#station-review');if(!el){$('.underbar').insertAdjacentHTML('afterend','<div class="game-controls" id="station-review"></div>');el=$('#station-review')}el.hidden=!['home','board','rankings','records'].includes(state.page);if(!el.hidden)el.textContent='评审示意：公园环境、开放安排及榜单昵称/时长/消耗均为模拟；小程序码不可扫码。两榜依赖统一计量、身份绑定、有效片段去重与公开展示授权，未接真实数据。'}
-const views={library,resourceDetail,resourcePlaying,resourceResult,home,courses,detail,games,gameRules,gamePrepare,gamePlaying,gameResult,board,rankings,records};
-function render(){$('#app').classList.toggle('dock-left',state.dockSide==='left');$('#app').classList.toggle('dock-collapsed',state.dockCollapsed);clearInterval(timer);clearInterval(homeRecommendationTimer);homeRecommendationTimer=null;homeQuickPressed=false;homeQuickElapsed=0;homeQuickLastTick=null;const i=pages.findIndex(p=>p[0]===state.page);$('#screen-label').textContent=String(i+1).padStart(2,'0')+' / '+pages[i][1];let actions='',hint='请根据自身状态运动；如有不适，请停止。';if(state.page==='resourcePlaying'){actions=btn(state.paused?'继续':'暂停','pause','',state.scene!=='normal'?'disabled':'')+btn('结束观看','resourceEnd','danger');hint='观看进度不作为个人有效运动时长。'}else if(state.page==='gamePlaying'){actions=btn(state.paused?'继续体验':'暂停','pause','',state.scene==='lost'?'disabled':'')+btn('结束本局','endGame','danger');hint='保持在自己的活动区内。'}else if(state.page==='gameResult'){hint='微信扫码查看运动记录。'}$('#app').innerHTML=header()+`<main class="main">${views[state.page]()}</main>`+footer(hint,actions)+moduleDock();const notice=$('.notice-copy');if(notice)notice.classList.toggle('is-long',notice.scrollWidth>$('.notice-window').clientWidth);renderScenario();renderGameControls();renderReuseReview();if(state.modal)renderModal();scale();renderResourceControl();renderStationReview();renderIdentityReportReview();if(state.page==='home')bindHomeRecommendationInteraction();if(['gamePlaying','resourcePlaying'].includes(state.page))timer=setInterval(tick,1000);refreshPrototypeHelp();}
+const views={library,resourceDetail,resourcePlaying,resourceResult,home,courses,detail,games,gameRules,gamePrepare,gamePlaying,gameResult,board,rankings,records,fitnessReport,followReport};
+function render(){$('#app').classList.toggle('dock-left',state.dockSide==='left');$('#app').classList.toggle('dock-collapsed',state.dockCollapsed);clearInterval(timer);clearInterval(homeRecommendationTimer);homeRecommendationTimer=null;homeQuickPressed=false;homeQuickElapsed=0;homeQuickLastTick=null;const i=pages.findIndex(p=>p[0]===state.page);$('#screen-label').textContent=String(i+1).padStart(2,'0')+' / '+pages[i][1];let actions='',hint='请根据自身状态运动；如有不适，请停止。';if(state.page==='resourcePlaying'){actions=btn(state.paused?'继续':'暂停','pause','',state.scene!=='normal'?'disabled':'')+btn('结束观看','resourceEnd','danger');hint='观看进度不作为个人有效运动时长。'}else if(state.page==='gamePlaying'){actions=btn(state.paused?'继续体验':'暂停','pause','',state.scene==='lost'?'disabled':'')+btn('结束本局','endGame','danger');hint='保持在自己的活动区内。'}else if(state.page==='gameResult'){hint='微信扫码查看运动记录。'}$('#app').innerHTML=header()+`<main class="main">${views[state.page]()}</main>`+footer(hint,actions)+moduleDock();const notice=$('.notice-copy');if(notice)notice.classList.toggle('is-long',notice.scrollWidth>$('.notice-window').clientWidth);renderScenario();renderGameControls();renderReuseReview();renderSettlementReview();if(state.modal)renderModal();scale();renderResourceControl();renderStationReview();renderIdentityReportReview();if(state.page==='home')bindHomeRecommendationInteraction();if(['gamePlaying','resourcePlaying'].includes(state.page))timer=setInterval(tick,1000);refreshPrototypeHelp();}
 
+
+function renderSettlementReview(){
+  let panel=$('#settlement-review');
+  if(!panel){
+    $('.underbar').insertAdjacentHTML('afterend','<div class="game-controls" id="settlement-review" hidden></div>');
+    panel=$('#settlement-review');
+    panel.addEventListener('click',event=>{
+      const action=event.target.closest('button')?.dataset.previewReport;
+      if(action)nav(action);
+    });
+  }
+  const route=state.page==='detail'?'followReport':
+    state.page==='resourceDetail'&&resource().category==='fitness'?'fitnessReport':'';
+  const report=['fitnessReport','followReport'].includes(state.page);
+  const fruit=state.page==='gameResult'&&game().id==='fruit-solo';
+  panel.hidden=!(route||report||fruit);
+  panel.innerHTML=route?`<span>全民健身机竖屏报告复用</span><button class="tool" data-preview-report="${route}">查看结算报告示例</button>`:
+    report?'评审示例。切换演示状态查看报告结构，数据为模拟。':
+    fruit?'点按演示普通切中，每次计 10 分。果心切与同手连切由正式玩法提供。':'';
+}
 
 function renderReuseReview(){let el=$('#reuse-review');if(!el){$('.underbar').insertAdjacentHTML('afterend','<div class="game-controls" id="reuse-review"></div>');el=$('#reuse-review')}el.hidden=!(['courses','detail'].includes(state.page)||(['library','resourceDetail'].includes(state.page)&&state.resourceCategory!=='media'));if(!el.hidden)el.textContent='体能以教学屏61项与原表9项补充记录重选12项候选；全身2、上肢3、核心3、下肢4，其余58项转后续，不新增或改编。原JSON只有名称，分类/朝向/强度和素材判定均需核验。 本期聚焦0到1：复用AI跟练、体能训练和运动视频，新增单人切水果；热身下一期。社会体育账号跨横屏、竖屏与小程序通用，账号体系和横屏多人检测复用教学屏体验，不另画共用过程；真实账号、检测接入及人数能力待联调验收。';}
 
@@ -215,7 +359,7 @@ function renderResourceControl(){let el=$('#resource-controls');if(!el){$('.unde
 function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
 function tick(){if(state.paused||state.modal||prototypeHelpState.open)return;if(state.page==='resourcePlaying'){if(state.scene!=='normal')return;state.resourceElapsed++;if(state.resourceElapsed>=resource().duration){nav('resourceResult');return;}$('#resource-time').textContent=fmt(state.resourceElapsed);$('.progress i').style.width=state.resourceElapsed/resource().duration*100+'%';return;}if(state.page==='gamePlaying'){state.gameTime--;$('#game-time').textContent=state.gameTime;if(game().kind==='pose'){for(let i=0;i<gameCount();i++){if(state.poseRemaining[i]>0){state.poseRemaining[i]--;if(state.poseRemaining[i]===0)addGamePoint(i,'保持完成 +1');}}refreshGameLanes();}else if(game().kind==='rhythm')refreshGameLanes();if(state.gameTime<=0)nav('gameResult')}}
 function scale(){const v=$('.viewport');$('#app').style.transform=`scale(${v.clientWidth/1600})`;schedulePrototypeHelpPosition()}
-const scenes={board:[['normal','今日榜单'],['empty','今日暂无记录']],library:[['normal','有内容'],['empty','本分类暂无内容']],resourcePlaying:[['normal','正常播放'],['lost','播放中断'],['loading','视频加载中'],['failed','视频加载失败']],gamePrepare:[['normal','全员人脸登录完成（模拟）'],['registered','新用户注册完成（模拟）'],['identityPending','身份待关联 · 不能开始'],['partial','部分人未关联 · 不能开始'],['none','无人进入 · 不能开始']],gameResult:[['normal','已自动上报（模拟）'],['reportPending','自动上报中（模拟）'],['reportFailed','上报失败自动重试（模拟）'],['reportPartial','多人部分失败重试（模拟）']],gamePlaying:[['normal','正常互动'],['lost','有人离区 · 本场暂停']],rankings:[['normal','有符合条件的成绩'],['empty','暂无上榜记录']]};
+const scenes={fitnessReport:[['normal','示例成绩'],['noHistory','暂无近期成绩']],followReport:[['normal','累计分报告'],['actionReview','动作细评报告']],board:[['normal','今日榜单'],['empty','今日暂无记录']],library:[['normal','有内容'],['empty','本分类暂无内容']],resourcePlaying:[['normal','正常播放'],['lost','播放中断'],['loading','视频加载中'],['failed','视频加载失败']],gamePrepare:[['normal','全员人脸登录完成（模拟）'],['registered','新用户注册完成（模拟）'],['identityPending','身份待关联 · 不能开始'],['partial','部分人未关联 · 不能开始'],['none','无人进入 · 不能开始']],gameResult:[['normal','已自动上报（模拟）'],['reportPending','自动上报中（模拟）'],['reportFailed','上报失败自动重试（模拟）'],['reportPartial','多人部分失败重试（模拟）']],gamePlaying:[['normal','正常互动'],['lost','有人离区 · 本场暂停']],rankings:[['normal','有符合条件的成绩'],['empty','暂无上榜记录']]};
 function renderScenario(){const options=(scenes[state.page]||[['normal','本页默认状态']]).filter(([v])=>v!=='reportPartial'||gameCount()>1);$('#scenario').innerHTML=options.map(([v,t])=>`<option value="${v}" ${state.scene===v?'selected':''}>${t}</option>`).join('');$('#scenario').disabled=options.length===1;}
 function openModal(name){state.modal=name;renderModal()}
 function closeModal(){
@@ -301,7 +445,7 @@ function prototypeHelpItems(){
     add('follow-multi','[data-follow-mode="multi"]','多人跟练','选择多人共同跟练的模式。','点击切换选中态。','支持人数与评分能力按对应现有产品及场地核验，不由此控件推定户外并发能力。');
     add('follow-whole','.lesson-whole','整套跟练','选择完整课程作为跟练内容。','点击后选中整套并取消分节选中态。','课程名称为'+c.title+'；未提供正式时长时不显示虚构时长。');
     add('follow-chapters','.lesson-chapters','分节练习','只列该课程已提供的分节名称，内容较多时可在章节区滚动。','点击具体章节后，开始入口对应当前所选分节。','本课程'+(c.segments.length?'共有'+c.segments.length+'个已列分节。':'没有已提供分节，不额外编造。')+'整套与分节互斥。');
-    add('follow-start','[data-action="existingFollow"]','开始跟练入口','右下角统一保留开始入口的位置。','本次评审原型中按钮禁用，演示到详情选择为止。','热身、AI跟练和体能训练的站位、运动中、暂停、结果及领取沿用原产品；需求保留文字说明。');
+    add('follow-start','[data-action="existingFollow"]','开始跟练入口','右下角统一保留开始入口的位置。','评审可从设备画面下方查看结算报告示例。','运动过程沿用原产品。结算报告参考全民健身机竖屏。');
   }
 
   if(state.page==='library'){
@@ -329,7 +473,17 @@ function prototypeHelpItems(){
     add('resource-media-meta','.lesson-meta','媒体关键信息',watch?'显示视频内容分类与示例时长。':warmup?'标识本项为热身内容。':'标识此处为动作示范。','信息展示，无点击跳转。','跟练和体能缺少正式时长时不虚构数值；视频时长仍是演示数据。');
     add('resource-classification','.detail-tags','当前内容分类','显示所属模块'+(r.body?'及训练部位“'+r.body+'”':'')+'。','用于理解内容，无点击操作。','训练部位用于分类，不表示运动适用条件已完成专业核验。');
     add('resource-description','.activity-info-scroll',watch?'视频内容说明':warmup?'热身方案说明':'动作说明',watch?'说明该视频的内容主题。':warmup?'展示方案定位、简短介绍和主要活动内容。':'展示已提供的动作步骤与提醒。','阅读后决定是否开始；长说明可在右侧内容区域内滚动。','说明不会挤走固定在右下角的开始入口。');
-    add('resource-start','.activity-primary button',watch?'开始观看':'开始'+(warmup?'热身':'训练')+'入口',watch?'进入当前视频的观看演示。':'保留接入现有产品运动流程的开始位置。',watch?'点击后进入播放页，从00:00开始模拟计时。':'本原型按钮禁用，演示截止内容详情。',watch?'观看可暂停和结束，纯观看不计入个人有效运动时长。':'过程体验沿用原产品，站位、运动中、结果和领取不在此另画页面。');
+    add('resource-start','.activity-primary button',watch?'开始观看':'开始'+(warmup?'热身':'训练')+'入口',watch?'进入当前视频的观看演示。':'保留接入现有产品运动流程的开始位置。',watch?'点击后进入播放页，从00:00开始模拟计时。':'评审可从设备画面下方查看结算报告示例。',watch?'观看可暂停和结束，纯观看不计入个人有效运动时长。':'运动过程沿用原产品。体能结算报告参考全民健身机竖屏。');
+  }
+
+  if(state.page==='fitnessReport'||state.page==='followReport'){
+    const fitness=state.page==='fitnessReport';
+    add('settlement-overview','.settlement-content>section:first-child',fitness?'本次体能成绩':'本次跟练成绩',
+      fitness?'展示项目成绩、运动消耗和耗时。':'根据课程呈现累计分报告或动作细评报告。','展示一位参与者的示例数据。','正式数据由竖屏对应报告的结算口径提供。');
+    if(fitness)add('settlement-charts','.settlement-charts','运动曲线与近期成绩','展示本次运动过程和可用的近期成绩。','可切换演示状态查看暂无近期成绩。');
+    else add('settlement-follow-metrics','.follow-settlement-metrics','跟练指标','指标随课程评分类型变化。','演示状态可切换两种竖屏报告结构。');
+    add('settlement-query','.settlement-qr','微信扫码查询','显示统一小程序码。','在小程序中查询本人记录。','二维码为示意。');
+    add('settlement-return','.settlement-actions','离开结算示例','回到首页或本次项目详情。','返回详情保留已选项目、分节和模式。');
   }
 
   if(state.page==='resourcePlaying'){
@@ -405,11 +559,15 @@ function prototypeHelpItems(){
     const g=game(),pk=['双人PK','分队PK'].includes(g.mode);
     add('game-result-heading','.title h1','本局结果标题',pk?'按本局双方或队伍的完成次数显示领先或打平。':'根据当前示例规则显示本轮或共同挑战完成情况。','信息展示，可继续查看个人次数。','仅说明本局模拟结果，不代表正式胜负门槛或真实算法已验证。');
     add('game-result-back','.back','返回当前项目列表','返回同一人数分类的玩法目录。','点击可继续选择其他项目。','本次数据在运动结束时已自动上报；返回不重复上报，也不删除账号内记录。');
+    if(g.id==='fruit-solo'){
+      add('fruit-result-score','.settlement-score','本局总分','显示本局普通切中的模拟总分。','每次点按模拟切中计10分。','正式评分还包括果心和同手连切加分。');
+      add('fruit-result-metrics','.settlement-fruit .settlement-metrics','切水果表现','展示切中水果数、果心切次数和最高同手连切。','— 表示本原型没有采集对应数据。');
+    }
     add('game-result-total','.game-result-layout .panel>h2','本场累计次数','展示各参与者当前完成次数之和。','信息展示。','合作项目展示共同完成；PK不把不同项目成绩混排。');
     add('game-result-people','.game-results-people','逐人结果','逐人展示本局完成次数，分队项目同时标明A队或B队。','通过编号核对本场参与位置。','编号仅用于本场；个人记录在运动前逐人关联账号，结束后自动上报；小程序登录本人账号查询，不在大屏选择站位领取。');
     add('game-result-replay','.game-result-layout [data-action="gamePrepare"]','再玩一次或同组再玩','继续当前项目。','点击回到运动准备；下一局重新人脸登录/注册关联用户，不沿用设备登录态。','不直接绕过全员就绪检查。');
     add('game-result-more','.game-result-layout [data-action="games"]','更多同类项目','查看当前单人、双人或多人分类下的其他玩法。','点击回到玩法目录。','保留原列表的分类、筛选及页码。');
-    add('game-result-records','.result-records','微信小程序查询自己的记录','结果页直接展示通用微信小程序码，与本站服务共用同一入口。','微信扫码进入小程序，登录自己的账号查看已有运动记录；大屏不用切换参与者。','通用码不携带可代领的站位记录；每次运动先人脸登录或新用户注册，运动数据在本次过程中按用户关联，结束自动上报；小程序仅按本人登录账号查询。真实接口仍需联调。当前码仅示意，不可扫码。');
+    add('game-result-records','.result-records,.settlement-fruit .settlement-qr','微信小程序查询自己的记录','结果页直接展示通用微信小程序码，与本站服务共用同一入口。','微信扫码进入小程序，登录自己的账号查看已有运动记录；大屏不用切换参与者。','通用码不携带可代领的站位记录；每次运动先人脸登录或新用户注册，运动数据在本次过程中按用户关联，结束自动上报；小程序仅按本人登录账号查询。真实接口仍需联调。当前码仅示意，不可扫码。');
     add('game-result-report','.result-report-status','运动结束自动上报','本次每位参与者的数据按运动前关联的账号分别自动上报。','结果页仅展示上报状态，无手动领取、保存或清除信息操作；失败由系统重试。','同一session与用户记录幂等，重复结束或重试不重复累计。设备结束本次关联，不保持用户登录态；待重试的运动记录不是登录态。当前全部为演示。');
   }
 

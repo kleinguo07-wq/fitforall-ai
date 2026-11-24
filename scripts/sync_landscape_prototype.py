@@ -86,8 +86,9 @@ def audit(text):
             raise ValueError(f"Publication audit rejected pattern: {pattern}")
     for marker in ["const HOME_ROTATION_MS=20000", "remaining<=5000",
                    "function movementThumbnail", "const views=", "function switchModule",
-                   "function prototypeHelpItems", "function togglePrototypeHelp", 'data-ranking-metric="calories"',
-                   "AI跟练和体能训练的运动过程沿用原产品，本原型展示到详情选择为止。"]:
+                   "function prototypeHelpItems", "function togglePrototypeHelp",
+                   "function fitnessReport", "function followReport", "function fruitSettlement", 'data-ranking-metric="calories"',
+                   "AI跟练和体能训练的运动过程沿用原产品，原型提供独立结算报告示例。"]:
         if marker not in text:
             raise ValueError(f"Required prototype behavior is missing: {marker}")
     for removed_view in ["prepare", "training", "results", "video", "resourcePrepare"]:
@@ -118,11 +119,11 @@ def derive(source_text):
     body_counts = "、".join(body + str(sum(x["body"] == body for x in fitness)) for body in ["全身", "上肢", "核心", "下肢"])
     deferred_count = 70 - fitness_count
     notes = ('<section class="review-notes" id="notes"><h2>整体说明</h2>'
-        '<p>本页为公园横屏 v1.0 交互原型，不代表已部署产品。用户账号体系与横屏多人检测复用教学屏体验，共用过程不另行设计；教学屏参照版本、账号接口、横屏实际人数与场地能力需联调及实机验收。AI跟练和体能训练的运动过程沿用原产品，本原型展示到详情选择为止。每次运动逐人通过人脸登录或注册关联数据，结束自动上报，设备不保留登录态。人脸、注册、上报、相机、评分、小程序和媒体均未接入真实服务。</p>'
+        '<p>本页为公园横屏 v1.0 交互原型，不代表已部署产品。用户账号体系与横屏多人检测复用教学屏体验，共用过程不另行设计；教学屏参照版本、账号接口、横屏实际人数与场地能力需联调及实机验收。AI跟练和体能训练的运动过程沿用原产品，原型提供独立结算报告示例。每次运动逐人通过人脸登录或注册关联数据，结束自动上报，设备不保留登录态。人脸、注册、上报、相机、评分、小程序和媒体均未接入真实服务。</p>'
         f'<ul><li>体能以教学屏61项名称为基础，原表9项有ID补充记录单列；一期{fitness_count}项选型候选，{body_counts}，其余{deferred_count}项转后续，不新增或改编。JSON仅有名称，分类、朝向、强度、素材及判定需核对原示范。</li><li>公园环境、开放安排、排行榜昵称、时长与估算消耗均为模拟；小程序码不可扫码。</li>'
         '<li>点击“原型说明”可查看当前页面逐功能编号、用途、操作及规则；说明随页面和弹窗切换，阅读时暂停演示计时与首页轮换，关闭后继续。</li>'
-        '<li>AI跟练和体能训练的站位、运动中、暂停、结果和领取按原产品执行，需求保留文字说明，原型不另作设计；详情开始按钮仅表示入口位置。</li>'
-        '<li>趣味运动保留站位、互动、暂停、退出确认及结果演示；结束按用户自动上报，结果页直接展示通用微信小程序查询码，登录后查看自己的记录，无需主动清除信息，运动视频保留观看流程。</li>'
+        '<li>AI跟练和体能训练详情下方可查看结算示例。两类报告参考全民健身机竖屏对应结构，示例展示模拟数据。</li>'
+        '<li>趣味运动按项目使用专属报告。切水果结算展示总分、切中水果数、果心切次数和最高同手连切。结束按用户自动上报，结果页直接展示通用微信小程序查询码，登录后查看自己的记录，无需主动清除信息，运动视频保留观看流程。</li>'
         '<li>本站服务标题右侧的齿轮打开设备设置。正式产品复用教学屏设置功能、权限和配置规则。原型演示导航位置切换，默认在右侧；进入大模块列表自动收起，首页默认展开。公告名称和显示开关可由后台配置，首页底部左侧仅一条只读公告，超长内容滚动，不提供公告列表或详情页；弱提示右置；榜单与查询采用图标加文字。</li><li>首页推荐每20秒更新；交互时暂停，更新前5秒显示提示。课程支持分类与分页，不提供搜索输入；体能按训练部位分类并分页。</li>'
         '<li>一期趣味运动聚焦单人切水果，其余候选后续迭代；热身移至下一期，本期隐藏入口；复用成熟内容完成0到1，社会体育统一账号跨横屏、竖屏及小程序通用，真实账号接口仍待联调。模拟输入不代表真实识别，水果连切和果心加分仍待真实判定。</li>'
         '<li>完整排行榜可切换本站今日运动时长榜与卡路里消耗榜，默认时长；两榜独立排序，同值并列。估算消耗以整千卡展示，正式算法与单位仍待核验；暂停、离区与纯观看不累计。</li></ul></section>')
@@ -145,7 +146,7 @@ def main():
         version = {
             "title": "横屏v1.0交互原型", "version": "v1.0", "date": VERSION_DATE,
             "status": "交互原型", "entry": "index.html#home",
-            "updated": "2026-11-10",
+            "updated": "2026-11-24",
             "admin_entry": "admin.html#videos",
             "admin_requirements": "admin-requirements.md",
             "tracking_entry": "tracking.html",
