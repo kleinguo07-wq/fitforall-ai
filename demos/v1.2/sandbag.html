@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f2e9">
+  <title>接沙包 · 全民健身机 v1.2</title>
+  <link rel="stylesheet" href="接沙包_样式.css">
+  <script defer src="接沙包_摄像头.js"></script>
+  <script defer src="接沙包_交互.js"></script>
+</head>
+<body>
+  <main class="workspace">
+    <section class="device" id="device" data-phase="intro" aria-label="接沙包竖屏游戏">
+      <header class="device-header">
+        <span class="section-name">康乐银发<span aria-hidden="true"> / </span>趣味运动</span>
+        <h2 id="heading">接沙包</h2>
+        <p id="hint">等沙包亮起来，再伸手接住。</p>
+      </header>
+      <div class="arena" id="arena">
+        <video id="video" playsinline muted hidden aria-label="镜像站位画面"></video>
+        <div class="ground" aria-hidden="true"></div>
+        <div class="demo-body" aria-hidden="true"><i></i></div>
+        <div class="stance-guide" aria-hidden="true"><span></span><span></span></div>
+        <div class="hud" id="hud" hidden>
+          <div class="hud-main">
+            <div class="identity"><span id="hud-avatar" class="user-avatar" aria-hidden="true">访</span><span id="hud-name">游客</span></div>
+            <div class="hud-time"><time id="time">01:00</time><strong id="score" aria-label="得分">0</strong></div>
+          </div>
+          <div class="hud-combo" id="combo" aria-label="连中与难度" hidden>
+            <span>连中 <b id="streak">0</b></span>
+            <span id="pace"><b id="level">1</b> 档<span id="sprint" hidden> · 冲刺</span></span>
+          </div>
+        </div>
+        <div id="stage-cue" class="stage-cue" hidden>
+          <strong id="stage-title"></strong>
+          <span id="stage-hint"></span>
+        </div>
+        <div id="thrower" class="thrower" data-pose="idle" aria-hidden="true">
+          <div id="thrower-art" class="thrower-art"><img src="接沙包_雪豹三视图.png" alt="" draggable="false"></div>
+        </div>
+        <div class="intro-art" aria-hidden="true">
+          <div class="demo-ring"><span class="sandbag"></span></div>
+          <i class="intro-hand"></i>
+          <i class="intro-hit"></i>
+          <div class="demo-flight"><span class="sandbag"></span></div>
+        </div>
+        <div id="basket" class="basket" aria-hidden="true">
+          <i class="basket-rim"></i><i class="basket-weave"></i>
+        </div>
+        <div id="air-bag" class="air-bag" aria-hidden="true" hidden><span class="sandbag"></span></div>
+        <button id="target" class="target" type="button" data-catch="preview" aria-label="接沙包" hidden><span class="sandbag" aria-hidden="true"></span></button>
+        <div id="left-hand" class="hand-dot" aria-hidden="true" hidden></div>
+        <div id="right-hand" class="hand-dot" aria-hidden="true" hidden></div>
+        <div id="flight" class="flight" aria-hidden="true" hidden><span class="sandbag"></span></div>
+        <div id="feedback" class="feedback" role="status" hidden><span id="feedback-points"></span><small id="feedback-bonus" hidden></small></div>
+        <div id="countdown" class="countdown" aria-live="polite" hidden><strong id="countdown-number">3</strong></div>
+        <section id="result" class="result-mask" aria-label="本局成绩" hidden>
+          <div class="result-card">
+            <header class="result-user"><span id="result-avatar" class="user-avatar" aria-hidden="true">访</span><div><strong id="result-name">游客</strong><p>接沙包</p></div></header>
+            <div class="result-metrics">
+              <strong id="result-score">0</strong><span>运动成绩/分</span>
+              <div class="result-details">
+                <div><strong id="result-catches">0</strong><span>成功接住/次</span></div>
+                <div><strong id="result-best-streak">0</strong><span>最长连中/次</span></div>
+                <div><strong id="result-duration">0</strong><span>运动时长/秒</span></div>
+              </div>
+              <p id="result-status" hidden></p>
+            </div>
+            <div class="result-actions"><button type="button" data-action="home">返回首页 <span id="result-countdown">10s</span></button><button type="button" data-action="replay">再来一次</button></div>
+          </div>
+        </section>
+        <section id="quit" class="result-mask" role="dialog" aria-modal="true" aria-labelledby="quit-title" hidden>
+          <div class="quit-card">
+            <h3 id="quit-title">结束本次运动？</h3>
+            <div class="result-actions"><button type="button" data-action="finish">结束运动</button><button type="button" data-action="continue">继续运动</button></div>
+          </div>
+        </section>
+        <button type="button" id="home-entry" class="home-entry" data-action="details" hidden>
+          <img src="接沙包_雪豹三视图.png" alt=""><span><strong>接沙包</strong><small>伸手接住亮起的沙包 · 60 秒</small></span><b aria-hidden="true">›</b>
+        </button>
+      </div>
+      <footer id="actions" class="device-actions"></footer>
+    </section>
+
+    <aside class="preview-tools" aria-labelledby="preview-title">
+      <h1 id="preview-title">试玩</h1>
+      <div class="mode-options" id="input-mode" role="group" aria-label="试玩操作方式">
+        <button type="button" data-mode="mouse" aria-pressed="true">鼠标或触屏</button>
+        <button type="button" data-mode="camera" aria-pressed="false">摄像头</button>
+      </div>
+      <p class="mode-note" id="camera-notice" role="status">点击亮起来的沙包即可体验。</p>
+
+      <section class="simulation" aria-labelledby="identity-title">
+        <h2 id="identity-title">人脸流程模拟</h2>
+        <div class="sim-options" id="identity-options" role="group" aria-label="模拟身份识别结果">
+          <button type="button" data-identity="visitor" aria-pressed="true">游客</button>
+          <button type="button" data-identity="member" aria-pressed="false">识别成功</button>
+        </div>
+        <p class="simulation-note">可在开局前切换。Demo 仅用摄像头识别站位和手部动作。</p>
+      </section>
+
+      <section id="simulate" class="simulation" aria-labelledby="sim-title">
+        <h2 id="sim-title">站位模拟</h2>
+        <div class="sim-options" role="group" aria-label="模拟站位状态">
+          <button type="button" data-sim="single" aria-pressed="true">一人就位</button>
+          <button type="button" data-sim="missing" aria-pressed="false">离开站位</button>
+          <button type="button" data-sim="multiple" aria-pressed="false">多人入镜</button>
+          <button type="button" data-sim="different" aria-pressed="false">换人入镜</button>
+        </div>
+      </section>
+      <div class="preview-actions">
+        <button type="button" id="preview-screensaver">预览屏保入口</button>
+        <button type="button" id="reset-demo">重新体验</button>
+        <button type="button" id="sound-toggle" aria-pressed="false">音效关闭</button>
+      </div>
+    </aside>
+  </main>
+  <noscript><p class="noscript">请在支持 JavaScript 的浏览器里打开试玩。</p></noscript>
+</body>
+</html>

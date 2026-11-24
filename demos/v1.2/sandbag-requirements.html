@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>全民健身机 v1.2｜接沙包 · FitForAll AI</title>
+<link rel="stylesheet" href="requirements.css"></head>
+<body><main class="site-main">
+<header class="site-heading"><p class="site-kicker">全民健身机 v1.2</p><h1>全民健身机 v1.2｜接沙包</h1></header>
+<article class="site-note requirements-copy">
+<p>2026-11-20 · P0 · 竖屏 · <a href="sandbag.html">在线试玩</a> · <a href="index.html">v1.2 版本需求</a></p>
+<p>看雪豹抛出沙包，等沙包亮起来再接。接得快、连得久，分数更高。一局 60 秒，越到后面抛得越快。</p>
+<h2>沿用趣味运动流程</h2>
+<p>入口为「康乐银发 → 趣味运动 → 接沙包」。从项目介绍点击「开始运动」，依次完成站位、人脸识别、开场倒数，再进入 60 秒游戏。视频屏保入口按一键跟练规则进入同一套站位识别流程。</p>
+<div class="requirements-table" role="region" tabindex="0" aria-label="需求表"><table>
+<thead>
+<tr>
+<th>环节</th>
+<th>复用方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>项目介绍</td>
+<td>沿用趣味运动详情模板，配置接沙包封面、玩法视频和说明。「开始运动」沿用原有项目初始化和镜像画面。</td>
+</tr>
+<tr>
+<td>站位与身份</td>
+<td>沿用站位框和人脸识别。进入站位框后开始识别。识别成功或设备设置允许进入游客分支时，继续开场倒数。识别失败和返回沿用现有规则。</td>
+</tr>
+<tr>
+<td>开始</td>
+<td>沿用左上角头像和昵称、右上角剩余时间和分数，以及居中「3、2、1、GO」。倒数结束后计时并启动接沙包玩法。对局中展示当前连中数和档位，最后 12 秒显示「冲刺」。</td>
+</tr>
+<tr>
+<td>结算与重玩</td>
+<td>沿用趣味运动结果弹窗，展示身份、游戏名、运动成绩、成功接住次数、最长连中和实际运动时长。到时或确认提前结束后走原有结算，成绩允许为 0。「返回首页」随现有结果倒计时执行，「再来一次」清空回合成绩及身份并重新走站位识别，可直接轮到下一位。</td>
+</tr>
+</tbody>
+</table></div>
+<p>源码依据为竖屏 v1.0 登记快照。拳脚快打 <code>src/page/games/handFootTouch/handFootTouch.vue</code> 和顺序摸球 <code>src/page/games/orderTouch/orderTouch.vue</code> 通过 <code>GMStage</code> 调用 <code>PLStage</code> 和 <code>GMResultDialog</code>。详情入口参照 <code>src/page/games/gameDetail/gameDetail.vue</code>，结算参照 <code>src/components/GM/GMStage/GMStage.vue</code> 和 <code>src/components/GM/GMResultDialog/GMResultDialog.vue</code>。</p>
+<p>Demo 中可点选「游客」或「识别成功」来展示两条路径，也可以使用鼠标或触屏。使用摄像头时，先在 HTTPS 试玩页授权，再点「开始运动」，浏览器仅做姿态与手部识别。Demo 中的用户和成绩用于试玩。 <a href="sandbag.html">在线试玩</a></p>
+<h2>接沙包玩法</h2>
+<div class="requirements-table" role="region" tabindex="0" aria-label="需求表"><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>画面与判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>投出与预判</td>
+<td>雪豹蓄力，从手部抛出沙包。沙包沿抛物线飞行，半透明落点同步缓慢移动。预判时不计分。</td>
+</tr>
+<tr>
+<td>爆亮可接</td>
+<td>沙包在落点爆亮，沿外侧路径缓慢向下移动。触碰有效目标后按接取时机加分，沙包飞入篮子。双手同时触碰只记 1 次。爆亮时手已在目标内，需要移出后再触碰。</td>
+</tr>
+<tr>
+<td>补接与落场</td>
+<td>常规接取结束后保留短暂补接，仍限制在腰以上的可达范围内。补接获得较低分数并计入接住次数。随后沙包熄灭接取光圈，受重力加速，从画面下方落出。下落离场阶段停止命中判定。</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>落点范围。</strong> 以头、肩、髋和手臂关键点估算上半身可达空间。高位落在头肩两侧、圆心高于肩线，玩家可以向斜上方伸手。中低位落在胸腰两侧。完整目标避开脸和躯干。左右、远近和高度随机，两侧都可达时同侧最多连续两包。可选位置允许时，连续两包同高度后换一个高度。目标位置受阻或两侧都无空间时，提示回到框中间后继续。</p>
+<p><strong>加速。</strong> 一局从第 1 档开始，随当局时长和连续命中提档。每连中 2 包提前升一档，48 秒前最高第 5 档，最后 12 秒进入第 6 档。漏接清空连击，本局已到达的档位和已得分保留。每次只有一个可接目标，档位越高，出包间隔、预告和接取时间越短，目标也越小。</p>
+<div class="requirements-table" role="region" tabindex="0" aria-label="需求表"><table>
+<thead>
+<tr>
+<th>档位</th>
+<th>按时间进入的最低档</th>
+<th>结算至下一包爆亮</th>
+<th>常规接取</th>
+<th>目标直径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>开局</td>
+<td>1.88 秒</td>
+<td>1.50 秒</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>2</td>
+<td>12 秒</td>
+<td>1.62 秒</td>
+<td>1.38 秒</td>
+<td>94%</td>
+</tr>
+<tr>
+<td>3</td>
+<td>24 秒</td>
+<td>1.35 秒</td>
+<td>1.21 秒</td>
+<td>88%</td>
+</tr>
+<tr>
+<td>4</td>
+<td>36 秒</td>
+<td>1.10 秒</td>
+<td>1.04 秒</td>
+<td>81%</td>
+</tr>
+<tr>
+<td>5</td>
+<td>连中提前解锁</td>
+<td>0.88 秒</td>
+<td>0.90 秒</td>
+<td>75%</td>
+</tr>
+<tr>
+<td>6</td>
+<td>48 秒</td>
+<td>0.71 秒</td>
+<td>0.76 秒</td>
+<td>70%</td>
+</tr>
+</tbody>
+</table></div>
+<p>提档从下一包生效。结算以接住或落出画面为起点，表中间隔包括蓄力和空中预告。各档补接 0.56 秒，尺寸也可随可达空间缩小。这些是 Demo 调试值，实机用不同身高和熟练度验证。</p>
+<h3>计分</h3>
+<p>每包使用出包时的档位。沙包爆亮后，常规接取窗口的前 40% 为「及时」，光圈更亮。达到 40% 后至常规接取结束为「接住」，之后 0.56 秒为「补接」。错过补接窗口记 0 分。摄像头以最终确认有效的连续接触的起始帧计时，暂停时冻结该包的计时。</p>
+<div class="requirements-table" role="region" tabindex="0" aria-label="需求表"><table>
+<thead>
+<tr>
+<th>出包档位</th>
+<th>及时窗口</th>
+<th>及时基础分</th>
+<th>接住基础分</th>
+<th>补接基础分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>600 毫秒</td>
+<td>10</td>
+<td>7</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>552 毫秒</td>
+<td>13</td>
+<td>9</td>
+<td>4</td>
+</tr>
+<tr>
+<td>3</td>
+<td>484 毫秒</td>
+<td>16</td>
+<td>11</td>
+<td>5</td>
+</tr>
+<tr>
+<td>4</td>
+<td>416 毫秒</td>
+<td>19</td>
+<td>13</td>
+<td>6</td>
+</tr>
+<tr>
+<td>5</td>
+<td>360 毫秒</td>
+<td>22</td>
+<td>15</td>
+<td>7</td>
+</tr>
+<tr>
+<td>6</td>
+<td>304 毫秒</td>
+<td>25</td>
+<td>17</td>
+<td>8</td>
+</tr>
+</tbody>
+</table></div>
+<p>在基础分之上叠加两种奖励。</p>
+<ul>
+<li><strong>反应奖励。</strong> 及时接到时，按及时窗口剩余比例折算 0–6 分，四舍五入。比如 6 档及时窗口为 304 毫秒，爆亮后 100 毫秒接到加 4 分，240 毫秒接到加 1 分。</li>
+<li><strong>连击奖励。</strong> 从第 4 次连中起，每次及时或普通接住额外加 1 分，连中达到第 8 次后每次加 2 分，第 12 次后每次加 3 分，以此递增。补接给该档基础分，并保留连中。漏接清空连击，本局累计分数和已升档位保留。</li>
+</ul>
+<p>每包得分计入累计分数，结果页展示实际分数、接住次数和最长连中。命中反馈显示本次加分，有奖励时在下方显示分项。三种命中均增加 1 次接住和 1 次连中，提档按连中次数计算。</p>
+<h2>交付与验收</h2>
+<ul>
+<li><strong>复用。</strong> 研发沿用项目详情、<code>GMStage</code> 的站位、人脸、倒数、提前结束和成绩上报，沿用 <code>GMResultDialog</code>。沿用已有身份与运动事件及字段，按正式游戏 ID 区分项目。结果弹窗的按钮点击和实际成绩上报各沿用原有口径。 <a href="../../demos/v1.1/index.html?view=tracking">v1.1 埋点口径</a></li>
+<li><strong>新增。</strong> 配置独立游戏 ID、康乐银发项目入口、封面和 9:16 视频。玩法槽提供投掷、判定、连击提档、得分和成功接住次数。雪豹正式素材标注离手时点、手部起飞位置，游戏按回合节奏触发播放。 <a href="%E6%8E%A5%E6%B2%99%E5%8C%85_%E9%9B%AA%E8%B1%B9%E4%B8%89%E8%A7%86%E5%9B%BE.png">雪豹三视图</a></li>
+<li><strong>流程验收。</strong> 从介绍页和屏保入口分别验证站位、识别成功与游客分支、3 至 1 后开始、到时结算、提前结束、自动返回和再来一次。换人后核对本次身份、分数和时长。</li>
+<li><strong>手感验收。</strong> 验证不同身高和轻微左右偏站时，高位能向斜上方伸手接到，中低位能在胸腰两侧接到。核对目标避开脸与躯干、单侧空间不足时的出包、双手同时触碰和回合到时。比较开局与最后 12 秒的出包频率和接取率。半透明和下落离场不计分，补接只在腰以上，沙包由下边缘离场。</li>
+<li><strong>计分验收。</strong> 核对六档的基础分、相同接住次数下反应时间或连中改变带来的分差，以及补接保留连中、漏接清空连击。单包跨提档时点仍按原档计分，重复触碰只结算一次。暂停期间接取窗口冻结。累计分数、接住次数和最长连中在重玩时归零。</li>
+<li><strong>镜像与中断。</strong> 实机复用现有站位和参与者判断。单人短暂离开或多人入框时暂停目标与计时，原参与者恢复站位后继续，确认换人或超时按原有规则结束。本地 Demo 使用姿态状态模拟中断，恢复镜像与计时需在设备上核验。</li>
+</ul>
+
+</article>
+</main></body></html>

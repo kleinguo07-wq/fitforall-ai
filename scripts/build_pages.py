@@ -55,6 +55,7 @@ def main() -> None:
     project_by_id = {item["id"]: item for item in projects}
     versions = {key: project_by_id[key]["current"] for key in ("fitness", "landscape")}
     fitness = f"demos/{versions['fitness']}/index.html"
+    fitness_v11 = "demos/v1.1/index.html"
     landscape = f"projects/landscape/{versions['landscape']}"
     trail = "projects/trail-checkin/prototype/index.html"
     research = "projects/trail-checkin/research/index.html"
@@ -66,19 +67,26 @@ def main() -> None:
     landscape_screen = f"{landscape}/{landscape_meta['entry']}"
     landscape_admin = f"{landscape}/{landscape_meta['admin_entry']}"
     tracking = f"{landscape}/{landscape_meta['tracking_entry']}"
+    analytics_entry = Entry("埋点数据看板", analytics, "查看社体屏的每日趋势、事件排行和属性分布。")
+    fitness_v11_entries = [
+        Entry("屏端原型", fitness_v11 + "?view=device", "体验视频屏保、趣运动项目同步等本期内容。"),
+        Entry("管理后台", fitness_v11 + "?view=admin", "评审全民健身机屏保管理。"),
+        Entry("评审说明", fitness_v11 + "?view=spec", "查看本期范围和评审重点。"),
+        Entry("需求文档", fitness_v11 + "?view=docs", "查看本期需求、业务规则与验收。"),
+        Entry("埋点需求", fitness_v11 + "?view=tracking", "查阅采集事件与口径。"),
+        analytics_entry,
+    ]
+    fitness_entries = fitness_v11_entries
+    if "entries" in vertical_meta:
+        fitness_dir = Path(fitness).parent
+        fitness_entries = [
+            Entry(item["title"], (fitness_dir / item["path"]).as_posix(), item["description"])
+            for item in vertical_meta["entries"]
+        ] + [analytics_entry]
+    previous_fitness = Entry("v1.1 版本", fitness_v11 + "?view=docs#release-intro",
+                             "查看视频屏保、一键跟练、趣运动同步与适老内容扩充。")
     resources = {
-        "fitness": [
-            Entry("屏端原型", fitness + "?view=device", "体验视频屏保、趣运动项目同步等本期内容。"),
-            Entry("管理后台", fitness + "?view=admin", "评审全民健身机屏保管理。"),
-            Entry("评审说明", fitness + "?view=spec", "查看本期范围和评审重点。"),
-            Entry("需求文档", fitness + "?view=docs", "查看本期需求、业务规则与验收。"),
-            Entry("埋点需求", fitness + "?view=tracking", "查阅采集事件与口径。"),
-            Entry(
-                "埋点数据看板",
-                analytics,
-                "查看社体屏的每日趋势、事件排行和属性分布。",
-            ),
-        ],
+        "fitness": fitness_entries,
         "landscape": [
             Entry("屏端原型", landscape_screen, "体验横屏首页、运动内容、趣味互动与本站服务。"),
             Entry("管理后台", landscape_admin, "查看分产品视频管理、公告与智慧步道入口。"),
@@ -102,6 +110,8 @@ def main() -> None:
             source = target.read_text(encoding="utf-8")
         navigation = resources.get(project, [])
         if project == "fitness":
+            if path == fitness_v11 and fitness != fitness_v11:
+                navigation = [*fitness_v11_entries, Entry("v1.2 需求", fitness)]
             navigation = [*navigation, backlog_entry]
         target.write_text(add_shell(source, path, projects, project, navigation, surface, assets, guide, fullscreen), encoding="utf-8")
 
@@ -124,14 +134,18 @@ def main() -> None:
         overview = render_project(
             project, entries, extra, updated,
             backlog_entry=backlog_entry if key == "fitness" else None,
+            previous_version=previous_fitness if key == "fitness" and fitness != fitness_v11 else None,
             change_summary=vertical_meta.get("change_summary", "") if key == "fitness" else "",
         )
         write(f"projects/{key}/index.html", key, overview)
 
-    fitness_source = (OUTPUT / fitness).read_text(encoding="utf-8")
+    fitness_source = (OUTPUT / fitness_v11).read_text(encoding="utf-8")
     fitness_source = fitness_source.replace('<p class="nav-label">评审空间</p>', '<p class="nav-label">页面目录</p>')
-    write(fitness, "fitness", fitness_source, surface="fitness",
+    write(fitness_v11, "fitness", fitness_source, surface="fitness",
           guide="从评审目录切换交互大屏的功能，使用场景模拟调整时间、内容和状态，查看本页需求。管理后台、需求文档和埋点可从项目内导航直接打开。", fullscreen=True)
+    if fitness != fitness_v11:
+        for page in (OUTPUT / fitness).parent.glob("*.html"):
+            write(page.relative_to(OUTPUT).as_posix(), "fitness")
     analytics_source = (OUTPUT / analytics).read_text(encoding="utf-8")
     analytics_source = analytics_source.replace(
         '<div id="root"', '<h1 class="analytics-page-title">社体屏埋点分析</h1>\n<div id="root"', 1
@@ -160,7 +174,7 @@ def main() -> None:
     write(research, "trail-checkin", surface="research")
 
     # Apply the shared shell to any other published versions that are reached by old URLs.
-    current_pages = {fitness, backlog, landscape_screen.split("#")[0], admin_path, tracking, trail, research}
+    current_pages = {fitness, fitness_v11, backlog, landscape_screen.split("#")[0], admin_path, tracking, trail, research}
     for directory, project in (("demos", "fitness"), ("projects/landscape", "landscape")):
         for target in (OUTPUT / directory).glob("v*/index.html"):
             path = target.relative_to(OUTPUT).as_posix()

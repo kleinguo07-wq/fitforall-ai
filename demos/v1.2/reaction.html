@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>选择反应时 · 全民健身机 v1.2</title>
+<style>
+  :root{color-scheme:light;--ink:#122f42;--muted:#506773;--border:#d6e2e8;--blue:#135878;--teal:#087b72;--mint:#a6ffe2;--gold:#ffdf79;font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:#eef3f6;color:var(--ink)}
+  [hidden]{display:none!important}
+  button{font:inherit;cursor:pointer}
+  button:disabled{cursor:default}
+  button:focus-visible,a:focus-visible{outline:3px solid #38a8e2;outline-offset:3px}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fff;border-bottom:1px solid var(--border);padding:14px max(20px,calc((100% - 1080px)/2))}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:760;white-space:nowrap}
+  .mark{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#165ab1;color:#fff;font-size:21px}
+  .version{font-size:12px;color:#31596e;background:#e9f1f6;padding:3px 6px;border-radius:5px}
+  .top a{color:var(--blue);font-size:13px;text-decoration:none;font-weight:700;white-space:nowrap}
+  main{max-width:930px;margin:0 auto;padding:28px 24px 40px;display:grid;grid-template-columns:minmax(0,420px) minmax(0,390px);gap:clamp(24px,5vw,62px);align-items:start;justify-content:center}
+  .preview-label{display:flex;justify-content:space-between;align-items:center;margin:0 3px 9px;font-size:12px;color:#476276;font-weight:700}
+  .device{aspect-ratio:9/16;background:#092332;color:#f4fbff;border:6px solid #112d3d;border-radius:24px;overflow:hidden;position:relative;display:flex;flex-direction:column;container-type:inline-size;box-shadow:0 16px 35px #0e2d4020}
+  .device-top{height:44px;display:flex;justify-content:center;align-items:center;background:#0e2c3d;font-size:13px;font-weight:700;flex:none;position:relative;border-bottom:1px solid #254252}
+  .device-top button,.device-top a{position:absolute;left:8px;color:#d6e8f2;font-size:12px;background:none;border:0;padding:8px;text-decoration:none}
+  .device[data-phase=detail] :is(.hud,.arena,#training-footer),.device:not([data-phase=detail]) #project-back{display:none}
+  .project-detail{flex:1;min-height:0;overflow:auto;background:#f5f9fc;color:var(--ink);padding:clamp(12px,4.8cqw,20px)}
+  .detail-cover{min-height:100px;aspect-ratio:2.15;display:flex;align-items:center;justify-content:center;gap:14%;margin:0 0 14px;border-radius:14px;background:radial-gradient(ellipse at 32% 52%,#355663,#102f41 72%)}
+  .detail-cover span{display:grid;place-items:center;width:clamp(44px,19cqw,75px);aspect-ratio:1;border:2px solid #7ba0b1;border-radius:50%;color:#dcebf2;font-size:clamp(13px,4cqw,18px);font-weight:750}
+  .detail-cover span:first-child{color:#36270c;background:var(--gold);border-color:#fff2b9;box-shadow:0 0 0 5px #ffdf7935,0 0 26px #ffdf794d}
+  .project-detail h2{margin:0 0 7px;font-size:clamp(21px,7.6cqw,32px);line-height:1.2}
+  .project-detail p{margin:0 0 15px;color:var(--muted);font-size:clamp(12px,3.9cqw,16px);line-height:1.55}
+  .project-detail h3{margin:0 0 7px;font-size:clamp(13px,4.1cqw,17px)}
+  .project-detail ol{margin:0;padding-left:1.4em;color:#284858;font-size:clamp(11px,3.8cqw,15px);line-height:1.6}
+  .project-detail li+li{margin-top:3px}
+  .hud{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 17px;flex:none;height:66px;align-items:center;background:#102f40}
+  .hud>div:last-child{text-align:right}
+  .hud small{display:block;color:#bbd1dc;font-size:11px}
+  .hud strong{font-size:25px;line-height:1.15;font-variant-numeric:tabular-nums}
+  .arena{position:relative;flex:1;min-height:0;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,#224d60 0,#112e40 57%,#0c2738 94%)}
+  .arena::before{content:"";position:absolute;inset:0;background:linear-gradient(#a9d3e00a 1px,transparent 1px),linear-gradient(90deg,#a9d3e00a 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(#0000,#000 26%,#000 78%,#0000);pointer-events:none}
+  canvas{width:100%;height:100%;display:block;position:absolute;inset:0;pointer-events:none}
+  .cue{position:absolute;inset:4% 11px auto;text-align:center;pointer-events:none}
+  .cue strong{display:block;font-size:clamp(17px,6.4cqw,29px);font-weight:800;line-height:1.25;letter-spacing:.01em}
+  .cue small{display:block;margin-top:6px;color:#c2dce6;font-size:clamp(11px,3.3cqw,14px)}
+  .cue[data-tone=hit] strong{color:var(--mint)}
+  .cue[data-tone=invalid] strong{color:#ffca9e}
+  .zone,.target{position:absolute;transform:translate(-50%,-50%);display:grid;place-items:center;aspect-ratio:1;border-radius:50%;color:#dffaff;font-weight:780}
+  .zone{top:59.3%;width:13%;color:#e4f7ff;background:#11405370;border:2px dashed #9ed6ee}
+  .zone.left{left:32.2%}.zone.right{left:67.8%}
+  .zone[aria-pressed=true]{border:2px solid #a6ffe2;background:#1079689e;color:#f4fffb;box-shadow:0 0 0 4px #a6ffe224}
+  .zone span{font-size:clamp(9px,3.15cqw,14px);white-space:nowrap}
+  .target{top:37%;width:17%;background:#132f40;color:#b3cdd9;border:3px solid #7398aa;font-size:clamp(11px,4.4cqw,21px);z-index:1}
+  .target.left{left:20%}.target.right{left:80%}
+  .target:enabled{background:var(--gold);color:#30230d;border-color:#fff2b9;box-shadow:0 0 0 5px #ffdf7940,0 0 32px #ffdf7952}
+  .bottom{background:#102e3f;border-top:1px solid #2d4d5d;padding:12px 16px;flex:none;text-align:center}
+  .bottom-note{font-size:12px;color:#b8d2dd;margin:0;line-height:1.5}
+  .panel{position:absolute;inset:auto 0 0;z-index:1;background:#f8fbfd;color:var(--ink);padding:14px 16px 16px}
+  .device[data-phase=detail] .panel{position:static}
+  .panel p{color:var(--muted);font-size:12px;line-height:1.55;margin:0 0 9px}
+  .lengths{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px}
+  .lengths button,.sim button,.secondary{background:#fff;color:var(--ink);border:1px solid #c9dce6;border-radius:9px;min-height:40px;font-weight:700;padding:7px}
+  .lengths [aria-pressed=true]{background:#e0f4ee;border-color:#188478;color:#075d54}
+  .primary{width:100%;background:#08766b;border:0;color:white;border-radius:9px;min-height:42px;font-weight:750;padding:9px 12px}
+  .primary:hover{background:#075f57}
+  .results{position:absolute;inset:0;z-index:2;background:#0b2638ed;display:grid;align-content:center;padding:16px}
+  .result-card{background:#f8fbfd;color:var(--ink);border-radius:17px;padding:18px;box-shadow:0 8px 25px #051a2877}
+  .result-card h2{margin:0 0 12px;font-size:clamp(19px,6.8cqw,30px)}
+  .overall{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:8px;margin-bottom:14px;padding:12px;border-radius:11px;background:#e6f4f1}
+  .overall strong{display:block;font-size:clamp(16px,5.75cqw,26px);font-variant-numeric:tabular-nums;white-space:nowrap}
+  #result-fastest{color:#075f57}
+  .overall small,.result-note{font-size:11px;color:var(--muted)}
+  .breakdown{width:100%;border-collapse:collapse;text-align:left;font-size:clamp(10px,3.4cqw,14px);margin:0 0 10px}
+  .breakdown th,.breakdown td{padding:8px 1px;border-bottom:1px solid #d9e5ea;white-space:nowrap}
+  .breakdown thead{color:#466171}
+  .result-note{line-height:1.5;margin:0 0 13px}
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  aside{padding-top:29px}
+  h1{font-size:clamp(24px,3.7vw,39px);margin:0 0 9px;letter-spacing:-.045em;line-height:1.18}
+  .summary{color:var(--muted);font-size:15px;line-height:1.65;margin:0 0 20px}
+  .sim{border:1px solid var(--border);border-radius:15px;background:#fff;padding:16px;margin-bottom:12px}
+  .sim h2{font-size:15px;margin:0 0 9px}
+  .sim p{font-size:13px;line-height:1.6;color:var(--muted);margin:0 0 13px}
+  .controls{display:grid;gap:7px;grid-template-columns:1fr 1fr}
+  .controls button[aria-pressed=true]{background:#e2f3ee;border-color:#75b5a5;color:#075b52}
+  .controls button:disabled{opacity:.42}
+  .controls button:hover:enabled{border-color:#087b72}
+  .controls .wide{grid-column:1/-1}
+  .wait-options{margin-bottom:13px}
+  .states{padding-top:4px;display:grid;gap:8px}
+  .states>div{display:grid;grid-template-columns:66px 1fr;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.45;color:var(--muted)}
+  .states b{color:var(--ink)}
+  .states [aria-current=step] b{color:#08766b}
+  @media(max-width:680px){main{grid-template-columns:minmax(0,420px);gap:16px;padding:15px 12px 25px}aside{padding:0}.summary{margin-bottom:10px}.top{padding:10px 12px}}
+  @media(max-width:375px){.device-top{height:34px}.hud{height:48px}.hud strong{font-size:20px}.bottom,.panel{padding:8px 10px}.lengths{margin-bottom:6px}.lengths button,.primary{min-height:35px}.panel p{margin-bottom:6px}.result-card{padding:12px}}
+</style>
+</head>
+<body>
+<main>
+  <section aria-label="竖屏交互预览">
+    <div class="preview-label"><span>设备竖屏</span><span>9 ∶ 16</span></div>
+    <div class="device" id="device" data-phase="detail">
+      <div class="device-top">
+        <a id="project-back" href="assessment.html?view=senior" aria-label="返回康乐银发趣味运动列表">‹ 返回</a>
+        <button id="end" type="button" hidden>结束训练</button>
+        <span id="device-title">趣味运动</span>
+      </div>
+      <section class="project-detail" id="project-detail" aria-labelledby="project-title">
+        <figure class="detail-cover" aria-label="左手靶点亮，右手靶等待"><span aria-hidden="true">左手</span><span aria-hidden="true">右手</span></figure>
+        <h2 id="project-title" tabindex="-1">选择反应时</h2>
+        <p>哪边亮，就用哪只手隔空触靶。结束后看看自己最快用了多久。</p>
+        <h3>怎么玩</h3>
+        <ol>
+          <li>正对屏幕，双手放到腰侧起始区。</li>
+          <li>靶亮后用同侧手触靶，另一只手留在腰侧。</li>
+          <li>触靶后把双手放回腰侧，等待下一靶。</li>
+        </ol>
+      </section>
+      <div class="hud">
+        <div><small>剩余时间</small><strong id="clock">00:30</strong></div>
+        <div><small>有效命中</small><strong id="hits">0 次</strong></div>
+      </div>
+      <div class="arena">
+        <canvas id="pose" width="720" height="840" aria-hidden="true"></canvas>
+        <div class="cue" id="cue" role="status"><strong id="cue-title">双手放回腰侧</strong><small id="cue-detail">左右手各放进一个起始圈</small></div>
+        <button type="button" class="zone left" id="zone-left" data-hand="left" aria-label="模拟左手进入或离开起始区" aria-pressed="false" disabled><span>左手</span></button>
+        <button type="button" class="zone right" id="zone-right" data-hand="right" aria-label="模拟右手进入或离开起始区" aria-pressed="false" disabled><span>右手</span></button>
+        <button type="button" class="target left" data-target="left" aria-label="左手靶" disabled>左手</button>
+        <button type="button" class="target right" data-target="right" aria-label="右手靶" disabled>右手</button>
+      </div>
+      <div class="bottom panel" id="setup">
+        <p>选训练时长</p>
+        <div class="lengths" role="group" aria-label="训练时长">
+          <button type="button" data-duration="30" aria-pressed="true">30 秒</button>
+          <button type="button" data-duration="60" aria-pressed="false">60 秒</button>
+        </div>
+        <button class="primary" id="start" type="button">开始运动</button>
+      </div>
+      <div class="bottom" id="training-footer"><p class="bottom-note">哪边亮就用哪只手，另一只手留在腰侧</p></div>
+      <div class="results" id="results" aria-labelledby="result-title" hidden>
+        <section class="result-card">
+          <h2 id="result-title" tabindex="-1">本次训练结果</h2>
+          <div class="overall">
+            <div><small>有效命中</small><strong id="result-hits">0 次</strong></div>
+            <div><small>最快反应用时</small><strong id="result-fastest">—</strong></div>
+            <div><small>训练时长</small><strong id="result-time">30 秒</strong></div>
+          </div>
+          <table class="breakdown">
+            <thead><tr><th scope="col">手别</th><th scope="col">命中</th><th scope="col">平均反应用时</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">左手</th><td id="result-left-count"></td><td id="result-left-time"></td></tr>
+              <tr><th scope="row">右手</th><td id="result-right-count"></td><td id="result-right-time"></td></tr>
+            </tbody>
+          </table>
+          <p class="result-note">反应用时从亮靶计到指定手触靶。最快用时和平均值均取自有效命中。<br><span id="result-other"></span></p>
+          <div class="actions">
+            <button type="button" class="secondary" id="configure">返回详情</button>
+            <button type="button" class="primary" id="again">再来一次</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+  <aside aria-label="原型模拟说明">
+    <h1>选择反应时</h1>
+    <p class="summary">每次从腰侧的固定起始区出发。看到靶亮，再用指定手隔空触靶。</p>
+    <section class="sim">
+      <h2>动作模拟</h2>
+      <p>开始运动后，可点腰侧起始圈或下方按钮模拟手部状态。直接点击亮靶会模拟指定手命中。</p>
+      <h2 id="wait-label">亮靶等待范围</h2>
+      <div class="controls wait-options" role="group" aria-labelledby="wait-label">
+        <button type="button" data-wait-max="3000" aria-pressed="true">1～3 秒</button>
+        <button type="button" data-wait-max="5000" aria-pressed="false">1～5 秒</button>
+      </div>
+      <div class="controls">
+        <button type="button" data-toggle="left" aria-pressed="false" disabled>左手入区 / 离区</button>
+        <button type="button" data-toggle="right" aria-pressed="false" disabled>右手入区 / 离区</button>
+        <button type="button" id="reset-hands" class="wide" disabled>双手复位</button>
+        <button type="button" data-touch="left" disabled>左手触靶</button>
+        <button type="button" data-touch="right" disabled>右手触靶</button>
+        <button type="button" id="both-touch" class="wide" disabled>双手同时出发</button>
+      </div>
+    </section>
+    <div class="states" aria-label="训练流程">
+      <div data-step="reset"><b>回到腰侧</b><span>识别到两只手都在各自的起始区，才进入亮靶等待。</span></div>
+      <div data-step="target"><b>随机亮靶</b><span>左右靶始终可见。每次随机等待后点亮一侧，从亮起开始计时。</span></div>
+      <div data-step="feedback"><b>单手触靶</b><span>指定手触到靶即结束计时，另一只手全程留在起始区。</span></div>
+    </div>
+  </aside>
+</main>
+<script>
+'use strict';
+
+const get = id => document.getElementById(id);
+const device = get('device');
+const targets = Array.from(document.querySelectorAll('[data-target]'));
+const zones = Array.from(document.querySelectorAll('.zone'));
+const toggles = Array.from(document.querySelectorAll('[data-toggle]'));
+const touchButtons = Array.from(document.querySelectorAll('[data-touch]'));
+const durationButtons = Array.from(document.querySelectorAll('[data-duration]'));
+const waitButtons = Array.from(document.querySelectorAll('[data-wait-max]'));
+const handNames = { left: '左手', right: '右手' };
+const hands = { left: false, right: false };
+const home = { left: [116, 249], right: [244, 249] };
+const canvas = get('pose');
+const pen = canvas.getContext('2d');
+const targetWindow = 2800;
+const feedbackWindow = 750;
+const waitMin = 1000;
+
+let phase = 'detail';
+let duration = 30;
+let waitMax = 3000;
+let roundStart = null;
+let roundEnd = null;
+let trial = null;
+let reach = null;
+let pendingAt = null;
+let frame = 0;
+let records = [];
+let sideDeck = [];
+let previousSides = [];
+let feedback = null;
+
+function setPhase(next) {
+  phase = next;
+  device.dataset.phase = next;
+  get('project-detail').hidden = next !== 'detail';
+  get('device-title').textContent = next === 'detail' ? '趣味运动' : '选择反应时';
+}
+
+function showCue(title, description, tone = '') {
+  get('cue-title').textContent = title;
+  get('cue-detail').textContent = description;
+  get('cue').dataset.tone = tone;
+}
+
+function bothHome() {
+  return hands.left && hands.right;
+}
+
+function hasRound() {
+  return ['reset', 'wait', 'target', 'feedback'].includes(phase);
+}
+
+function updateControls() {
+  const active = hasRound();
+  for (const button of waitButtons) button.disabled = active;
+  for (const button of targets) button.disabled = phase !== 'target' || button.dataset.target !== trial.side;
+  for (const control of [...zones, ...toggles]) {
+    const hand = control.dataset.hand || control.dataset.toggle;
+    control.disabled = !active;
+    control.setAttribute('aria-pressed', String(hands[hand]));
+  }
+  get('reset-hands').disabled = !active;
+  for (const control of [...touchButtons, get('both-touch')]) {
+    control.disabled = phase !== 'target';
+  }
+  for (const item of document.querySelectorAll('[data-step]')) {
+    const current = phase === 'wait' ? 'target' : phase;
+    if (item.dataset.step === current) item.setAttribute('aria-current', 'step');
+    else item.removeAttribute('aria-current');
+  }
+}
+
+function strokePath(points, width, color) {
+  pen.beginPath();
+  pen.moveTo(...points[0]);
+  points.slice(1).forEach(point => pen.lineTo(...point));
+  pen.lineWidth = width;
+  pen.strokeStyle = color;
+  pen.stroke();
+}
+
+function oval(x, y, rx, ry, color) {
+  pen.beginPath();
+  pen.ellipse(x, y, rx, ry, 0, 0, 2 * Math.PI);
+  pen.fillStyle = color;
+  pen.fill();
+}
+
+function drawBody() {
+  pen.setTransform(2, 0, 0, 2, 0, 0);
+  pen.clearRect(0, 0, 360, 420);
+  pen.lineCap = 'round';
+  pen.lineJoin = 'round';
+
+  oval(180, 404, 95, 13, '#071d2b85');
+  strokePath([[113, 406], [247, 406]], 1, '#98d3e047');
+  for (const [x, foot] of [[163, 150], [197, 210]]) {
+    strokePath([[x, 260], [x + (foot - x) * .4, 321], [foot, 392]], 25, '#5d93a6');
+    strokePath([[foot - 5, 394], [foot + 8, 394]], 13, '#7aaec0');
+  }
+  for (const side of ['left', 'right']) {
+    const direction = side === 'left' ? -1 : 1;
+    const shoulder = [180 + direction * 32, 157];
+    const resting = hands[side];
+    const wrist = reach?.side === side ? reach.point :
+      resting ? home[side] : [180 + direction * 68, 290];
+    const elbow = wrist[1] < 220 ? [180 + direction * 65, (wrist[1] + 180) / 2] :
+      [180 + direction * 55, 209];
+    strokePath([shoulder, elbow, wrist], 16, '#78aec0');
+    oval(wrist[0], wrist[1], 8, 10, resting ? '#aff9e2' : '#a5cad7');
+  }
+
+  const fill = pen.createLinearGradient(140, 148, 219, 271);
+  fill.addColorStop(0, '#a2ccda');
+  fill.addColorStop(1, '#6195a8');
+  pen.beginPath();
+  pen.moveTo(169, 139);
+  pen.quadraticCurveTo(143, 141, 139, 153);
+  pen.quadraticCurveTo(142, 195, 154, 230);
+  pen.lineTo(151, 263);
+  pen.quadraticCurveTo(180, 280, 209, 263);
+  pen.lineTo(206, 230);
+  pen.quadraticCurveTo(218, 195, 221, 153);
+  pen.quadraticCurveTo(217, 141, 191, 139);
+  pen.closePath();
+  pen.fillStyle = fill;
+  pen.fill();
+  strokePath([[155, 233], [205, 233]], 1, '#ddf6fe66');
+  oval(180, 137, 11, 14, '#85b5c7');
+  oval(180, 108, 22, 29, '#a7cada');
+  strokePath([[173, 117], [187, 117]], 1, '#53778a');
+}
+
+function setClock(remaining) {
+  const seconds = Math.max(0, Math.ceil(remaining / 1000));
+  get('clock').textContent = '00:' + String(seconds).padStart(2, '0');
+  if (seconds === 60) get('clock').textContent = '01:00';
+}
+
+function formatMs(ms) {
+  return Math.round(ms) + ' ms';
+}
+
+function draw() {
+  drawBody();
+  updateControls();
+}
+
+function resetCue() {
+  const detail = hands.left ? '把右手放进右侧起始圈' :
+    hands.right ? '把左手放进左侧起始圈' : '左右手各放进一个起始圈';
+  showCue('双手放回腰侧', detail);
+}
+
+function waitForTarget(now) {
+  if (roundStart === null) {
+    roundStart = now;
+    roundEnd = now + duration * 1000;
+  }
+  setPhase('wait');
+  pendingAt = now + waitMin + Math.random() * (waitMax - waitMin);
+  showCue('双手已就位', '保持住，看到靶亮再出手');
+}
+
+function nextSide() {
+  if (sideDeck.length === 0) {
+    const validGroups = [
+      ['left', 'left', 'right', 'right'], ['left', 'right', 'left', 'right'],
+      ['left', 'right', 'right', 'left'], ['right', 'right', 'left', 'left'],
+      ['right', 'left', 'right', 'left'], ['right', 'left', 'left', 'right']
+    ].filter(group => {
+      const sequence = [...previousSides, ...group];
+      return sequence.every((side, index) => side !== sequence[index - 1] || side !== sequence[index - 2]);
+    });
+    sideDeck = [...validGroups[Math.floor(Math.random() * validGroups.length)]];
+  }
+  const side = sideDeck.shift();
+  previousSides = [...previousSides, side].slice(-2);
+  return side;
+}
+
+function showTarget(now) {
+  if (!bothHome()) return;
+  const side = nextSide();
+  const button = targets.find(item => item.dataset.target === side);
+  const point = [button.offsetLeft / canvas.clientWidth * 360, button.offsetTop / canvas.clientHeight * 420];
+  trial = { side, point, shownAt: now };
+  setPhase('target');
+  showCue('用' + handNames[side] + '触靶', '另一只手留在腰侧起始圈');
+  updateControls();
+}
+
+function settle(status, now, title, description) {
+  const ms = status === 'hit' ? now - trial.shownAt : null;
+  records.push({ status, side: trial.side, ms });
+  trial = null;
+  setPhase('feedback');
+  feedback = now + feedbackWindow;
+  if (status === 'hit') {
+    get('hits').textContent = records.filter(record => record.status === 'hit').length + ' 次';
+    showCue('命中 · ' + formatMs(ms), '双手回到腰侧，准备下一靶', 'hit');
+  } else {
+    showCue(title, description, 'invalid');
+  }
+  draw();
+}
+
+function attempt(side) {
+  if (phase !== 'target') return;
+  const now = performance.now();
+  if (now >= roundEnd) {
+    finish(now);
+    return;
+  }
+  if (now >= trial.shownAt + targetWindow) {
+    settle('miss', now, '这次没碰到', '双手回到腰侧，准备下一靶');
+    return;
+  }
+  hands[side] = false;
+  reach = { side, point: trial.point };
+  if (side === trial.side && hands[side === 'left' ? 'right' : 'left']) {
+    settle('hit', now);
+  } else {
+    settle('invalid', now, '请用提示的那只手', '本次无效，双手回到腰侧');
+  }
+}
+
+function updateHands(left, right) {
+  if (!hasRound()) return;
+  const now = performance.now();
+  if (roundEnd !== null && now >= roundEnd) {
+    finish(now);
+    return;
+  }
+  hands.left = left;
+  hands.right = right;
+  reach = null;
+  if (phase === 'target') {
+    if (now >= trial.shownAt + targetWindow) {
+      settle('miss', now, '这次没碰到', '双手回到腰侧，准备下一靶');
+      return;
+    }
+    const other = trial.side === 'left' ? 'right' : 'left';
+    if (!hands[other]) {
+      const title = !left && !right ? '请只用一只手' : '另一只手留在腰侧';
+      settle('invalid', now, title, '本次无效，双手回到腰侧');
+      return;
+    }
+  }
+  if (phase === 'wait' && !bothHome()) {
+    setPhase('reset');
+    pendingAt = null;
+    showCue('等靶亮了再出手', '请把双手放回腰侧');
+  } else if (phase === 'reset') {
+    if (bothHome()) waitForTarget(now);
+    else resetCue();
+  }
+  draw();
+}
+
+function prepare() {
+  cancelAnimationFrame(frame);
+  setPhase('detail');
+  roundStart = null;
+  roundEnd = null;
+  pendingAt = null;
+  trial = null;
+  reach = null;
+  feedback = null;
+  records = [];
+  sideDeck = [];
+  previousSides = [];
+  hands.left = false;
+  hands.right = false;
+  get('hits').textContent = '0 次';
+  setClock(duration * 1000);
+  get('end').hidden = true;
+  get('results').hidden = true;
+  get('setup').hidden = false;
+  resetCue();
+  draw();
+}
+
+function start() {
+  prepare();
+  setPhase('reset');
+  get('setup').hidden = true;
+  get('end').hidden = false;
+  draw();
+  get('zone-left').focus();
+  frame = requestAnimationFrame(tick);
+}
+
+function finish(now) {
+  cancelAnimationFrame(frame);
+  const stoppedAt = roundEnd === null ? now : Math.min(now, roundEnd);
+  if (trial && trial.shownAt + targetWindow < stoppedAt) {
+    records.push({ status: 'miss', side: trial.side, ms: null });
+  }
+  trial = null;
+  setPhase('result');
+  get('end').hidden = true;
+  get('results').hidden = false;
+  const elapsed = roundStart === null ? 0 : Math.max(0, stoppedAt - roundStart);
+  setClock(duration * 1000 - elapsed);
+  const hits = records.filter(record => record.status === 'hit');
+  get('result-hits').textContent = hits.length + ' 次';
+  get('result-fastest').textContent = hits.length ? formatMs(Math.min(...hits.map(record => record.ms))) : '—';
+  get('result-time').textContent = Math.floor(elapsed / 1000) + ' 秒';
+  for (const side of ['left', 'right']) {
+    const matching = hits.filter(record => record.side === side);
+    get('result-' + side + '-count').textContent = matching.length + ' 次';
+    const total = matching.reduce((sum, record) => sum + record.ms, 0);
+    get('result-' + side + '-time').textContent = matching.length ? formatMs(total / matching.length) : '—';
+  }
+  const misses = records.filter(record => record.status === 'miss').length;
+  const invalid = records.filter(record => record.status === 'invalid').length;
+  get('result-other').textContent = '漏靶 ' + misses + ' 次 · 动作无效 ' + invalid + ' 次';
+  updateControls();
+  get('result-title').focus();
+}
+
+function tick() {
+  const now = performance.now();
+  if (roundEnd !== null) {
+    if (now >= roundEnd) {
+      finish(now);
+      return;
+    }
+    setClock(roundEnd - now);
+  }
+  if (phase === 'wait' && now >= pendingAt) showTarget(now);
+  if (phase === 'target' && now >= trial.shownAt + targetWindow) {
+    settle('miss', now, '这次没碰到', '双手回到腰侧，准备下一靶');
+  }
+  if (phase === 'feedback' && now >= feedback) {
+    reach = null;
+    setPhase('reset');
+    if (bothHome()) waitForTarget(now);
+    else resetCue();
+    draw();
+  }
+  frame = requestAnimationFrame(tick);
+}
+
+for (const button of durationButtons) {
+  button.addEventListener('click', () => {
+    duration = Number(button.dataset.duration);
+    for (const choice of durationButtons) choice.setAttribute('aria-pressed', String(choice === button));
+    setClock(duration * 1000);
+  });
+}
+for (const button of waitButtons) {
+  button.addEventListener('click', () => {
+    waitMax = Number(button.dataset.waitMax);
+    for (const choice of waitButtons) choice.setAttribute('aria-pressed', String(choice === button));
+  });
+}
+for (const button of [...zones, ...toggles]) {
+  button.addEventListener('click', () => {
+    const side = button.dataset.hand || button.dataset.toggle;
+    updateHands(side === 'left' ? !hands.left : hands.left, side === 'right' ? !hands.right : hands.right);
+  });
+}
+for (const button of touchButtons) {
+  button.addEventListener('click', () => attempt(button.dataset.touch));
+}
+for (const button of targets) {
+  button.addEventListener('click', () => { if (!button.disabled) attempt(button.dataset.target); });
+}
+get('both-touch').addEventListener('click', () => updateHands(false, false));
+get('reset-hands').addEventListener('click', () => updateHands(true, true));
+get('start').addEventListener('click', start);
+get('again').addEventListener('click', start);
+get('configure').addEventListener('click', () => { prepare(); get('project-title').focus(); });
+get('end').addEventListener('click', () => finish(performance.now()));
+
+prepare();
+</script>
+</body>
+</html>

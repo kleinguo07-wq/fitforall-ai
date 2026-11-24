@@ -1,0 +1,12 @@
+.requirements-copy > :first-child { margin-top: 0; }
+.requirements-copy :is(p, ul, ol, details) { margin-block: 0.75rem; }
+.requirements-copy :is(h2, h3) { margin-top: 1.8em; }
+.requirements-copy h2 { font-size: 1.42rem; }
+.requirements-copy a { text-underline-offset: 0.15em; }
+.requirements-table { overflow-x: auto; margin-block: 1.15rem; }
+.requirements-table table { width: 100%; border-collapse: collapse; }
+.requirements-table :is(th, td) { padding: 0.65rem 0.75rem; border: 1px solid var(--site-line); vertical-align: top; text-align: left; }
+.requirements-table th { background: #edf4ff; }
+.requirements-table td:first-child { min-width: 7rem; }
+.requirements-copy pre { overflow-x: auto; padding: 1rem; border-radius: 8px; background: #edf4ff; font-size: 0.85rem; }
+.requirements-copy summary { cursor: pointer; font-weight: 650; }
