@@ -4,7 +4,7 @@
   "date": "2026-11-04",
   "status": "交互原型",
   "entry": "index.html#home",
-  "updated": "2026-11-10",
+  "updated": "2026-11-24",
   "admin_entry": "admin.html#videos",
   "admin_requirements": "admin-requirements.md",
   "tracking_entry": "tracking.html",
@@ -16,5 +16,5 @@
   ],
   "implementation_status": "横屏接入与实机能力待联调验收",
   "fitness_content_count": 12,
-  "source_sha256": "0c8b9b60a229aff2ef8f6cbf5a9fa3c76bc0b9415aacc966a4a22fcd21d96a26"
+  "source_sha256": "27a6a2e28463df99157b3701e60111e99b957e8126ac8766d99f64a0b85dbe0e"
 }
