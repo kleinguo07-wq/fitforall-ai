@@ -240,7 +240,7 @@ function settlementActions(returnPage){
 function fitnessReport(){
   const item=resource();
   const recentScores=state.scene==='noHistory'?[]:[18,21,24];
-  return heading('体能单项结算报告',`${esc(item.title)} · 示例成绩`,'resourceDetail')+`
+  return heading(esc(item.title),'','resourceDetail')+`
     <div class="settlement-layout">
       <div class="settlement-content">
         <section class="panel"><h2>本次运动</h2>
