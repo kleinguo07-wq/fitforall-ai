@@ -279,9 +279,9 @@ function followReportValue(value){return value===null||value===undefined?'—':S
 function followReport(){
   const course=selectedCourse(),example=followReportExample();
   const section=state.playback==='chapter'?course.segments[state.chapter]:null;
-  const mode=state.followMode==='multi'?'多人跟练 · 单个参与者示例':'单人跟练 · 示例成绩';
+  const title=`${course.title}·${section?chapterName(section):'整套跟练'}`;
   const minutes=Math.floor(example.seconds/60),seconds=example.seconds%60;
-  return heading('AI 跟练结算报告',`${esc(course.title)} · ${section?esc(chapterName(section)):'整套跟练'} · ${mode}`,'detail')+`
+  return heading(esc(title),'','detail')+`
     <div class="settlement-layout follow-report" data-follow-report-state="${esc(state.scene)}">
       <div class="settlement-content">
         <section class="panel follow-report-card">
