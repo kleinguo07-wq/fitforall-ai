@@ -87,8 +87,8 @@ def audit(text):
     for marker in ["const HOME_ROTATION_MS=20000", "remaining<=5000",
                    "function movementThumbnail", "const views=", "function switchModule",
                    "function prototypeHelpItems", "function togglePrototypeHelp",
-                   "function fitnessReport", "function followReport", "function fruitSettlement", 'data-ranking-metric="calories"',
-                   "AI跟练和体能训练的运动过程沿用原产品，原型提供独立结算报告示例。"]:
+                   "function fitnessReport", "function followReport", "function fruitSettlement",
+                   'data-ranking-metric="calories"']:
         if marker not in text:
             raise ValueError(f"Required prototype behavior is missing: {marker}")
     for removed_view in ["prepare", "training", "results", "video", "resourcePrepare"]:
@@ -112,25 +112,6 @@ def derive(source_text):
     text = replace_once(text,
         '<a class="tool" href="趣味运动-调研与候选项目-v0.4.html">玩法调研</a>', "")
     text = text.replace("本地评审稿", "公开评审原型")
-    resource_start = source_text.index("const resources=[") + len("const resources=[")
-    resource_end = source_text.index("\n{id:'warmup-demo'", resource_start)
-    fitness = json.loads("[" + source_text[resource_start:resource_end].strip().rstrip(",") + "]")
-    fitness_count = len(fitness)
-    body_counts = "、".join(body + str(sum(x["body"] == body for x in fitness)) for body in ["全身", "上肢", "核心", "下肢"])
-    deferred_count = 70 - fitness_count
-    notes = ('<section class="review-notes" id="notes"><h2>整体说明</h2>'
-        '<p>本页为公园横屏 v1.0 交互原型，不代表已部署产品。用户账号体系与横屏多人检测复用教学屏体验，共用过程不另行设计；教学屏参照版本、账号接口、横屏实际人数与场地能力需联调及实机验收。AI跟练和体能训练的运动过程沿用原产品，原型提供独立结算报告示例。每次运动逐人通过人脸登录或注册关联数据，结束自动上报，设备不保留登录态。人脸、注册、上报、相机、评分、小程序和媒体均未接入真实服务。</p>'
-        f'<ul><li>体能以教学屏61项名称为基础，原表9项有ID补充记录单列；一期{fitness_count}项选型候选，{body_counts}，其余{deferred_count}项转后续，不新增或改编。JSON仅有名称，分类、朝向、强度、素材及判定需核对原示范。</li><li>公园环境、开放安排、排行榜昵称、时长与估算消耗均为模拟；小程序码不可扫码。</li>'
-        '<li>点击“原型说明”可查看当前页面逐功能编号、用途、操作及规则；说明随页面和弹窗切换，阅读时暂停演示计时与首页轮换，关闭后继续。</li>'
-        '<li>AI跟练和体能训练详情下方可查看结算示例。AI跟练沿用竖屏报告的运动评分、三颗星、运动时长、动作评价次数与疲劳反馈，并在横屏展示本次参与者的头像和昵称。设备外演示状态可切换很好／不错、完美／真棒和无评价示例；示例值不定义算法阈值。</li>'
-        '<li>切水果结算冻结一次，显示本局标题、总分及基础、果心、连切三项明细，以及切中数、果心次数、最高连切和有效挥切时间。设备外演示状态可单独查看打满、零分、提前结束和长数字四种样例。结束按用户自动上报；运动视频保留观看流程。</li>'
-        '<li>本站服务标题右侧的齿轮打开设备设置。正式产品复用教学屏设置功能、权限和配置规则。原型演示导航位置切换，默认在右侧；进入大模块列表自动收起，首页默认展开。公告名称和显示开关可由后台配置，首页底部左侧仅一条只读公告，超长内容滚动，不提供公告列表或详情页；弱提示右置；榜单与查询采用图标加文字。</li><li>首页推荐每20秒更新；交互时暂停，更新前5秒显示提示。课程支持分类与分页，不提供搜索输入；体能按训练部位分类并分页。</li>'
-        '<li>一期趣味运动聚焦单人切水果，其余候选后续迭代；热身移至下一期，本期隐藏入口；复用成熟内容完成0到1，社会体育统一账号跨横屏、竖屏及小程序通用，真实账号接口仍待联调。模拟输入不代表真实识别，水果连切和果心加分仍待真实判定。</li>'
-        '<li>完整排行榜可切换本站今日运动时长榜与卡路里消耗榜，默认时长；两榜独立排序，同值并列。估算消耗以整千卡展示，正式算法与单位仍待核验；暂停、离区与纯观看不累计。</li></ul></section>')
-    text, n = re.subn(r'<section class="review-notes" id="notes">.*?</section>',
-                      lambda _: notes, text, count=1, flags=re.S)
-    if n != 1:
-        raise ValueError("Missing public explanation panel")
     audit(text)
     return text
 
