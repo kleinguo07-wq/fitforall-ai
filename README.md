@@ -4,6 +4,10 @@
 
 **当前产品版本：v1.0（包含体态检测功能）。** 本仓库目前建立产品需求与设计资料基线，用于后续需求梳理、原型和 Demo 迭代；尚未收录设备应用、算法、后台或小程序的实现代码。产品版本不代表仓库已有可运行的软件发行版。
 
+## v1.2 需求与原型
+
+[版本需求](https://kleinguo07-wq.github.io/fitforall-ai/demos/v1.2/)收录腰背痛测评与康复、接沙包和选择反应时。配套页面可体验屏端和手机报告、接沙包结算及左右手触靶流程。GitHub Pages 供需求与交互评审使用。
+
 ## v1.1 需求评审
 
 当前 [需求文档](docs/requirements/v1.1-product-review.md)、[功能埋点清单](docs/requirements/v1.1-event-tracking.md) 和 [交互 Demo](demos/v1.1/README.md) 仅展示本期 P0：视频屏保、趣运动项目同步、线上问题修正、老年内容扩充及后台需求。B02 保留文字需求，原型目录隐藏入口。v1.1 为评审草稿，尚未上线。
@@ -20,7 +24,7 @@ GitHub Pages 统一入口：<https://kleinguo07-wq.github.io/fitforall-ai/>。�
 
 | 项目 | 独立入口 | 当前内容 |
 | --- | --- | --- |
-| 全民健身机 · 竖屏 | [项目页](https://kleinguo07-wq.github.io/fitforall-ai/projects/fitness/) | v1.1需求工作台及待开发需求池 |
+| 全民健身机 · 竖屏 | [项目页](https://kleinguo07-wq.github.io/fitforall-ai/projects/fitness/) | v1.2 需求与原型、v1.1 版本资料及待开发需求池 |
 | 公园横屏 | [项目页](https://kleinguo07-wq.github.io/fitforall-ai/projects/landscape/) | [v1.0交互原型](https://kleinguo07-wq.github.io/fitforall-ai/projects/landscape/v1.0/#home) |
 | 智慧步道打卡杆 | [项目页](https://kleinguo07-wq.github.io/fitforall-ai/projects/trail-checkin/) | 筹备中，暂无原型 |
 

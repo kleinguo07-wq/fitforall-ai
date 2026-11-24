@@ -56,7 +56,7 @@ def render_hub(projects: list[dict[str, str]]) -> str:
 
 def render_project(
     project: dict[str, str], entries: list[Entry], extra: str = "", updated: str = "",
-    *, backlog_entry: Entry | None = None, change_summary: str = "",
+    *, backlog_entry: Entry | None = None, previous_version: Entry | None = None, change_summary: str = "",
 ) -> str:
     path = f"projects/{project['id']}/index.html"
     cards = []
@@ -77,13 +77,20 @@ def render_project(
 <p>{escape(backlog_entry.description)}</p>
 <a class="site-heading-link" href="{escape(relative_url(path, backlog_entry.path))}">打开需求池 <span aria-hidden="true">→</span></a>
 </section>"""
+    previous_section = ""
+    if previous_version:
+        previous_section = f"""<section class="site-note" aria-labelledby="previous-version">
+<h2 id="previous-version">{escape(previous_version.title)}</h2>
+<p>{escape(previous_version.description)}</p>
+<a class="site-heading-link" href="{escape(relative_url(path, previous_version.path))}">查看发版简介 <span aria-hidden="true">→</span></a>
+</section>"""
     return render_page(project["title"], f"""<header class="site-heading">
 <p class="site-kicker">{escape(project['form'])}</p><h1>{escape(project['title'])}</h1>
 <p>{escape(project['description'])}</p>{background_link}</header>
 <section class="site-release" aria-labelledby="current-version">
 <header class="site-section-heading"><div><p class="site-kicker">当前评审</p>
 <h2 id="current-version">{escape(version_title)}</h2></div>{timestamp}</header>
-<div class="site-grid">{''.join(cards)}</div></section>{backlog_section}{extra}""")
+<div class="site-grid">{''.join(cards)}</div></section>{previous_section}{backlog_section}{extra}""")
 
 
 def render_landscape_background(background: dict) -> str:

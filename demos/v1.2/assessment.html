@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>全民健身机 v1.2 · 运动测评原型</title>
+  <link rel="stylesheet" href="原型样式.css">
+  <script defer src="评分参考.js"></script>
+  <script defer src="手机端报告.js"></script>
+  <script defer src="竖屏交互.js"></script>
+</head>
+<body>
+  <main class="workspace">
+    <aside class="intro">
+      <div class="eyebrow">交互原型</div>
+      <h1>运动测评</h1>
+      <p>从设备首页开始，看看用户如何了解今天适合做什么，以及练过之后怎么跟进。</p>
+      <div class="journey" aria-label="体验进度">
+        <div data-phase="entry"><span></span>找到测评入口</div>
+        <div data-phase="questions"><span></span>回答几个问题</div>
+        <div data-phase="observation"><span></span>试做简单动作</div>
+        <div data-phase="result"><span></span>查看今日建议</div>
+        <div data-phase="lesson"><span></span>开始跟练</div>
+        <div data-phase="phone"><span></span>保存报告与复测</div>
+      </div>
+    </aside>
+    <section class="preview" aria-label="原型预览">
+      <div class="surface-bar">
+        <div class="surface-switch" aria-label="预览设备">
+          <button type="button" id="kiosk-view" aria-pressed="true">设备竖屏</button>
+          <button type="button" id="phone-view" aria-pressed="false" disabled>手机报告</button>
+        </div>
+        <button type="button" class="text-button" id="reset">重新体验</button>
+      </div>
+      <div class="frame" id="frame">
+        <div class="screen" id="screen"></div>
+        <div class="phone-view" id="phone" hidden></div>
+        <dialog id="retest-login" class="retest-login" aria-labelledby="login-title"></dialog>
+      </div>
+    </section>
+    <aside class="presets" aria-labelledby="preset-title">
+      <h2 id="preset-title">快速体验</h2>
+      <p>选择一个场景，查看对应的测评流程和建议。</p>
+      <div class="preset-list" id="presets">
+        <button type="button" data-scenario="light"><i></i><span><b>可以独立坐站</b><small>舒缓入门</small></span><span>›</span></button>
+        <button type="button" data-scenario="upper"><i></i><span><b>上背不适</b><small>评估确认与坐姿跟练</small></span><span>›</span></button>
+        <button type="button" data-scenario="seated"><i></i><span><b>日常活动明显费力</b><small>先咨询康复专业人员</small></span><span>›</span></button>
+        <button type="button" data-scenario="urgent"><i></i><span><b>出现需紧急就医的情况</b><small>停止测评</small></span><span>›</span></button>
+        <button type="button" data-scenario="incomplete"><i></i><span><b>现场没有合适座椅</b><small>本次未完成</small></span><span>›</span></button>
+      </div>
+      <div class="review-tool account-tools">
+        <h3 id="device-account">设备未登录</h3>
+        <button type="button" id="return-sample">模拟同一用户再次到访</button>
+        <button type="button" id="empty-account-sample">模拟另一个账号登录</button>
+        <button type="button" id="logout-sample" hidden>退出登录</button>
+      </div>
+      <div class="review-tool account-tools" id="login-result-tool" hidden>
+        <h3>登录结果演示</h3>
+        <button type="button" id="login-success">模拟登录成功</button>
+        <button type="button" id="login-failure">模拟登录失败</button>
+      </div>
+      <div class="review-tool" id="posture-reference" hidden>
+        <a href="assessment-requirements.html" target="_blank" rel="noopener">查看运动测评需求 ↗</a>
+      </div>
+      <p class="review-note">扫码、身份确认和复测提醒均为演示。</p>
+      <div class="review-tool" id="pace-tool" hidden>
+        <h3>跟练播放速度</h3>
+        <button type="button" id="speed" aria-pressed="true">演示加速 ×12</button>
+      </div>
+    </aside>
+  </main>
+  <dialog id="modal" class="modal" aria-labelledby="modal-title"></dialog>
+</body>
+</html>
