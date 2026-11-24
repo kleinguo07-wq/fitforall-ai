@@ -70,6 +70,10 @@
 .settlement-recent{display:grid;gap:8px}
 .settlement-recent div{display:grid;grid-template-columns:4em 1fr 3em;align-items:center;gap:8px;font-size:17px}
 .settlement-recent i{height:9px;background:var(--green);border-radius:6px}
+.settlement-participant{text-align:center;display:grid;justify-items:center;gap:14px}
+.settlement-participant-label{font-size:18px;color:var(--muted)}
+.settlement-participant .settlement-avatar{width:112px;height:112px;font-size:46px}
+.settlement-nickname{font-size:27px;overflow-wrap:anywhere}
 .settlement-qr{text-align:center}
 .settlement-qr .mini-qr{width:155px;height:155px;margin:10px auto}
 .settlement-qr p{font-size:18px;margin:8px 0}
@@ -190,8 +194,17 @@ function settlementMetrics(metrics, primary=true){
     </div>`).join('')}</dl>`;
 }
 
-function settlementQuery(card=true){
-  return `<section class="${card?'panel ':''}settlement-qr">
+function settlementParticipant(){
+  const nickname='晨光漫步';
+  return `<section class="panel settlement-participant" aria-label="本次参与者">
+    <span class="settlement-participant-label">本次参与者</span>
+    <span class="rank-avatar settlement-avatar" aria-hidden="true">${nickname.slice(0,1)}</span>
+    <strong class="settlement-nickname">${nickname}</strong>
+  </section>`;
+}
+
+function settlementQuery(){
+  return `<section class="settlement-qr">
     <h2>我的运动记录</h2>${qrMarkup()}<p>微信扫码，在小程序中查看</p>
   </section>`;
 }
@@ -227,7 +240,7 @@ function fitnessReport(){
         </div>
         ${settlementActions('resourceDetail')}
       </div>
-      ${settlementQuery()}
+      ${settlementParticipant()}
     </div>`;
 }
 
@@ -253,7 +266,7 @@ function followReport(){
         </section>
         ${settlementActions('detail')}
       </div>
-      ${settlementQuery()}
+      ${settlementParticipant()}
     </div>`;
 }
 
@@ -268,7 +281,7 @@ function fruitSettlement(){
         ${settlementMetrics([['切中水果数',cutCount,'个'],['果心切次数','—',''],['最高同手连切','—','']],false)}
         ${state.gameReport?`<p class="result-report-status ${report.status}" data-report-status="${report.status}">${report.text}</p>`:''}
       </section>
-      <section class="panel game-result-actions">${settlementQuery(false)}
+      <section class="panel game-result-actions">${settlementQuery()}
         <div class="result-replay-actions">${btn('再玩一次','gamePrepare','primary')}${btn('返回趣味运动','games')}</div>
       </section>
     </div>`;
@@ -482,7 +495,7 @@ function prototypeHelpItems(){
       fitness?'展示项目成绩、运动消耗和耗时。':'根据课程呈现累计分报告或动作细评报告。','展示一位参与者的示例数据。','正式数据由竖屏对应报告的结算口径提供。');
     if(fitness)add('settlement-charts','.settlement-charts','运动曲线与近期成绩','展示本次运动过程和可用的近期成绩。','可切换演示状态查看暂无近期成绩。');
     else add('settlement-follow-metrics','.follow-settlement-metrics','跟练指标','指标随课程评分类型变化。','演示状态可切换两种竖屏报告结构。');
-    add('settlement-query','.settlement-qr','微信扫码查询','显示统一小程序码。','在小程序中查询本人记录。','二维码为示意。');
+    add('settlement-participant','.settlement-participant','本次参与者','展示这份报告对应的用户头像和昵称。','运动开始前完成登录或注册，报告读取本场关联账号。','多人场次的身份与成绩按报告逐人对应。原型展示示例身份。');
     add('settlement-return','.settlement-actions','离开结算示例','回到首页或本次项目详情。','返回详情保留已选项目、分节和模式。');
   }
 
