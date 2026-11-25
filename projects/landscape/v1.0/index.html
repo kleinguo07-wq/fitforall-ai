@@ -355,7 +355,7 @@ function groupSettlement(title,kind,count){
           </tr>`).join('')}</tbody>
         </table>
       </section>
-      ${follow?`<div class="settlement-actions">${btn('返回首页','home')}${btn('再来一次','detail','primary')}</div>`:settlementActions(back)}
+      <div class="settlement-actions">${btn('返回首页','home')}${btn('再来一次',follow?'detail':'replayGroupFitness','primary')}</div>
     </div>`;
 }
 
@@ -633,19 +633,36 @@ function renderScenario(){
 function openModal(name){state.modal=name;renderModal()}
 function closeModal(){
   const wasRecordQr=state.modal==='recordQr';
+  const wasGroupFitnessPrepare=state.modal==='groupFitnessPrepare';
   state.pendingModule=null;state.modal=null;$('.modal-shade')?.remove();refreshPrototypeHelp();
+  if(wasGroupFitnessPrepare)$('[data-action="replayGroupFitness"]')?.focus();
   if(wasRecordQr&&state.page==='home'){
     $('[data-action="openRecordQr"]')?.focus();
     startHomeRecommendationTimer();
   }
 }
-function modalShell(body){$('.modal-shade')?.remove();$('#app').insertAdjacentHTML('beforeend',`<div class="modal-shade"><section class="modal" role="dialog" aria-modal="true">${body}</section></div>`);$('.modal-shade button')?.focus();refreshPrototypeHelp()}
-function renderModal(){const m=state.modal;let content='';if(m==='resourceEnd')content=`<h2>结束本次观看？</h2><p>可返回视频列表或重新观看。</p><div class="actions">${btn('继续观看','closeModal')}${btn('结束观看','confirmResourceEnd','primary')}</div>`;if(m==='leaveActive')content=`<h2>结束本次体验并离开？</h2><p>${state.page==='gamePlaying'?'结束后将自动上报本次运动数据。':'将结束本次视频观看。'}</p><div class="actions">${btn('继续体验','closeModal')}${btn(state.pendingNav==='home'?'结束并返回首页':'结束并离开','confirmLeaveActive','primary')}</div>`;if(m==='settings')content=`<h2>设备设置</h2><p>设备设置功能沿用教学屏。</p><p>导航位置</p><div class="actions">${btn('左侧','dockLeft',state.dockSide==='left'?'primary':'')}${btn('右侧','dockRight',state.dockSide==='right'?'primary':'')}</div><div class="actions">${btn('完成','closeModal','primary')}</div>`;if(m==='recordQr')content=`<h2>运动记录查询</h2><div class="record-qr-dialog">${qrMarkup()}<p>微信扫码，在小程序中查看个人运动记录。</p></div><div class="actions">${btn('关闭','closeModal','primary')}</div>`;if(content)modalShell(content)}
+function modalShell(body,label=''){$('.modal-shade')?.remove();$('#app').insertAdjacentHTML('beforeend',`<div class="modal-shade"><section class="modal" role="dialog" aria-modal="true"${label?` aria-label="${esc(label)}"`:''}>${body}</section></div>`);$('.modal-shade button')?.focus();refreshPrototypeHelp()}
+function renderModal(){
+  const m=state.modal;
+  if(m==='groupFitnessPrepare'){
+    const title=resource().title+'·多人训练准备';
+    modalShell(`<h2>${esc(title)}</h2>
+      <p>请进入活动区，面向屏幕完成本轮站位和身份确认。</p>
+      <div class="actions">${btn('返回结算','closeModal')}</div>`,title);
+    return;
+  }
+  let content='';if(m==='resourceEnd')content=`<h2>结束本次观看？</h2><p>可返回视频列表或重新观看。</p><div class="actions">${btn('继续观看','closeModal')}${btn('结束观看','confirmResourceEnd','primary')}</div>`;if(m==='leaveActive')content=`<h2>结束本次体验并离开？</h2><p>${state.page==='gamePlaying'?'结束后将自动上报本次运动数据。':'将结束本次视频观看。'}</p><div class="actions">${btn('继续体验','closeModal')}${btn(state.pendingNav==='home'?'结束并返回首页':'结束并离开','confirmLeaveActive','primary')}</div>`;if(m==='settings')content=`<h2>设备设置</h2><p>设备设置功能沿用教学屏。</p><p>导航位置</p><div class="actions">${btn('左侧','dockLeft',state.dockSide==='left'?'primary':'')}${btn('右侧','dockRight',state.dockSide==='right'?'primary':'')}</div><div class="actions">${btn('完成','closeModal','primary')}</div>`;if(m==='recordQr')content=`<h2>运动记录查询</h2><div class="record-qr-dialog">${qrMarkup()}<p>微信扫码，在小程序中查看个人运动记录。</p></div><div class="actions">${btn('关闭','closeModal','primary')}</div>`;if(content)modalShell(content)}
 function toast(text){$('.floating-note')?.remove();$('#app').insertAdjacentHTML('beforeend',`<div class="floating-note">${esc(text)}</div>`);clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('.floating-note')?.remove(),2200)}
 function hit(){gameHit(state.gameActivePlayer)}
-function action(a){if(a==='openRecordQr'){openModal('recordQr');pauseHomeRecommendationTimer();return;}if(a==='dockToggle'){state.dockCollapsed=!state.dockCollapsed;render();return;}if(a==='systemSettings'){openModal('settings');return;}if(a==='dockLeft'||a==='dockRight'){state.dockSide=a==='dockLeft'?'left':'right';render();return;}if(a==='resourceStart'){if(resource().category!=='media')return;state.resourceCategory='media';state.resourceElapsed=0;state.paused=false;nav('resourcePlaying');return;}if(a==='resourceRetry'){state.scene='normal';state.paused=false;render();return;}if(a==='resourceEnd'){openModal('resourceEnd');return;}if(a==='confirmResourceEnd'){nav('resourceResult');return;}if(a==='confirmLeaveActive'){if(state.page==='gamePlaying')completeDemoGameSession();if(state.pendingModule){const id=state.pendingModule;activateModule(id)}else nav(state.pendingNav);return;}if(pages.some(p=>p[0]===a)){if(['gamePlaying','resourcePlaying'].includes(state.page)&&a!==state.page){state.pendingModule=null;state.pendingNav=a;openModal('leaveActive');return;}nav(a);return;}switch(a){case'startGame':if(['none','partial','identityPending'].includes(state.scene))return;nav('gamePlaying');break;case'pause':state.paused=!state.paused;render();break;case'endGame':nav('gameResult');break;case'closeModal':closeModal();break;case'hit':hit();break;}}
+function action(a){
+  if(a==='replayGroupFitness'){
+    if(state.page==='fitnessReport'&&groupReportSize())openModal('groupFitnessPrepare');
+    return;
+  }
+  if(a==='openRecordQr'){openModal('recordQr');pauseHomeRecommendationTimer();return;}if(a==='dockToggle'){state.dockCollapsed=!state.dockCollapsed;render();return;}if(a==='systemSettings'){openModal('settings');return;}if(a==='dockLeft'||a==='dockRight'){state.dockSide=a==='dockLeft'?'left':'right';render();return;}if(a==='resourceStart'){if(resource().category!=='media')return;state.resourceCategory='media';state.resourceElapsed=0;state.paused=false;nav('resourcePlaying');return;}if(a==='resourceRetry'){state.scene='normal';state.paused=false;render();return;}if(a==='resourceEnd'){openModal('resourceEnd');return;}if(a==='confirmResourceEnd'){nav('resourceResult');return;}if(a==='confirmLeaveActive'){if(state.page==='gamePlaying')completeDemoGameSession();if(state.pendingModule){const id=state.pendingModule;activateModule(id)}else nav(state.pendingNav);return;}if(pages.some(p=>p[0]===a)){if(['gamePlaying','resourcePlaying'].includes(state.page)&&a!==state.page){state.pendingModule=null;state.pendingNav=a;openModal('leaveActive');return;}nav(a);return;}switch(a){case'startGame':if(['none','partial','identityPending'].includes(state.scene))return;nav('gamePlaying');break;case'pause':state.paused=!state.paused;render();break;case'endGame':nav('gameResult');break;case'closeModal':closeModal();break;case'hit':hit();break;}}
 $('#app').addEventListener('click',e=>{const target=e.target.closest('button');if(!target||target.disabled)return;if(target.dataset.rankingMetric){state.rankingMetric=target.dataset.rankingMetric;render();return;}if(target.dataset.resourcePage){state.resourcePage+=Number(target.dataset.resourcePage);render();return;}if(target.dataset.homeCourseId){openCourse(target.dataset.homeCourseId);return;}if(target.dataset.action){action(target.dataset.action);return;}if(target.dataset.category){state.category=target.dataset.category;state.course=catalogue[state.category][0]?.id||'';state.filter='全部';state.catalogPage=0;state.playback='full';state.chapter=0;render()}if(target.dataset.course!==undefined){state.course=target.dataset.course;state.playback='full';state.chapter=0;state.followMode='single';nav('detail')}if(target.dataset.filter){state.filter=target.dataset.filter;state.catalogPage=0;render()}if(target.dataset.pageStep){state.catalogPage+=Number(target.dataset.pageStep);render()}if(target.dataset.playback){state.playback=target.dataset.playback;state.chapter=0;render()}if(target.dataset.followMode){state.followMode=target.dataset.followMode;state.scene='normal';render()}if(target.dataset.followChapter!==undefined){state.playback='chapter';state.chapter=Number(target.dataset.followChapter);render()}if(target.dataset.gameCategory){state.gameCategory=target.dataset.gameCategory;state.gameFilter='全部';state.gameCatalogPage=0;render()}if(target.dataset.gameFilter){state.gameFilter=target.dataset.gameFilter;state.gameCatalogPage=0;render()}if(target.dataset.gamePage){state.gameCatalogPage+=Number(target.dataset.gamePage);render()}if(target.dataset.gameCount){state.gamePlayers=Number(target.dataset.gameCount);state.scene='identityPending';render()}if(target.dataset.gameHit!==undefined){gameHit(Number(target.dataset.gameHit));return;}if(target.dataset.pose!==undefined){const i=Number(target.dataset.pose);if(!prototypeHelpState.open&&!state.paused&&state.scene!=='lost'&&!state.poseRemaining[i]){state.poseRemaining[i]=3;state.gameFeedback[i]='保持中';refreshGameLanes()}return;}if(target.dataset.game){state.game=target.dataset.game;state.gamePlayers=game().count;nav('gameRules')}});
 $('#scenario').addEventListener('change',e=>{state.scene=e.target.value;
+  if(state.modal==='groupFitnessPrepare')state.modal=null;
   if(state.page==='followReport')state.followMode=groupReportSize()?'multi':'single';if(state.page==='gamePlaying'&&state.scene==='lostTimeout'){nav('gameResult');return;}
   if(state.page==='gamePlaying'||state.page==='resourcePlaying')state.paused=state.scene==='lost';
   if(state.page==='gameResult'&&state.gameReport&&!Object.hasOwn(fruitResultExamples,state.scene)){const report=state.gameReport;report.status=demoReportState().status;report.records.forEach((r,i)=>r.status=state.scene==='reportPartial'?(i===report.records.length-1?'retrying':'reported'):report.status)}render()});
@@ -680,6 +697,10 @@ function prototypeHelpItems(){
   if(state.modal){
     add('dialog-summary','.modal h2','当前弹窗','说明当前弹窗要确认的事项。','先阅读提示，再选择继续、结束或关闭。','这是评审原型的弹窗演示；身份、账号、保存服务均未实际接入。');
     if(state.modal==='settings'){modalButton('dockLeft','导航在左侧','将侧栏与展开按钮移到左侧。','站点设置，不改变用户身份或运动记录。');modalButton('dockRight','导航在右侧','将侧栏与展开按钮移到右侧。','默认右侧；正式配置持久化由设备设置服务接入。');modalButton('closeModal','完成','关闭设备设置。');}
+    if(state.modal==='groupFitnessPrepare'){
+      add('group-fitness-prepare','.modal h2','提踵多人训练准备','进入同一运动项目的新一轮准备。','提示本轮重新完成站位和身份确认。','训练准备与正式训练由设备复用流程承接。');
+      modalButton('closeModal','返回结算','返回本轮已展示的多人报告。');
+    }
     if(state.modal==='recordQr'){
       add('dialog-record-qr','.modal .mini-qr','运动记录查询码','展示通用微信小程序码。','使用微信扫码，在小程序里查询本人记录。','原型码为示意。');
       modalButton('closeModal','关闭','关闭浮窗并留在首页。');
@@ -768,7 +789,7 @@ function prototypeHelpItems(){
     add('group-report-shared','.group-report-meta','本场人数与项目时长','本场参与者共用标题和项目时长。','信息展示。','原型展示2–8人场次。设备实测人数以联调验收为准。');
     add('group-report-chart','.group-chart','同场运动曲线','按同一时间轴和累计完成次数刻度绘制每位参与者。','点选右侧参与者可突出对应曲线，再次点选恢复全部。','曲线末端的次数与个人成绩表对齐。');
     add('group-report-people','.group-results','个人成绩','按本场完成次数从高到低排名，前三名以金、银、铜标识突出。','点击参与者突出同色曲线。AI跟练还展示个人评分。','同次数并列，同名次显示同一种标识。');
-    add('settlement-return','.settlement-actions','返回或再练','返回首页或当前项目详情。','AI 跟练点击再来一次回当前课程，并保留已选内容和多人模式。');
+    add('settlement-return','.settlement-actions','返回或再练','返回首页，或点击「再来一次」继续当前项目。',state.page==='fitnessReport'?'直接进入提踵多人训练准备，重新确认本轮参与者。原型展示训练准备的跳转示意。':'回到当前 AI 课程，并保留已选内容和多人模式。');
   }else if(isExerciseSettlement(state.page)){
     const fitness=state.page==='fitnessReport';
     add('settlement-overview','.settlement-content>section:first-child',fitness?'本次体能成绩':'本次跟练成绩',
