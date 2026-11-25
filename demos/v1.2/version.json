@@ -1,13 +1,13 @@
 {
   "title": "v1.2 产品需求与交互评审",
   "change_summary": "腰背痛测评与康复、接沙包、选择反应时",
-  "description": "评审运动测评、康乐银发趣味运动及相关验收规则。",
+  "description": "评审腰背痛测评与康复、康乐银发「接沙包」和服务于国民体测的「选择反应时」。",
   "status": "需求与交互评审",
   "updated": "2026-11-25",
   "entries": [
     {"title": "需求文档", "path": "index.html", "description": "查看本期范围、业务规则和验收。"},
     {"title": "运动测评原型", "path": "assessment.html", "description": "体验腰背痛测评、跟练和手机报告。"},
     {"title": "接沙包试玩", "path": "sandbag.html", "description": "体验雪豹抛投、接包、连击提档和结算。"},
-    {"title": "选择反应时试玩", "path": "reaction.html", "description": "从项目详情开始，体验固定靶位和左右手反应计时。"}
+    {"title": "选择反应时试玩", "path": "reaction.html", "description": "服务于国民体测，体验固定靶位和左右手反应计时。"}
   ]
 }

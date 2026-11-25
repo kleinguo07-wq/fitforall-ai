@@ -100,7 +100,7 @@
     <div class="preview-label"><span>设备竖屏</span><span>9 ∶ 16</span></div>
     <div class="device" id="device" data-phase="detail">
       <div class="device-top">
-        <a id="project-back" href="assessment.html?view=senior" aria-label="返回康乐银发趣味运动列表">‹ 返回</a>
+        <a id="project-back" href="assessment.html?view=games" aria-label="返回趣味运动列表">‹ 返回</a>
         <button id="end" type="button" hidden>结束训练</button>
         <span id="device-title">趣味运动</span>
       </div>
@@ -162,7 +162,7 @@
   </section>
   <aside aria-label="原型模拟说明">
     <h1>选择反应时</h1>
-    <p class="summary">每次从腰侧的固定起始区出发。看到靶亮，再用指定手隔空触靶。</p>
+    <p class="summary">服务于国民体测的趣味运动。每次从腰侧出发，等靶亮后用同侧手隔空触靶。</p>
     <section class="sim">
       <h2>动作模拟</h2>
       <p>开始运动后，可点腰侧起始圈或下方按钮模拟手部状态。直接点击亮靶会模拟指定手命中。</p>
@@ -192,6 +192,11 @@
 
 const get = id => document.getElementById(id);
 const device = get('device');
+if (new URLSearchParams(location.search).get('from') === 'senior') {
+  const back = get('project-back');
+  back.href = 'assessment.html?view=senior';
+  back.setAttribute('aria-label', '返回康乐银发趣味运动列表');
+}
 const targets = Array.from(document.querySelectorAll('[data-target]'));
 const zones = Array.from(document.querySelectorAll('.zone'));
 const toggles = Array.from(document.querySelectorAll('[data-toggle]'));
