@@ -10,6 +10,7 @@ const phoneButton = document.querySelector("#phone-view");
 const kioskButton = document.querySelector("#kiosk-view");
 
 const SELF_GUIDED_STOP_SCORE = 8;
+const LESSON_DURATION = 240;
 const DEMO_MEMBER_ID = "demo-member";
 const DEMO_OTHER_MEMBER_ID = "demo-other-member";
 const urgentItems = [
@@ -34,7 +35,6 @@ const symptoms = [
   {id:"health", title:"需要先咨询专业人员", items:reviewItems}
 ];
 const resultLabels = {
-  light: "可以先试「舒缓入门」",
   seated: "建议先咨询康复专业人员",
   urgent: "请立即就医",
   refer: "请先咨询专业人员"
@@ -42,15 +42,14 @@ const resultLabels = {
 const seatedResultReason = "你反馈日常活动明显费力。请先咨询康复专业人员，了解适合自己的活动。";
 const trainingLabels = {
   complete: "本次跟练已完成",
-  partial: "本次跟练部分完成",
   early: "本次跟练提前结束"
 };
 const comfortCourse = [
   [0, "坐稳，准备开始", "双脚踩实，放松肩膀。按你自己的速度。", "rest"],
   [30, "坐姿小幅活动", "骨盆轻轻向前、回中，再向后、回中。自然呼吸。", "tilt"],
   [75, "坐姿交替轻抬脚", "一只脚轻轻离地，再踩稳换另一边。", "march"],
-  [115, "从椅子起身", "能独立站稳、无需搀扶时，慢慢站起再坐回。否则请跳过这一段。", "stand"],
-  [165, "扶稳后轻轻提踵", "仅在能独立站稳时练习，双手扶在稳固支撑上。否则请跳过这一段。", "heel"],
+  [115, "从椅子起身", "能独立站稳、无需搀扶时，慢慢站起再坐回。无法安全完成时，请坐稳休息。", "stand"],
+  [165, "扶稳后轻轻提踵", "仅在能独立站稳时练习，双手扶在稳固支撑上。无法安全完成时，请坐稳休息。", "heel"],
   [210, "坐下休息", "坐稳，自然呼吸，留意现在的感受。", "rest"]
 ];
 const upperBackCourse = [
@@ -60,14 +59,12 @@ const upperBackCourse = [
   [145, "坐姿上背小幅转动", "坐稳后，上背轻轻转向一侧，回到正中，再换一侧。", "upperTurn"],
   [210, "坐稳休息", "双手搭回大腿，放松肩膀，留意现在的感受。", "upperRest"]
 ];
-const upperResultReason = "你确认已由专业人员评估、获准做轻柔的上背坐姿活动，且情况没有变化。";
-const lowerResultReason = "你记录的两项分数和日常活动影响符合查看舒缓入门的条件。";
 const painArea = scope => scope==="upper" ? "上背" : "腰背";
 const courseTitle = scope => scope==="upper" ? "上背舒缓" : "舒缓入门";
 const ratingValue = value => value==null ? "未记录" : `${value}/10`;
 const segmentsFor = report => report.scope==="upper" ? upperBackCourse : comfortCourse;
 function blankSession(){
-  return {page:"home", history:[], answers:{}, report:null, scenario:null, newSymptoms:false, sessionLesson:null};
+  return {page:"home", history:[], answers:{}, report:null, scenario:null, sessionLesson:null};
 }
 let session = blankSession();
 let memberId = null;
@@ -94,7 +91,7 @@ const art = (pose, animate=false) =>
 const options = (items, key) =>
   `<div class="options">${items.map(([value,label])=>choice(label,value,session.answers[key]===value)).join("")}</div>`;
 function score(key, left, right) {
-  const previous = key==="afterPain" ? null : matchingPrevious();
+  const previous = matchingPrevious();
   const buttons = Array.from({length:11}, (_, value) => {
     const history = previous?.[key] === value ? '<span class="score-history">上次</span>' : "";
     return button(`<span>${value}</span>${history}`,"score","",`data-key="${key}" data-value="${value}" aria-pressed="${session.answers[key]===value}"`);
@@ -155,7 +152,7 @@ function continueAfterRatings(){
       ? "上背不适已明显影响日常活动。请先咨询专业人员，再决定适合的活动。"
       : seatedResultReason);
   }
-  setReport("light",session.answers.scope==="upper" ? upperResultReason : lowerResultReason,"","course");
+  setReport("light","","","course");
 }
 function startOver(){
   if (modal.open) modal.close();
@@ -176,8 +173,7 @@ function setReport(kind, reason, urgency="", page="report"){
     ? {pain:previousReport.pain, difficulty:previousReport.difficulty, dateLabel:previousReport.dateLabel}
     : null;
   const dateLabel = new Intl.DateTimeFormat("zh-CN", {month:"long",day:"numeric",hour:"2-digit",minute:"2-digit",hour12:false,timeZone:"Asia/Shanghai"}).format(new Date());
-  session.report = {id:++nextReportId, ownerId:memberId, dateLabel, kind, reason, urgency, scope, difficulty:difficulty ?? null, pain:pain ?? null, previous, training:null, feedback:null};
-  session.newSymptoms = false;
+  session.report = {id:++nextReportId, ownerId:memberId, dateLabel, kind, reason, urgency, scope, difficulty:difficulty ?? null, pain:pain ?? null, previous, training:null};
   phone.replaceChildren();
   setPage(page);
 }
@@ -260,14 +256,11 @@ function finishLogin(){
 }
 function clearPreviousReport(){
   session.report = null;
-  session.newSymptoms = false;
   session.sessionLesson = null;
   phone.replaceChildren();
 }
 function goBack(){
   if (session.page==="lesson") return requestStop();
-  if (session.page==="feedback") return;
-  if (session.page==="report" && (session.report.training || session.newSymptoms)) return setPage("hub");
   const previous = session.history.pop();
   if (!previous) return startOver();
   if (session.page==="report" || session.page==="course") clearPreviousReport();
@@ -337,12 +330,9 @@ function intro(){
 function returning(){
   const last = latestReport(memberId);
   const completed = canSaveReport(session.report);
-  const changed = ["worse","new"].includes(last.feedback);
-  const feedbackLabel = {better:"感觉好一些",same:"感觉差不多",worse:"感觉更不舒服",new:"出现新的不适"}[last.feedback];
   return panel("运动测评",`${assessmentTabs("back")}<h2>腰背痛测评与康复</h2>
     ${completed ? `<div class="tile"><strong>本次跟练已完成</strong>${courseTitle(last.scope)} · ${last.dateLabel}</div>` : "<p>从上次记录继续。</p>"}
-    ${changed ? '<div class="result-block warn"><h3>先确认不适有没有变化</h3><p>如果不适加重或有新的症状，请先咨询专业人员。</p></div>' : ""}
-    <h3>${completed?"本次记录":"上次记录"}</h3><p class="caption">${last.dateLabel} · ${last.scope==="upper"?"上背":"下腰背"}${feedbackLabel?" · "+feedbackLabel:""}</p>
+    <h3>${completed?"本次记录":"上次记录"}</h3><p class="caption">${last.dateLabel} · ${last.scope==="upper"?"上背":"下腰背"}</p>
     <div class="metrics">
       <div>当时的不适<strong>${ratingValue(last.pain)}</strong></div>
       <div>过去 7 天的活动困难<strong>${ratingValue(last.difficulty)}</strong></div>
@@ -422,7 +412,7 @@ function courseDetail(){
     <ul class="course-tags"><li>约 4 分钟</li><li>${upper?"全程坐姿":"坐站结合"}</li><li>需要稳固座椅</li></ul>
     <p>${upper?"坐着活动肩部和上背，按舒服的幅度练。":"从轻柔坐姿活动开始，再练习起身和扶稳提踵。"} </p>
     <div class="course-safety"><strong>练习提示</strong>
-      <p>用稳固、没有轮子的椅子，坐稳后双脚踩实地面。${upper?"":"近期有跌倒、站不稳或需要搀扶时，请跳过站姿动作。"}</p>
+      <p>用稳固、没有轮子的椅子，坐稳后双脚踩实地面。${upper?"":"近期有跌倒、站不稳或需要搀扶时，请保持坐姿。"}</p>
       <p>不适加重或出现新症状时，选择「结束跟练」。</p>
     </div>
     <h3>跟练内容</h3>
@@ -430,35 +420,35 @@ function courseDetail(){
     button("开始跟练","start"));
 }
 function canStartLesson(){
-  return session.report?.kind==="light" && !session.report.training && !session.newSymptoms;
+  return session.report?.kind==="light" && !session.report.training;
 }
 
 function reportPage(){
   const r = session.report;
-  const saveAllowed = canSaveReport(r);
-  const upper = r.scope==="upper";
-  const warning = r.kind==="urgent" ? "urgent" : (r.kind!=="light" || session.newSymptoms ? "warn" : "");
-  let title = upper && r.kind==="light" ? "可以先试「上背舒缓」" : resultLabels[r.kind];
-  let detail = r.reason;
-  if (session.newSymptoms) {
-    title = "今天先暂停跟练";
-    detail = r.urgency==="urgent" ? "你反馈了需要紧急处理的情况，请立即就医。" : "你反馈不适有变化。请先向专业人员确认。";
-  }
+  const urgent = r.kind==="urgent";
   const scores = r.pain!=null || r.difficulty!=null ? `<div class="metrics">
     <div>现在的${painArea(r.scope)}不适<strong>${r.pain==null?"未测":r.pain+"/10"}</strong>${r.previous?.pain!=null?`上次 ${r.previous.pain}/10`:""}</div>
     <div>日常活动困难程度<strong>${r.difficulty==null?"未测":r.difficulty+"/10"}</strong>过去 7 天${r.previous?.difficulty!=null?` · 上次 ${r.previous.difficulty}/10`:""}</div>
   </div>` : "";
-  const outcome = r.training ? `<div class="tile"><strong>${trainingLabels[r.training]}</strong>${{better:"你感觉好一些。",same:"你感觉差不多。",worse:"你感觉更不舒服。",new:"你反馈出现了新的症状。"}[r.feedback] ?? "未填写练后感受。"}${r.afterPain==null?"":` 练后不适 ${r.afterPain}/10。`}${r.skipped ? ` 已跳过 ${r.skipped} 段。` : ""}</div>` : "";
-  let actions = "";
-  if (session.newSymptoms){
-    actions = button("重新测评","retry");
-  }
-  if (saveAllowed) actions += button("扫码保存到手机","save","secondary");
-  if (r.kind==="urgent" || r.urgency==="urgent") actions += button("返回首页","home","secondary");
-  return panel("本次测评结果",`<div class="result-block ${warning}"><div class="overline">今日建议</div><h2>${title}</h2><p>${detail}</p></div>
-    ${scores}${r.previous?`<p class="caption">上次记录于 ${r.previous.dateLabel}。两项分数都来自你自己的感受。</p>`:""}${outcome}
-    ${saveAllowed ? '<p class="caption">保存后，下次复测可以对照本次记录。</p>' : ""}`,
-    actions, !r.training && !session.newSymptoms && !session.scenario);
+  return panel("本次测评结果",`<div class="result-block ${urgent?"urgent":"warn"}"><div class="overline">今日建议</div><h2>${resultLabels[r.kind]}</h2><p>${r.reason}</p></div>
+    ${scores}${r.previous?`<p class="caption">上次记录于 ${r.previous.dateLabel}。两项分数都来自你自己的感受。</p>`:""}`,
+    urgent ? button("返回首页","home","secondary") : "", !session.scenario);
+}
+function lessonResult(){
+  const r = session.report;
+  const complete = canSaveReport(r);
+  const upper = r.scope==="upper";
+  return panel("AI 跟练结算",`<section class="lesson-result">
+    <div class="result-user"><span aria-hidden="true">${r.userName.slice(0,1)}</span><strong>${r.userName}</strong></div>
+    <h2>${courseTitle(r.scope)}</h2>
+    <p class="caption">${upper?"上背跟练":"腰部舒缓跟练"} · ${trainingLabels[r.training]}</p>
+    <div class="metrics">
+      <div>跟练得分<strong>${r.lessonScore==null?"—":r.lessonScore+" 分"}</strong></div>
+      <div>实际运动时长<strong>${timerText(r.lessonSeconds)}</strong></div>
+    </div>
+  </section>
+  ${complete ? `<p class="lesson-advice">${upper?"后续请按专业人员确认的安排练习。":"状态稳定、练后不适没有加重时，建议每天跟练 1 次。"}</p>` : ""}`,
+    button("返回腰背痛测评与康复","returnFromLesson") + (complete ? button("扫码保存到手机","save","secondary") : ""),false);
 }
 function timerText(value){
   return Math.floor(value / 60) + ":" + String(Math.floor(value % 60)).padStart(2,"0");
@@ -467,25 +457,13 @@ function training(){
   const lesson = session.sessionLesson;
   const segments = segmentsFor(session.report);
   const segment = segments[lesson.segment];
-  const paused = lesson.paused;
   return panel(session.report.scope==="upper"?"上背舒缓":"舒缓入门",`
-    <div class="lesson-time"><span>${paused?"已暂停":`第 ${lesson.segment+1} 段 / ${segments.length} 段`}</span><span id="lesson-time">${timerText(lesson.elapsed)} / 4:00</span></div>
-    <progress id="lesson-progress" class="lesson-progress" max="240" value="${lesson.elapsed}" aria-label="跟练进度"></progress>
-    ${art(segment[3],!paused)}<h2>${segment[1]}</h2><p>${segment[2]}</p>
+    <div class="lesson-time"><span>第 ${lesson.segment+1} 段 / ${segments.length} 段</span><span id="lesson-time">${timerText(lesson.elapsed)} / ${timerText(LESSON_DURATION)}</span></div>
+    <progress id="lesson-progress" class="lesson-progress" max="${LESSON_DURATION}" value="${lesson.elapsed}" aria-label="跟练进度"></progress>
+    ${art(segment[3],true)}<h2>${segment[1]}</h2><p>${segment[2]}</p>
     <p class="caption">不适加重或出现新的不适时，选「结束跟练」。</p>`,`
-    <div class="follow-actions">${button(paused?"继续播放":"暂停","pause","secondary")}${button("跳过这段","skip","secondary")}</div>
     ${button("结束跟练","stop","danger")}`,false);
 }
-function feedback(){
-  const state = session.sessionLesson;
-  const complete = state.finished && !state.skipped;
-  return panel("跟练反馈", `<h2>${state.finished ? "跟练结束了" : "你已停止跟练"}</h2><p>和刚开始练习时相比，现在感觉怎么样？</p>
-    ${options([["better","好一些"],["same","差不多"],["worse","更不舒服"],["new","出现新的不适"]],"feedback")}
-    ${session.answers.feedback ? `<span class="feedback-label">现在的${painArea(session.report.scope)}不适（可不选）</span>${score("afterPain","不痛","最痛")}` : ""}`,
-    button(complete?"完成并返回":"保存反馈","finish","primary",session.answers.feedback?"":"disabled") +
-    button(complete?"跳过，返回功能页":"先不填，查看报告","finishSkip","ordinary"),false);
-}
-
 const pages = {
   home, hub, intro, returning,
   senior:()=>panel("全民健身机",`<h2>康乐银发</h2><div class="open-cards">
@@ -504,44 +482,38 @@ const pages = {
   screening, scope:profile, ratings, course:courseDetail,
   report:reportPage,
   lesson:training,
-  feedback
+  lessonResult
 };
 
-function recordAnswer(value){
-  if (session.page==="scope") return selectScope(value);
-  if (session.page==="feedback") {
-    session.answers.feedback = value;
-    paint(false);
-  }
-}
 function startLesson(){
-  session.sessionLesson = {elapsed:0,segment:0,skipped:0,paused:false,finished:false};
+  const userName = memberId===DEMO_MEMBER_ID ? "体验用户" : memberId ? "体验用户 B" : "游客";
+  session.sessionLesson = {elapsed:0,segment:0,userName};
   setPage("lesson");
 }
-function openFeedback(finished){
-  session.sessionLesson.finished = finished;
-  session.answers.feedback = null;
-  session.answers.afterPain = null;
-  setPage("feedback");
-}
 function requestStop(){
-  session.sessionLesson.paused = true;
-  paint(false);
-  showDialog("结束这次跟练？","可以记录现在的感受，也可以继续练习。",
-    button("结束并记录","confirmStop","danger") + button("继续跟练","continue","secondary"));
+  showDialog("结束这次跟练？","确认结束，或继续跟练。",
+    button("结束跟练","confirmStop","danger") + button("继续跟练","close","secondary"));
 }
-function finish(record){
+function finishLesson(complete){
+  const {elapsed,userName} = session.sessionLesson;
+  session.sessionLesson = null;
+  // 演示沿用现有整节训练达到课程时长 20% 才显示结算的规则。
+  if (!complete && elapsed<Math.ceil(LESSON_DURATION * 0.2)) return goBackToCourse();
   const r = session.report;
-  const lesson = session.sessionLesson;
-  r.training = !lesson.finished ? "early" : lesson.skipped ? "partial" : "complete";
-  r.feedback = record ? session.answers.feedback : null;
-  r.afterPain = record ? session.answers.afterPain : null;
-  r.skipped = lesson.skipped;
-  if (r.feedback==="worse" || r.feedback==="new") session.newSymptoms = true;
-  if (!canSaveReport(r)) return setPage("report");
-  if (memberId) saveReport(r);
-  else guestReports.set(r.id, {...r});
-  enterAssessment(r);
+  r.training = complete ? "complete" : "early";
+  r.userName = userName;
+  r.lessonSeconds = Math.floor(elapsed);
+  r.lessonScore = complete ? 86 : null; // 示例成绩。正式设备读取 AI 课程结算得分。
+  if (complete) {
+    if (memberId) saveReport(r);
+    else guestReports.set(r.id, {...r});
+  }
+  setPage("lessonResult");
+}
+function goBackToCourse(){
+  session.history.pop();
+  session.page = "course";
+  paint();
 }
 function allowPhone(){
   if (!canSaveReport(session.report)) return;
@@ -567,7 +539,7 @@ function scenario(name){
     session.answers = {scope:"lowerLong", difficulty:name==="light"?4:6, pain:name==="light"?3:5, impact:name==="light"?"light":"seated"};
   }
   const reasons = {
-    light:lowerResultReason,
+    light:"",
     seated:seatedResultReason,
     urgent:"你选择了一项可能需要紧急处理的情况。请立即寻求急诊帮助。"
   };
@@ -575,15 +547,15 @@ function scenario(name){
 }
 function lessonTick(){
   const l = session.sessionLesson;
-  if (l.paused) return;
-  l.elapsed = Math.min(240,l.elapsed + speed/4);
-  if (l.elapsed>=240) return openFeedback(true);
+  if (modal.open) return;
+  l.elapsed = Math.min(LESSON_DURATION,l.elapsed + speed/4);
+  if (l.elapsed>=LESSON_DURATION) return finishLesson(true);
   const index = segmentsFor(session.report).findLastIndex(item=>item[0]<=l.elapsed);
   if (l.segment!==index){
     l.segment = index;
     return paint(false);
   }
-  document.querySelector("#lesson-time").textContent = `${timerText(l.elapsed)} / 4:00`;
+  document.querySelector("#lesson-time").textContent = `${timerText(l.elapsed)} / ${timerText(LESSON_DURATION)}`;
   document.querySelector("#lesson-progress").value = l.elapsed;
 }
 
@@ -591,7 +563,7 @@ function phaseFor(page){
   if (surface==="phone") return "phone";
   if (["home","senior","hub","intro","returning","posture"].includes(page)) return "entry";
   if (["course","report"].includes(page)) return "result";
-  if (["lesson","feedback"].includes(page)) return "lesson";
+  if (["lesson","lessonResult"].includes(page)) return "lesson";
   return "questions";
 }
 function paint(focus=true){
@@ -633,10 +605,8 @@ function act(target){
   switch(action){
     case "home":
       if (session.page==="lesson") return requestStop();
-      if (session.page==="feedback") return finish(false);
       return startOver();
     case "back": return goBack();
-    case "retry": return enterAssessment();
     case "showPosture": if (session.page!=="hub") return showAssessmentEntry("hub"); return;
     case "enterAssessment": if (session.page==="hub") return enterAssessment(); return;
     case "retest": return openRetest();
@@ -664,7 +634,7 @@ function act(target){
       screen.querySelector("[data-ratings-next]").disabled = !ratingsReady();
       return;
     }
-    case "answer": return recordAnswer(value);
+    case "answer": return selectScope(value);
     case "reviewRatings": return continueAfterRatings();
     case "score": {
       session.answers[key] = Number(value);
@@ -679,23 +649,9 @@ function act(target){
     }
     case "start":
       return session.page==="course" && canStartLesson() ? startLesson() : undefined;
-    case "pause":
-      session.sessionLesson.paused = !session.sessionLesson.paused;
-      return paint(false);
-    case "skip": {
-      const l = session.sessionLesson;
-      const segments = segmentsFor(session.report);
-      l.skipped++;
-      if (l.segment===segments.length-1) return openFeedback(l.skipped < segments.length);
-      l.segment++;
-      l.elapsed = segments[l.segment][0];
-      return paint(false);
-    }
     case "stop": return requestStop();
-    case "confirmStop": modal.close(); return openFeedback(false);
-    case "continue": modal.close(); session.sessionLesson.paused = false; return paint(false);
-    case "finish": return finish(true);
-    case "finishSkip": return finish(false);
+    case "confirmStop": modal.close(); return finishLesson(false);
+    case "returnFromLesson": return enterAssessment(canSaveReport(session.report) ? session.report : null);
     case "save":
       if (!canSaveReport(session.report)) return;
       return showDialog("保存本次测评","用微信扫一扫，即可保存本次测评结果。",
