@@ -1,13 +1,5 @@
 /* 独立网页原型的小程序报告。交互状态存放在当前预览页面中。 */
 (() => {
-  const outcomeCopy = {
-    light: { title: '舒缓入门', reason: '本次跟练已播放完成。' },
-    seated: { title: '建议先咨询康复专业人员', reason: '日常活动仍然比较费力，可以把测评结果带给康复专业人员。' },
-    urgent: { title: '请立即寻求急诊帮助', reason: '根据你刚才的回答，请先处理当前不适。' },
-    refer: { title: '建议先咨询专业人员', reason: '请向专业人员说明当前不适和日常活动情况，再确认运动安排。' },
-  };
-  const feedbackCopy = { better: '好一些', same: '差不多', worse: '更不舒服', new: '出现新的不适' };
-
   function el(tag, className, text) {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -106,26 +98,14 @@
     const body = el('div', 'mr-sheet');
     const upperBack = report.scope === 'upper';
     const region = upperBack ? '上背' : '腰背';
-    const course = upperBack ? '上背舒缓' : outcomeCopy.light.title;
+    const course = upperBack ? '上背舒缓' : '舒缓入门';
     const assessment = upperBack ? '腰背痛测评与康复 · 上背' : '腰背痛测评与康复';
     const canRetest = (report.kind === 'light' || report.kind === 'seated') && report.difficulty != null;
     const initial = { pain: report.pain ?? null, difficulty: report.difficulty ?? null };
     let reminder = false;
     let retest = null;
-    let followupPaused = needsCheck();
+    let followupPaused = false;
     root.append(style, header, body);
-
-    function needsCheck() {
-      return report.feedback === 'worse' || report.feedback === 'new';
-    }
-
-    function result() {
-      if (needsCheck()) return { title: '今天先暂停跟练', reason: '你反馈不适有变化，请先确认当前情况。' };
-      const outcome = upperBack && report.kind === 'light'
-        ? { title: course, reason: '本次上背坐姿跟练已播放完成。' }
-        : outcomeCopy[report.kind];
-      return { title: outcome.title, reason: report.reason || outcome.reason };
-    }
 
     function show(title, label, heading, description, content) {
       header.replaceChildren(el('strong', '', title));
@@ -142,13 +122,9 @@
     }
 
     function trainingCard() {
-      const states = { complete: '已完成本次跟练', early: '已提前结束本次跟练' };
       return block(`本次跟练 · ${course}`, [
-        el('p', '', states[report.training] || '暂无跟练记录'),
-        report.feedback
-          ? el('p', '', `练后自评 · ${feedbackCopy[report.feedback]}`)
-          : el('p', '', '练后自评 · 未记录'),
-        ...(report.afterPain == null ? [] : [measure(`练后${region}不适`, report.afterPain)]),
+        el('p', '', `跟练得分 · ${report.lessonScore == null ? '—' : report.lessonScore + ' 分'}`),
+        el('p', '', `实际运动时长 · ${report.lessonSeconds} 秒`),
       ]);
     }
 
@@ -231,9 +207,7 @@
 
     function followupCard() {
       if (followupPaused) {
-        const content = [el('p', '', '请先确认当前不适，再安排后续练习。')];
-        if (needsCheck() && !retest) content.push(button('重新确认近况', () => showSafety(), true));
-        return block('跟进暂缓', content);
+        return block('跟进暂缓', [el('p', '', '请先确认当前不适，再安排后续练习。')]);
       }
       const toggle = el('label', 'mr-toggle');
       const input = document.createElement('input');
@@ -257,7 +231,6 @@
     }
 
     function showSaved() {
-      const outcome = result();
       const cards = [baselineCard()];
       if (report.previous) {
         const { pain, difficulty, dateLabel } = report.previous;
@@ -277,14 +250,13 @@
       if (canRetest) cards.push(trainingCard());
       if (canRetest && !retest) cards.push(followupCard());
       if (canRetest && onContinue) cards.push(button('回设备继续测评', () => onContinue(), true));
-      show('我的测评', `${assessment} · 已保存`, outcome.title, outcome.reason, cards);
+      show('我的测评', `${assessment} · 已保存`, course, '本次跟练已完成。', cards);
     }
 
     function showClaim() {
-      const outcome = result();
       show('领取测评结果', assessment, '把这次结果带走',
         '保存后，可在「我的测评」中查看本次结果和初测记录。', [
-          block('本次结果', [el('strong', '', outcome.title), el('p', '', outcome.reason)]),
+          trainingCard(),
           button('保存到我的测评', () => {
             onSave?.(report);
             showSaved();
