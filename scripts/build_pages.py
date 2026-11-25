@@ -74,7 +74,6 @@ def main() -> None:
         Entry("评审说明", fitness_v11 + "?view=spec", "查看本期范围和评审重点。"),
         Entry("需求文档", fitness_v11 + "?view=docs", "查看本期需求、业务规则与验收。"),
         Entry("埋点需求", fitness_v11 + "?view=tracking", "查阅采集事件与口径。"),
-        analytics_entry,
     ]
     fitness_entries = fitness_v11_entries
     if "entries" in vertical_meta:
@@ -82,9 +81,15 @@ def main() -> None:
         fitness_entries = [
             Entry(item["title"], (fitness_dir / item["path"]).as_posix(), item["description"])
             for item in vertical_meta["entries"]
-        ] + [analytics_entry]
+        ]
     previous_fitness = Entry("v1.1 版本", fitness_v11 + "?view=docs#release-intro",
                              "查看视频屏保、一键跟练、趣运动同步与适老内容扩充。")
+    current_fitness = Entry(f"{versions['fitness']} 版本", fitness)
+    fitness_tools = [analytics_entry, backlog_entry]
+    fitness_project_nav = [current_fitness]
+    if fitness != fitness_v11:
+        fitness_project_nav.append(previous_fitness)
+    fitness_project_nav.extend(fitness_tools)
     resources = {
         "fitness": fitness_entries,
         "landscape": [
@@ -111,8 +116,11 @@ def main() -> None:
         navigation = resources.get(project, [])
         if project == "fitness":
             if path == fitness_v11 and fitness != fitness_v11:
-                navigation = [*fitness_v11_entries, Entry("v1.2 需求", fitness)]
-            navigation = [*navigation, backlog_entry]
+                navigation = [*fitness_v11_entries, *fitness_tools, current_fitness]
+            elif Path(path).parent == Path(fitness).parent:
+                navigation = [*fitness_entries, *fitness_tools]
+            else:
+                navigation = fitness_project_nav
         target.write_text(add_shell(source, path, projects, project, navigation, surface, assets, guide, fullscreen), encoding="utf-8")
 
     write("index.html", "", render_hub(projects))
@@ -129,8 +137,10 @@ def main() -> None:
             )
         updated = {"fitness": vertical_meta["updated"], "landscape": landscape_meta["updated"]}.get(key, "")
         entries = resources.get(key, [])
-        if key == "fitness" and versions["fitness"] == "v1.1":
-            entries = [*entries, Entry("发版简介", fitness + "?view=docs#release-intro", "查看本版本的主要更新。")]
+        if key == "fitness":
+            entries = [*entries, analytics_entry]
+            if fitness == fitness_v11:
+                entries.append(Entry("发版简介", fitness + "?view=docs#release-intro", "查看本版本的主要更新。"))
         overview = render_project(
             project, entries, extra, updated,
             backlog_entry=backlog_entry if key == "fitness" else None,
