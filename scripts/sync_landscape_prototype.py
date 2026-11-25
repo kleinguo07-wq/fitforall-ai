@@ -127,7 +127,7 @@ def main():
         version = {
             "title": "横屏v1.0交互原型", "version": "v1.0", "date": VERSION_DATE,
             "status": "交互原型", "entry": "index.html#home",
-            "updated": "2026-11-24",
+            "updated": "2026-11-25",
             "admin_entry": "admin.html#videos",
             "admin_requirements": "admin-requirements.md",
             "tracking_entry": "tracking.html",

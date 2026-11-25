@@ -81,6 +81,39 @@
 .settlement-participant .settlement-avatar{width:112px;height:112px;font-size:46px}
 .settlement-nickname{font-size:27px;overflow-wrap:anywhere}
 .settlement-actions{display:flex;justify-content:flex-end;gap:12px}
+.group-report-meta{display:flex;align-items:center;gap:14px;white-space:nowrap}
+.group-report-meta .tag{font-size:18px}
+.group-report-duration{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:white;font-size:18px}
+.group-report-duration span{color:var(--muted)}
+.group-report-duration strong{font-size:25px;font-variant-numeric:tabular-nums}
+.group-report{display:grid;grid-template-columns:minmax(0,1.33fr) minmax(0,1fr);gap:18px;align-items:stretch}
+.group-report .panel{min-width:0;padding:19px 22px}
+.group-report h2{margin:0;font-size:24px}
+.group-chart{display:flex;flex-direction:column}
+.group-chart-head,.group-results-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.group-chart-head span,.group-results-head span{font-size:16px;color:var(--muted)}
+.group-chart svg{display:block;width:100%;height:auto;min-height:0;margin:auto 0}
+.group-chart svg text{font-family:var(--font);font-size:18px;fill:var(--muted)}
+.group-chart-grid{stroke:#e0e8dd;stroke-width:1}
+.group-chart-axis{stroke:#9eaea3;stroke-width:1.4}
+.group-curve{transition:opacity .16s ease}
+.group-curve path{fill:none;stroke:currentColor;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.group-curve circle{fill:currentColor;stroke:white;stroke-width:2}
+.group-report.has-focus .group-curve:not(.selected){opacity:.2}
+.group-curve.selected path{stroke-width:6}
+.group-results table{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:10px;font-variant-numeric:tabular-nums}
+.group-results th,.group-results td{padding:0 7px;height:42px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.group-results thead th{height:34px;color:var(--muted);font-size:16px;font-weight:550}
+.group-results th:first-child{width:43%;padding-left:0;text-align:left}
+.group-results td{font-size:20px;font-weight:680}
+.group-results tbody tr:last-child>*{border-bottom:0}
+.group-results tr.selected>*{background:#ecf2e8}
+.group-results tr.selected th{box-shadow:inset 3px 0 var(--series)}
+.group-person{display:flex;align-items:center;gap:7px;width:100%;min-height:40px;padding:3px 4px;border:0;background:transparent;text-align:left;color:var(--ink);font-size:18px}
+.group-person .rank-avatar{width:25px;height:25px;flex:none;font-size:15px}
+.group-person-name{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.group-person-number{display:grid;place-items:center;flex:none;width:22px;height:22px;border-radius:50%;background:var(--series);color:white;font-size:14px;font-weight:700}
+.group-report .settlement-actions{grid-column:1/-1}
 .settlement-layout .follow-report-card{padding:26px}
 .follow-report-top{display:grid;grid-template-columns:210px minmax(0,1fr);align-items:center;gap:24px;padding:8px 0 26px;border-bottom:1px solid var(--line)}
 .follow-report-score{text-align:center}
@@ -142,7 +175,7 @@ let timer,toastTimer,homeRecommendationTimer;
 let homeQuickPressed=false,homeQuickElapsed=0,homeQuickLastTick=null;
 const HOME_ROTATION_MS=20000,homeQuickIndices=[0,0,0];
 const btn=(label,action,cls='',extra='')=>`<button class="button ${cls}" data-action="${action}" ${extra}>${label}</button>`;
-function nav(page,resetScene=true){if(['library','resourceDetail','resourcePlaying','resourceResult'].includes(page)&&(state.resourceCategory==='warmup'||resource().category==='warmup')){state.resourceCategory='fitness';state.resourceId='fitness-1';page='library';}if(['courses','library','games','board'].includes(page))state.dockCollapsed=true;else if(page==='home')state.dockCollapsed=false;const previousScene=state.scene;if(page==='fitnessReport'&&resource().category!=='fitness'){state.resourceCategory='fitness';state.resourceId='fitness-1';state.resourceReturn='library';}if(['prepare','training','results','video'].includes(page))page='detail';if(page==='resourcePrepare'){state.resourceCategory='fitness';if(resource().category!=='fitness')state.resourceId='fitness-1';page='resourceDetail';}if(['resourcePlaying','resourceResult'].includes(page)&&resource().category!=='media')page='resourceDetail';if(!pages.some(p=>p[0]===page))page='home';if(page==='rankings'&&state.page!==page)state.rankingMetric='duration';if(state.page==='gamePlaying'&&page!=='gamePlaying')completeDemoGameSession();if(page==='gamePrepare'){state.gameSession=null;state.gameReport=null;}state.page=page;state.modal=null;if(resetScene)state.scene='normal';if(page==='gamePlaying')initializeGame(previousScene);if(page==='resourcePlaying')state.paused=false;if(page==='home'){state.gameSession=null;state.resourceElapsed=0;state.paused=false;state.ready=1;state.followMode='single';}history.replaceState(null,'','#'+page);render();}
+function nav(page,resetScene=true){if(['library','resourceDetail','resourcePlaying','resourceResult'].includes(page)&&(state.resourceCategory==='warmup'||resource().category==='warmup')){state.resourceCategory='fitness';state.resourceId='fitness-1';page='library';}if(['courses','library','games','board'].includes(page))state.dockCollapsed=true;else if(page==='home')state.dockCollapsed=false;const previousScene=state.scene;if(page==='fitnessReport'&&resource().category!=='fitness'){state.resourceCategory='fitness';state.resourceId='fitness-1';state.resourceReturn='library';}if(['prepare','training','results','video'].includes(page))page='detail';if(page==='resourcePrepare'){state.resourceCategory='fitness';if(resource().category!=='fitness')state.resourceId='fitness-1';page='resourceDetail';}if(['resourcePlaying','resourceResult'].includes(page)&&resource().category!=='media')page='resourceDetail';if(!pages.some(p=>p[0]===page))page='home';if(page==='rankings'&&state.page!==page)state.rankingMetric='duration';if(state.page==='gamePlaying'&&page!=='gamePlaying')completeDemoGameSession();if(page==='gamePrepare'){state.gameSession=null;state.gameReport=null;}state.page=page;state.modal=null;if(resetScene)state.scene=page==='followReport'&&state.followMode==='multi'?'multi8':'normal';if(page==='gamePlaying')initializeGame(previousScene);if(page==='resourcePlaying')state.paused=false;if(page==='home'){state.gameSession=null;state.resourceElapsed=0;state.paused=false;state.ready=1;state.followMode='single';}history.replaceState(null,'','#'+page);render();}
 
 function chapterName(seg){return seg.title.replace(/[（(]示例[）)]/g,'')}
 
@@ -242,8 +275,92 @@ function settlementActions(returnPage){
   return `<div class="settlement-actions">${btn('返回首页','home')}${btn('返回项目详情',returnPage,'primary')}</div>`;
 }
 
+const groupReportScenes=Array.from({length:7},(_,index)=>{
+  const count=index+2;
+  return [`multi${count}`,`多人报告 · ${count} 人`];
+});
+const groupReportPeople=[
+  {name:'晨光漫步',color:'#23654f',dash:'',fitness:{kcal:8,counts:[0,5,11,17,24]},follow:{kcal:24,counts:[0,3,8,13,18],score:90}},
+  {name:'小林爱运动',color:'#245fa5',dash:'',fitness:{kcal:11,counts:[0,7,15,23,31]},follow:{kcal:27,counts:[0,5,11,16,22],score:95}},
+  {name:'阿晴',color:'#a2531e',dash:'',fitness:{kcal:6,counts:[0,4,9,14,18]},follow:{kcal:17,counts:[0,2,6,9,13],score:79}},
+  {name:'绿道行者',color:'#7549a2',dash:'9 5',fitness:{kcal:9,counts:[0,6,13,21,27]},follow:{kcal:21,counts:[0,4,7,12,16],score:84}},
+  {name:'小满',color:'#9a365f',dash:'4 5',fitness:{kcal:5,counts:[0,3,8,11,16]},follow:{kcal:13,counts:[0,2,4,6,10],score:72}},
+  {name:'向阳而行',color:'#267585',dash:'10 5',fitness:{kcal:7,counts:[0,6,10,16,22]},follow:{kcal:28,counts:[0,6,10,17,23],score:96}},
+  {name:'自在如风',color:'#626b22',dash:'3 5',fitness:{kcal:4,counts:[0,2,5,7,11]},follow:{kcal:11,counts:[0,1,3,5,8],score:68}},
+  {name:'早起的鹿',color:'#803f38',dash:'12 4 3 4',fitness:{kcal:12,counts:[0,8,16,25,34]},follow:{kcal:26,counts:[0,4,9,15,20],score:93}}
+];
+const groupReportTimes={fitness:[0,10,20,30,40],follow:[0,50,100,150,205]};
+
+function groupReportSize(){
+  return supportsGroupSettlement(state.page)&&/^multi[2-8]$/.test(state.scene)?Number(state.scene.slice(5)):0;
+}
+
+function groupReportChart(people,times){
+  const left=56,right=680,top=28,bottom=292;
+  const maxCount=Math.max(10,Math.ceil(Math.max(...people.map(person=>person.counts.at(-1)))/10)*10);
+  const x=seconds=>left+(right-left)*seconds/times.at(-1);
+  const y=count=>bottom-(bottom-top)*count/maxCount;
+  const ticks=Array.from({length:maxCount/10+1},(_,index)=>index*10);
+  return `<svg viewBox="0 0 710 337" role="img" aria-label="各参与者随项目时间变化的累计完成次数，编号与参与者列表对应">
+    ${ticks.map(value=>`<line class="group-chart-grid" x1="${left}" x2="${right}" y1="${y(value)}" y2="${y(value)}"/><text x="42" y="${y(value)}" dy=".3em" text-anchor="end">${value}</text>`).join('')}
+    ${times.map(seconds=>`<text x="${x(seconds)}" y="323" text-anchor="middle">${fmt(seconds)}</text>`).join('')}
+    <path class="group-chart-axis" fill="none" d="M${left},${top}V${bottom}H${right}"/>
+    ${people.map(person=>{
+      const path=person.counts.map((count,index)=>`${index===0?'M':'L'}${x(times[index])},${y(count)}`).join(' ');
+      return `<g class="group-curve" data-group-curve="${person.id}" style="color:${person.color}">
+        <title>${person.id}号 ${esc(person.name)}</title>
+        <path d="${path}" stroke-dasharray="${person.dash||'none'}"/>
+        <circle cx="${right}" cy="${y(person.counts.at(-1))}" r="4.5"/>
+      </g>`;
+    }).join('')}
+  </svg>`;
+}
+
+function groupSettlement(title,kind,count){
+  const follow=kind==='follow',back=follow?'detail':'resourceDetail';
+  const times=groupReportTimes[kind];
+  const people=groupReportPeople.slice(0,count).map((person,index)=>({id:index+1,...person,...person[kind]}));
+  const meta=`<div class="group-report-meta"><span class="tag">多人 · ${count} 人</span><div class="group-report-duration"><span>项目时长</span><strong>${fmt(times.at(-1))}</strong></div></div>`;
+  return heading(esc(title),'',back,meta)+`
+    <div class="group-report">
+      <section class="panel group-chart">
+        <div class="group-chart-head"><h2>运动曲线</h2><span>累计完成次数（次）</span></div>
+        ${groupReportChart(people,times)}
+      </section>
+      <section class="panel group-results" aria-labelledby="group-results-title">
+        <div class="group-results-head"><h2 id="group-results-title">个人成绩</h2><span>点选参与者可突出曲线</span></div>
+        <table aria-labelledby="group-results-title">
+          <thead><tr><th scope="col">参与者</th>${follow?'<th scope="col">评分（分）</th>':''}<th scope="col">次数（次）</th><th scope="col">消耗（千卡）</th></tr></thead>
+          <tbody>${people.map(person=>`<tr style="--series:${person.color}">
+            <th scope="row"><button type="button" class="group-person" data-select-curve="${person.id}" aria-pressed="false">
+              <span class="group-person-number">${person.id}</span><span class="rank-avatar" aria-hidden="true">${esc(person.name.slice(0,1))}</span><span class="group-person-name">${esc(person.name)}</span>
+            </button></th>
+            ${follow?`<td>${person.score}</td>`:''}<td>${person.counts.at(-1)}</td><td>${person.kcal}</td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </section>
+      ${follow?`<div class="settlement-actions">${btn('返回首页','home')}${btn('再来一次','detail','primary')}</div>`:settlementActions(back)}
+    </div>`;
+}
+
+$('#app').addEventListener('click',event=>{
+  const button=event.target.closest('[data-select-curve]');
+  if(!button)return;
+  const report=button.closest('.group-report');
+  const id=button.getAttribute('aria-pressed')==='true'?'':button.dataset.selectCurve;
+  report.classList.toggle('has-focus',Boolean(id));
+  report.querySelectorAll('[data-select-curve]').forEach(item=>{
+    const selected=item.dataset.selectCurve===id;
+    item.setAttribute('aria-pressed',String(selected));
+    item.closest('tr').classList.toggle('selected',selected);
+  });
+  report.querySelectorAll('[data-group-curve]').forEach(curve=>curve.classList.toggle('selected',curve.dataset.groupCurve===id));
+});
+
 function fitnessReport(){
   const item=resource();
+  const count=groupReportSize();
+  if(count)return groupSettlement(item.title,'fitness',count);
   const recentScores=state.scene==='noHistory'?[]:[18,21,24];
   return heading(esc(item.title),'','resourceDetail')+`
     <div class="settlement-layout">
@@ -282,9 +399,12 @@ const followReportExamples={
 function followReportExample(){return followReportExamples[state.scene]||followReportExamples.normal}
 function followReportValue(value){return value===null||value===undefined?'—':String(value)}
 function followReport(){
-  const course=selectedCourse(),example=followReportExample();
+  const course=selectedCourse();
   const section=state.playback==='chapter'?course.segments[state.chapter]:null;
   const title=`${course.title}·${section?chapterName(section):'整套跟练'}`;
+  const count=groupReportSize();
+  if(count)return groupSettlement(title,'follow',count);
+  const example=followReportExample();
   const minutes=Math.floor(example.seconds/60),seconds=example.seconds%60;
   return heading(esc(title),'','detail')+`
     <div class="settlement-layout follow-report" data-follow-report-state="${esc(state.scene)}">
@@ -449,17 +569,19 @@ function renderSettlementReview(){
     $('.underbar').insertAdjacentHTML('afterend','<div class="game-controls" id="settlement-review" hidden></div>');
     panel=$('#settlement-review');
     panel.addEventListener('click',event=>{
-      const action=event.target.closest('button')?.dataset.previewReport;
-      if(action)nav(action);
+      const button=event.target.closest('[data-preview-report]');
+      if(!button)return;
+      if(button.dataset.previewScene)state.scene=button.dataset.previewScene;
+      nav(button.dataset.previewReport,!button.dataset.previewScene);
     });
   }
   const route=state.page==='detail'?'followReport':
     state.page==='resourceDetail'&&resource().category==='fitness'?'fitnessReport':'';
-  const report=['fitnessReport','followReport'].includes(state.page);
+  const report=isExerciseSettlement(state.page);
   const fruit=state.page==='gameResult'&&game().id==='fruit-solo';
   panel.hidden=!(route||report||fruit);
-  panel.innerHTML=route?`<span>全民健身机竖屏报告复用</span><button class="tool" data-preview-report="${route}">查看结算报告示例</button>`:
-    state.page==='followReport'?'AI跟练报告参考现有产品结算页，提供很好/不错、完美/真棒、无评价三态；无评价仍有运动评分。课程与分节保留当前选择，数字及身份均为模拟。':report?'评审示例。切换演示状态查看报告结构，数据为模拟。':
+  panel.innerHTML=route?`<span>全民健身机竖屏报告复用</span><button class="tool" data-preview-report="${route}">查看结算报告示例</button>${route==='fitnessReport'&&supportsGroupSettlement(route)?'<button class="tool" data-preview-report="fitnessReport" data-preview-scene="multi8">查看多人结算示例</button>':''}`:
+    report?(supportsGroupSettlement(state.page)?'评审示例。可用「演示状态」切换单人报告与 2–8 人报告，身份及成绩均为模拟。':'评审示例。切换演示状态查看报告结构，数据为模拟。'):
     fruit?'四种样例由设备外「演示状态」切换。点按试玩只演示普通命中，挥切时长由真实手部轨迹提供。':'';
 }
 
@@ -478,10 +600,17 @@ function tick(){if(state.paused||state.modal||prototypeHelpState.open)return;if(
 function scale(){const v=$('.viewport');$('#app').style.transform=`scale(${v.clientWidth/1600})`;schedulePrototypeHelpPosition()}
 const scenes={fitnessReport:[['normal','示例成绩'],['noHistory','暂无近期成绩']],followReport:[['normal','很好／不错 · 70分'],['perfect','完美／真棒 · 95分'],['noEvaluation','无评价 · 10分']],board:[['normal','今日榜单'],['empty','今日暂无记录']],library:[['normal','有内容'],['empty','本分类暂无内容']],resourcePlaying:[['normal','正常播放'],['lost','播放中断'],['loading','视频加载中'],['failed','视频加载失败']],gamePrepare:[['normal','全员人脸登录完成（模拟）'],['registered','新用户注册完成（模拟）'],['identityPending','身份待关联 · 不能开始'],['partial','部分人未关联 · 不能开始'],['none','无人进入 · 不能开始']],gameResult:[['normal','已自动上报（模拟）'],['reportPending','自动上报中（模拟）'],['reportFailed','上报失败自动重试（模拟）'],['reportPartial','多人部分失败重试（模拟）']],gamePlaying:[['normal','正常互动'],['lost','有人离区 · 本场暂停'],['lostTimeout','离区超时 · 提前结束']],rankings:[['normal','有符合条件的成绩'],['empty','暂无上榜记录']]};
 const fruitResultOptions=[['full','打满 · 350 分'],['zero','打满 · 0 分'],['early','提前结束 · 45 分'],['wide','长数字 · 1280 分']];
+function isExerciseSettlement(page){
+  return page==='fitnessReport'||page==='followReport';
+}
+function supportsGroupSettlement(page){
+  return page==='followReport'||(page==='fitnessReport'&&resource().id==='fitness-1');
+}
 function renderScenario(){
   const options=state.page==='gameResult'&&game().id==='fruit-solo'?
     [...(state.gameReport?.fruitResult?[['normal','本局试玩结果'],...scenes.gameResult.slice(1,3)]:[]),...fruitResultOptions]:
     (scenes[state.page]||[['normal','本页默认状态']]).filter(([v])=>v!=='reportPartial'||gameCount()>1);
+  if(supportsGroupSettlement(state.page))options.push(...groupReportScenes);
   $('#scenario').innerHTML=options.map(([v,t])=>`<option value="${v}" ${state.scene===v?'selected':''}>${t}</option>`).join('');
   $('#scenario').disabled=options.length===1;
 }
@@ -500,7 +629,8 @@ function toast(text){$('.floating-note')?.remove();$('#app').insertAdjacentHTML(
 function hit(){gameHit(state.gameActivePlayer)}
 function action(a){if(a==='openRecordQr'){openModal('recordQr');pauseHomeRecommendationTimer();return;}if(a==='dockToggle'){state.dockCollapsed=!state.dockCollapsed;render();return;}if(a==='systemSettings'){openModal('settings');return;}if(a==='dockLeft'||a==='dockRight'){state.dockSide=a==='dockLeft'?'left':'right';render();return;}if(a==='resourceStart'){if(resource().category!=='media')return;state.resourceCategory='media';state.resourceElapsed=0;state.paused=false;nav('resourcePlaying');return;}if(a==='resourceRetry'){state.scene='normal';state.paused=false;render();return;}if(a==='resourceEnd'){openModal('resourceEnd');return;}if(a==='confirmResourceEnd'){nav('resourceResult');return;}if(a==='confirmLeaveActive'){if(state.page==='gamePlaying')completeDemoGameSession();if(state.pendingModule){const id=state.pendingModule;activateModule(id)}else nav(state.pendingNav);return;}if(pages.some(p=>p[0]===a)){if(['gamePlaying','resourcePlaying'].includes(state.page)&&a!==state.page){state.pendingModule=null;state.pendingNav=a;openModal('leaveActive');return;}nav(a);return;}switch(a){case'startGame':if(['none','partial','identityPending'].includes(state.scene))return;nav('gamePlaying');break;case'pause':state.paused=!state.paused;render();break;case'endGame':nav('gameResult');break;case'closeModal':closeModal();break;case'hit':hit();break;}}
 $('#app').addEventListener('click',e=>{const target=e.target.closest('button');if(!target||target.disabled)return;if(target.dataset.rankingMetric){state.rankingMetric=target.dataset.rankingMetric;render();return;}if(target.dataset.resourcePage){state.resourcePage+=Number(target.dataset.resourcePage);render();return;}if(target.dataset.homeCourseId){openCourse(target.dataset.homeCourseId);return;}if(target.dataset.action){action(target.dataset.action);return;}if(target.dataset.category){state.category=target.dataset.category;state.course=catalogue[state.category][0]?.id||'';state.filter='全部';state.catalogPage=0;state.playback='full';state.chapter=0;render()}if(target.dataset.course!==undefined){state.course=target.dataset.course;state.playback='full';state.chapter=0;state.followMode='single';nav('detail')}if(target.dataset.filter){state.filter=target.dataset.filter;state.catalogPage=0;render()}if(target.dataset.pageStep){state.catalogPage+=Number(target.dataset.pageStep);render()}if(target.dataset.playback){state.playback=target.dataset.playback;state.chapter=0;render()}if(target.dataset.followMode){state.followMode=target.dataset.followMode;state.scene='normal';render()}if(target.dataset.followChapter!==undefined){state.playback='chapter';state.chapter=Number(target.dataset.followChapter);render()}if(target.dataset.gameCategory){state.gameCategory=target.dataset.gameCategory;state.gameFilter='全部';state.gameCatalogPage=0;render()}if(target.dataset.gameFilter){state.gameFilter=target.dataset.gameFilter;state.gameCatalogPage=0;render()}if(target.dataset.gamePage){state.gameCatalogPage+=Number(target.dataset.gamePage);render()}if(target.dataset.gameCount){state.gamePlayers=Number(target.dataset.gameCount);state.scene='identityPending';render()}if(target.dataset.gameHit!==undefined){gameHit(Number(target.dataset.gameHit));return;}if(target.dataset.pose!==undefined){const i=Number(target.dataset.pose);if(!prototypeHelpState.open&&!state.paused&&state.scene!=='lost'&&!state.poseRemaining[i]){state.poseRemaining[i]=3;state.gameFeedback[i]='保持中';refreshGameLanes()}return;}if(target.dataset.game){state.game=target.dataset.game;state.gamePlayers=game().count;nav('gameRules')}});
-$('#scenario').addEventListener('change',e=>{state.scene=e.target.value;if(state.page==='gamePlaying'&&state.scene==='lostTimeout'){nav('gameResult');return;}
+$('#scenario').addEventListener('change',e=>{state.scene=e.target.value;
+  if(state.page==='followReport')state.followMode=groupReportSize()?'multi':'single';if(state.page==='gamePlaying'&&state.scene==='lostTimeout'){nav('gameResult');return;}
   if(state.page==='gamePlaying'||state.page==='resourcePlaying')state.paused=state.scene==='lost';
   if(state.page==='gameResult'&&state.gameReport&&!Object.hasOwn(fruitResultExamples,state.scene)){const report=state.gameReport;report.status=demoReportState().status;report.records.forEach((r,i)=>r.status=state.scene==='reportPartial'?(i===report.records.length-1?'retrying':'reported'):report.status)}render()});
 $('#reset').onclick=()=>{homeQuickIndices.fill(0);Object.assign(state,{gameSession:null,gameReport:null,reportQueue:[],sessionSequence:0,rankingMetric:'duration',resourceCategory:'fitness',resourceId:'fitness-1',resourcePage:0,resourceReturn:'home',resourceElapsed:0,followMode:'single',mediaFilter:'全部',fitnessFilter:'全部',page:'home',category:'健身气功',course:'baduan-standard',filter:'全部',catalogPage:0,playback:'full',chapter:0,ready:1,scene:'normal',paused:false,gameScore:0,gameTime:60,modal:null,game:'fruit-solo',gameCategory:'单人',gameFilter:'全部',gameCatalogPage:0,gamePlayers:1});nav('home')};
@@ -618,7 +748,12 @@ function prototypeHelpItems(){
     add('resource-start','.activity-primary button',watch?'开始观看':'开始'+(warmup?'热身':'训练')+'入口',watch?'进入当前视频的观看演示。':'保留接入现有产品运动流程的开始位置。',watch?'点击后进入播放页，从00:00开始模拟计时。':'评审可从设备画面下方查看结算报告示例。',watch?'观看可暂停和结束，纯观看不计入个人有效运动时长。':'运动过程沿用原产品。体能结算报告参考全民健身机竖屏。');
   }
 
-  if(state.page==='fitnessReport'||state.page==='followReport'){
+  if(isExerciseSettlement(state.page)&&groupReportSize()){
+    add('group-report-shared','.group-report-meta','本场人数与项目时长','本场参与者共用标题和项目时长。','信息展示。','原型展示2–8人场次。设备实测人数以联调验收为准。');
+    add('group-report-chart','.group-chart','同场运动曲线','按同一时间轴和累计完成次数刻度绘制每位参与者。','点选右侧参与者可突出对应曲线，再次点选恢复全部。','曲线末端的次数与个人成绩表对齐。');
+    add('group-report-people','.group-results','个人成绩','逐人展示本场头像、昵称、次数及消耗。AI跟练还展示个人评分。','按编号和颜色对应左侧曲线。','多人报告只展示本场成绩。');
+    add('settlement-return','.settlement-actions','返回或再练','返回首页或当前项目详情。','AI 跟练点击再来一次回当前课程，并保留已选内容和多人模式。');
+  }else if(isExerciseSettlement(state.page)){
     const fitness=state.page==='fitnessReport';
     add('settlement-overview','.settlement-content>section:first-child',fitness?'本次体能成绩':'本次跟练成绩',
       fitness?'展示项目成绩、运动消耗和耗时。':'展示运动评分、3星评价、运动时长、两类动作评价计数及疲劳程度。','展示一位参与者的示例数据。',fitness?'正式数据由竖屏对应报告的结算口径提供。':'沿用现有跟练报告字段，不再展示累计分、消耗或完成组数；样例不代表真实评分算法。');
@@ -788,9 +923,30 @@ $('#prototype-help-layer').addEventListener('click',e=>{const b=e.target.closest
 $('#prototype-help-list').addEventListener('click',e=>{const b=e.target.closest('[data-help-select]');if(b)selectPrototypeHelp(b.dataset.helpSelect)});
 $('.viewport').addEventListener('scroll',schedulePrototypeHelpPosition,true);
 
-window.addEventListener('hashchange',()=>{const p=location.hash.slice(1);if(p!==state.page)nav(p)});
-const initialPage=location.hash.slice(1)||'home';
-const initialSample=new URLSearchParams(location.search).get('sample');
-if(initialPage==='gameResult'&&Object.hasOwn(fruitResultExamples,initialSample))state.scene=initialSample;
-nav(initialPage,false);
+function openLocation(page){
+  const params=new URLSearchParams(location.search);
+  const sample=params.get('sample');
+  const groupScene='multi'+params.get('participants');
+  if(isExerciseSettlement(page)&&groupReportScenes.some(([scene])=>scene===groupScene)){
+    state.scene=groupScene;
+    if(page==='followReport')state.followMode='multi';
+    else {
+      state.resourceCategory='fitness';
+      state.resourceId='fitness-1';
+    }
+    nav(page,false);
+    return;
+  }
+  if(page==='gameResult'&&Object.hasOwn(fruitResultExamples,sample)){
+    state.scene=sample;
+    nav(page,false);
+    return;
+  }
+  nav(page);
+}
+window.addEventListener('hashchange',()=>{
+  const page=location.hash.slice(1)||'home';
+  if(page!==state.page)openLocation(page);
+});
+openLocation(location.hash.slice(1)||'home');
 </script></body></html>
