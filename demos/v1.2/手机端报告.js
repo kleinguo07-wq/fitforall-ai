@@ -1,7 +1,7 @@
 /* 独立网页原型的小程序报告。交互状态存放在当前预览页面中。 */
 (() => {
   const outcomeCopy = {
-    light: { title: '舒缓入门', reason: '你完成了坐姿活动和一次起立，过程中没有报告不适加重。' },
+    light: { title: '舒缓入门', reason: '本次跟练已播放完成。' },
     seated: { title: '建议先咨询康复专业人员', reason: '日常活动仍然比较费力，可以把测评结果带给康复专业人员。' },
     urgent: { title: '请立即寻求急诊帮助', reason: '根据你刚才的回答，请先处理当前不适。' },
     refer: { title: '建议先咨询专业人员', reason: '请向专业人员说明当前不适和日常活动情况，再确认运动安排。' },
@@ -122,7 +122,7 @@
     function result() {
       if (needsCheck()) return { title: '今天先暂停跟练', reason: '你反馈不适有变化，请先确认当前情况。' };
       const outcome = upperBack && report.kind === 'light'
-        ? { title: course, reason: '你完成了上背坐姿试做，过程中没有报告不适加重。' }
+        ? { title: course, reason: '本次上背坐姿跟练已播放完成。' }
         : outcomeCopy[report.kind];
       return { title: outcome.title, reason: report.reason || outcome.reason };
     }

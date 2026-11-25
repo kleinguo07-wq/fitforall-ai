@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>全民健身机 v1.2 · 运动测评原型</title>
-  <link rel="stylesheet" href="原型样式.css">
+  <link rel="stylesheet" href="原型样式.css?v=b8207b3ff1">
   <script defer src="评分参考.js"></script>
-  <script defer src="手机端报告.js"></script>
-  <script defer src="竖屏交互.js"></script>
+  <script defer src="手机端报告.js?v=01804c5654"></script>
+  <script defer src="竖屏交互.js?v=d9932370dc"></script>
 </head>
 <body>
   <main class="workspace">
@@ -19,7 +19,6 @@
         <div data-phase="entry"><span></span>找到测评入口</div>
         <div data-phase="questions"><span></span>完成初筛与状态记录</div>
         <div data-phase="result"><span></span>查看课程或建议</div>
-        <div data-phase="observation"><span></span>跟练前确认</div>
         <div data-phase="lesson"><span></span>开始跟练</div>
         <div data-phase="phone"><span></span>保存报告与复测</div>
       </div>
@@ -46,7 +45,6 @@
         <button type="button" data-scenario="upper"><i></i><span><b>上背不适</b><small>评估确认与坐姿跟练</small></span><span>›</span></button>
         <button type="button" data-scenario="seated"><i></i><span><b>日常活动明显费力</b><small>先咨询康复专业人员</small></span><span>›</span></button>
         <button type="button" data-scenario="urgent"><i></i><span><b>出现需紧急就医的情况</b><small>停止测评</small></span><span>›</span></button>
-        <button type="button" data-scenario="incomplete"><i></i><span><b>现场没有合适座椅</b><small>本次未完成</small></span><span>›</span></button>
       </div>
       <div class="review-tool account-tools">
         <h3 id="device-account">设备未登录</h3>
