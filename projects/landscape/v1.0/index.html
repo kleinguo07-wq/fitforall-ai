@@ -104,15 +104,22 @@
 .group-results table{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:10px;font-variant-numeric:tabular-nums}
 .group-results th,.group-results td{padding:0 7px;height:42px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
 .group-results thead th{height:34px;color:var(--muted);font-size:16px;font-weight:550}
-.group-results th:first-child{width:43%;padding-left:0;text-align:left}
+.group-results tr>*:first-child{width:46px;padding:0 4px 0 0;text-align:center}
+.group-results th:nth-child(2){width:35%;padding-left:0;text-align:left}
 .group-results td{font-size:20px;font-weight:680}
 .group-results tbody tr:last-child>*{border-bottom:0}
+.group-results tr[data-medal="gold"]{--medal-row:#fbf4e4;--medal-fill:#f9e7b5;--medal-edge:#dec078;--medal-ink:#6b4a12}
+.group-results tr[data-medal="silver"]{--medal-row:#f1f4f8;--medal-fill:#e6ebf2;--medal-edge:#bac6d3;--medal-ink:#354b61}
+.group-results tr[data-medal="bronze"]{--medal-row:#fbf1e9;--medal-fill:#f1dac5;--medal-edge:#d9ab85;--medal-ink:#763f23}
+.group-results tr[data-medal]>*{background:var(--medal-row)}
+.group-rank{display:inline-grid;place-items:center;width:29px;height:29px;border:1px solid transparent;border-radius:50%;font-size:17px;font-weight:700;color:var(--muted)}
+.group-results tr[data-medal] .group-rank{color:var(--medal-ink);background:var(--medal-fill);border-color:var(--medal-edge)}
 .group-results tr.selected>*{background:#ecf2e8}
-.group-results tr.selected th{box-shadow:inset 3px 0 var(--series)}
+.group-results tr.selected>:first-child{box-shadow:inset 3px 0 var(--series)}
 .group-person{display:flex;align-items:center;gap:7px;width:100%;min-height:40px;padding:3px 4px;border:0;background:transparent;text-align:left;color:var(--ink);font-size:18px}
 .group-person .rank-avatar{width:25px;height:25px;flex:none;font-size:15px}
 .group-person-name{min-width:0;overflow:hidden;text-overflow:ellipsis}
-.group-person-number{display:grid;place-items:center;flex:none;width:22px;height:22px;border-radius:50%;background:var(--series);color:white;font-size:14px;font-weight:700}
+.group-series-key{width:7px;height:18px;border-radius:4px;flex:none;background:var(--series)}
 .group-report .settlement-actions{grid-column:1/-1}
 .settlement-layout .follow-report-card{padding:26px}
 .follow-report-top{display:grid;grid-template-columns:210px minmax(0,1fr);align-items:center;gap:24px;padding:8px 0 26px;border-bottom:1px solid var(--line)}
@@ -285,7 +292,7 @@ const groupReportPeople=[
   {name:'阿晴',color:'#a2531e',dash:'',fitness:{kcal:6,counts:[0,4,9,14,18]},follow:{kcal:17,counts:[0,2,6,9,13],score:79}},
   {name:'绿道行者',color:'#7549a2',dash:'9 5',fitness:{kcal:9,counts:[0,6,13,21,27]},follow:{kcal:21,counts:[0,4,7,12,16],score:84}},
   {name:'小满',color:'#9a365f',dash:'4 5',fitness:{kcal:5,counts:[0,3,8,11,16]},follow:{kcal:13,counts:[0,2,4,6,10],score:72}},
-  {name:'向阳而行',color:'#267585',dash:'10 5',fitness:{kcal:7,counts:[0,6,10,16,22]},follow:{kcal:28,counts:[0,6,10,17,23],score:96}},
+  {name:'向阳而行',color:'#267585',dash:'10 5',fitness:{kcal:7,counts:[0,6,10,16,22]},follow:{kcal:28,counts:[0,6,10,17,23],score:91}},
   {name:'自在如风',color:'#626b22',dash:'3 5',fitness:{kcal:4,counts:[0,2,5,7,11]},follow:{kcal:11,counts:[0,1,3,5,8],score:68}},
   {name:'早起的鹿',color:'#803f38',dash:'12 4 3 4',fitness:{kcal:12,counts:[0,8,16,25,34]},follow:{kcal:26,counts:[0,4,9,15,20],score:93}}
 ];
@@ -301,14 +308,14 @@ function groupReportChart(people,times){
   const x=seconds=>left+(right-left)*seconds/times.at(-1);
   const y=count=>bottom-(bottom-top)*count/maxCount;
   const ticks=Array.from({length:maxCount/10+1},(_,index)=>index*10);
-  return `<svg viewBox="0 0 710 337" role="img" aria-label="各参与者随项目时间变化的累计完成次数，编号与参与者列表对应">
+  return `<svg viewBox="0 0 710 337" role="img" aria-label="各参与者随项目时间变化的累计完成次数，曲线颜色与参与者列表对应">
     ${ticks.map(value=>`<line class="group-chart-grid" x1="${left}" x2="${right}" y1="${y(value)}" y2="${y(value)}"/><text x="42" y="${y(value)}" dy=".3em" text-anchor="end">${value}</text>`).join('')}
     ${times.map(seconds=>`<text x="${x(seconds)}" y="323" text-anchor="middle">${fmt(seconds)}</text>`).join('')}
     <path class="group-chart-axis" fill="none" d="M${left},${top}V${bottom}H${right}"/>
     ${people.map(person=>{
       const path=person.counts.map((count,index)=>`${index===0?'M':'L'}${x(times[index])},${y(count)}`).join(' ');
       return `<g class="group-curve" data-group-curve="${person.id}" style="color:${person.color}">
-        <title>${person.id}号 ${esc(person.name)}</title>
+        <title>${esc(person.name)}</title>
         <path d="${path}" stroke-dasharray="${person.dash||'none'}"/>
         <circle cx="${right}" cy="${y(person.counts.at(-1))}" r="4.5"/>
       </g>`;
@@ -316,10 +323,18 @@ function groupReportChart(people,times){
   </svg>`;
 }
 
+function rankGroupResults(people){
+  const ordered=people.map(person=>({...person,completed:person.counts.at(-1)}))
+    .sort((a,b)=>b.completed-a.completed||a.id-b.id);
+  return ordered.map(person=>({...person,rank:ordered.findIndex(entry=>entry.completed===person.completed)+1}));
+}
+
 function groupSettlement(title,kind,count){
   const follow=kind==='follow',back=follow?'detail':'resourceDetail';
   const times=groupReportTimes[kind];
   const people=groupReportPeople.slice(0,count).map((person,index)=>({id:index+1,...person,...person[kind]}));
+  const ranked=rankGroupResults(people);
+  const medals=['gold','silver','bronze'];
   const meta=`<div class="group-report-meta"><span class="tag">多人 · ${count} 人</span><div class="group-report-duration"><span>项目时长</span><strong>${fmt(times.at(-1))}</strong></div></div>`;
   return heading(esc(title),'',back,meta)+`
     <div class="group-report">
@@ -330,12 +345,13 @@ function groupSettlement(title,kind,count){
       <section class="panel group-results" aria-labelledby="group-results-title">
         <div class="group-results-head"><h2 id="group-results-title">个人成绩</h2><span>点选参与者可突出曲线</span></div>
         <table aria-labelledby="group-results-title">
-          <thead><tr><th scope="col">参与者</th>${follow?'<th scope="col">评分（分）</th>':''}<th scope="col">次数（次）</th><th scope="col">消耗（千卡）</th></tr></thead>
-          <tbody>${people.map(person=>`<tr style="--series:${person.color}">
+          <thead><tr><th scope="col">名次</th><th scope="col">参与者</th>${follow?'<th scope="col">评分（分）</th>':''}<th scope="col" aria-sort="descending">次数（次）</th><th scope="col">消耗（千卡）</th></tr></thead>
+          <tbody>${ranked.map(person=>`<tr style="--series:${person.color}"${person.rank<=medals.length?` data-medal="${medals[person.rank-1]}"`:''}>
+            <td><span class="group-rank">${person.rank}</span></td>
             <th scope="row"><button type="button" class="group-person" data-select-curve="${person.id}" aria-pressed="false">
-              <span class="group-person-number">${person.id}</span><span class="rank-avatar" aria-hidden="true">${esc(person.name.slice(0,1))}</span><span class="group-person-name">${esc(person.name)}</span>
+              <span class="group-series-key" aria-hidden="true"></span><span class="rank-avatar" aria-hidden="true">${esc(person.name.slice(0,1))}</span><span class="group-person-name">${esc(person.name)}</span>
             </button></th>
-            ${follow?`<td>${person.score}</td>`:''}<td>${person.counts.at(-1)}</td><td>${person.kcal}</td>
+            ${follow?`<td>${person.score}</td>`:''}<td>${person.completed}</td><td>${person.kcal}</td>
           </tr>`).join('')}</tbody>
         </table>
       </section>
@@ -751,7 +767,7 @@ function prototypeHelpItems(){
   if(isExerciseSettlement(state.page)&&groupReportSize()){
     add('group-report-shared','.group-report-meta','本场人数与项目时长','本场参与者共用标题和项目时长。','信息展示。','原型展示2–8人场次。设备实测人数以联调验收为准。');
     add('group-report-chart','.group-chart','同场运动曲线','按同一时间轴和累计完成次数刻度绘制每位参与者。','点选右侧参与者可突出对应曲线，再次点选恢复全部。','曲线末端的次数与个人成绩表对齐。');
-    add('group-report-people','.group-results','个人成绩','逐人展示本场头像、昵称、次数及消耗。AI跟练还展示个人评分。','按编号和颜色对应左侧曲线。','多人报告只展示本场成绩。');
+    add('group-report-people','.group-results','个人成绩','按本场完成次数从高到低排名，前三名以金、银、铜标识突出。','点击参与者突出同色曲线。AI跟练还展示个人评分。','同次数并列，同名次显示同一种标识。');
     add('settlement-return','.settlement-actions','返回或再练','返回首页或当前项目详情。','AI 跟练点击再来一次回当前课程，并保留已选内容和多人模式。');
   }else if(isExerciseSettlement(state.page)){
     const fitness=state.page==='fitnessReport';
