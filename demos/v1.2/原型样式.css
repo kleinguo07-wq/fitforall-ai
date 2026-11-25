@@ -137,6 +137,23 @@ a{color:var(--blue)}
 .rating-block + .rating-block{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
 .rating-block h3{margin-bottom:4px}
 .rating-block .caption{margin-bottom:3px}
+.screening-group{margin-top:12px;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:#fff}
+.screening-group-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.screening-group h3{font-size:15px}
+.screening-group ul{margin:6px 0;padding-left:1.15em;font-size:14px;line-height:1.45}
+.screening-group button{flex:none;width:auto;min-height:34px;padding:5px 9px;font-size:13px}
+.status-history{display:grid;gap:6px;margin:9px 0 7px}
+.status-history>div{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline;background:#e7f1f1;border-radius:8px;padding:7px 9px;font-size:13px}
+.status-history small{color:var(--muted)}
+.status-history span{flex-basis:100%}
+.course-cover{margin-bottom:12px}
+.course-tags{display:flex;flex-wrap:wrap;gap:5px;list-style:none;padding:0;margin:7px 0 10px}
+.course-tags li{background:#e0f1ed;border-radius:7px;color:var(--teal);padding:4px 7px;font-size:12px;font-weight:700}
+.course-segments{margin:7px 0;padding-left:1.4em;font-size:15px;line-height:1.65}
+.prep-list{display:grid;gap:7px}
+.screen .prep-list p{margin:0;font-size:13px}
+.prep-option{display:flex;align-items:flex-start;gap:9px;padding:9px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:14px;line-height:1.45;cursor:pointer}
+.prep-option input{margin:2px 0;flex:none;width:17px;height:17px;accent-color:var(--teal)}
 .callout.warn{background:#fff2df;color:#6b4115}
 .callout.urgent{background:var(--rust-lite);color:#782c24}
 .bullets{padding-left:19px;margin:11px 0 16px;line-height:1.5;font-size:16px}
