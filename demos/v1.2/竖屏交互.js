@@ -464,6 +464,9 @@ function training(){
     <p class="caption">不适加重或出现新的不适时，选「结束跟练」。</p>`,`
     ${button("结束跟练","stop","danger")}`,false);
 }
+function reactionCard(fromSenior = false){
+  return `<a class="open-card demo-game-link" href="reaction.html${fromSenior?"?from=senior":""}"><span class="card-icon" aria-hidden="true">◉</span><span><strong>选择反应时</strong><small>国民体测 · 双手复位，按亮靶提示触靶</small></span><span aria-hidden="true">›</span></a>`;
+}
 const pages = {
   home, hub, intro, returning,
   senior:()=>panel("全民健身机",`<h2>康乐银发</h2><div class="open-cards">
@@ -473,9 +476,11 @@ const pages = {
       <h3 id="senior-games-title">趣味运动</h3>
       <div class="open-cards">
         <a class="open-card demo-game-link" href="sandbag.html"><span class="card-icon" aria-hidden="true">◈</span><span><strong>接沙包</strong><small>等沙包亮起来，伸手接住</small></span><span aria-hidden="true">›</span></a>
-        <a class="open-card demo-game-link" href="reaction.html"><span class="card-icon" aria-hidden="true">◉</span><span><strong>选择反应时</strong><small>看哪边亮，再用同侧手触靶</small></span><span aria-hidden="true">›</span></a>
+        ${reactionCard(true)}
       </div>
     </section>`),
+  games:()=>panel("全民健身机",`<section aria-labelledby="games-title"><h2 id="games-title">趣味运动</h2>
+    <div class="open-cards">${reactionCard()}</div></section>`),
   posture:()=>panel("体态检测",`<h2>请站到检测框内</h2><p>正对屏幕，双脚站稳。站到指定位置后，按提示完成检测。</p>
     <div class="posture-position" aria-hidden="true"><img src="体态检测_人体主视觉.png" alt=""><i></i></div>`,
     button("返回介绍","back","secondary")),
@@ -561,7 +566,7 @@ function lessonTick(){
 
 function phaseFor(page){
   if (surface==="phone") return "phone";
-  if (["home","senior","hub","intro","returning","posture"].includes(page)) return "entry";
+  if (["home","senior","games","hub","intro","returning","posture"].includes(page)) return "entry";
   if (["course","report"].includes(page)) return "result";
   if (["lesson","lessonResult"].includes(page)) return "lesson";
   return "questions";
@@ -837,5 +842,6 @@ function drawSample(canvas){
   draw(starts);
 }
 
-if (new URLSearchParams(location.search).get("view") === "senior") setPage("senior");
+const view = new URLSearchParams(location.search).get("view");
+if (view==="games" || view==="senior") setPage(view);
 else paint();
