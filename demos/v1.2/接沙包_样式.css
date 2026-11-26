@@ -73,6 +73,7 @@ a { color: var(--teal-deep); }
   container-type: inline-size;
 }
 .device-header { flex: none; padding: 16px 18px 12px; }
+.game-list-back { float: right; color: var(--teal-deep); font-size: 14px; font-weight: 700; padding: 6px 0 6px 10px; }
 .section-name { display: block; color: var(--teal-deep); font-size: 13px; font-weight: 700; }
 .section-name span { margin: 0 3px; color: #6d8275; }
 #heading {

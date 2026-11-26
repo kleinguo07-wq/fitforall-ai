@@ -3,7 +3,7 @@
   "change_summary": "腰背痛测评与康复、接沙包、选择反应时",
   "description": "评审腰背痛测评与康复、康乐银发「接沙包」和服务于国民体测的「选择反应时」。",
   "status": "需求与交互评审",
-  "updated": "2026-11-25",
+  "updated": "2026-11-26",
   "entries": [
     {"title": "需求文档", "path": "index.html", "description": "查看本期范围、业务规则和验收。"},
     {"title": "运动测评原型", "path": "assessment.html", "description": "体验腰背痛测评、跟练和手机报告。"},

@@ -464,23 +464,37 @@ function training(){
     <p class="caption">不适加重或出现新的不适时，选「结束跟练」。</p>`,`
     ${button("结束跟练","stop","danger")}`,false);
 }
-function reactionCard(fromSenior = false){
-  return `<a class="open-card demo-game-link" href="reaction.html${fromSenior?"?from=senior":""}"><span class="card-icon" aria-hidden="true">◉</span><span><strong>选择反应时</strong><small>国民体测 · 双手复位，按亮靶提示触靶</small></span><span aria-hidden="true">›</span></a>`;
+const gameCategories = {all:"全部", play:"互动游戏", fitness:"国民体测"};
+const gameProjects = [
+  {category:"play", title:"接沙包", detail:"等沙包亮起来，伸手接住", icon:"◈", path:"sandbag.html"},
+  {category:"fitness", title:"选择反应时", detail:"双手复位，按亮靶提示触靶", icon:"◉", path:"reaction.html"}
+];
+let gameCategory = "all";
+
+function gameList(from){
+  const heading = from==="senior" ? "h3" : "h2";
+  const filters = Object.entries(gameCategories).map(([value,label])=>
+    button(label,"gameCategory","game-category",`data-value="${value}" aria-pressed="${gameCategory===value}"`)
+  ).join("");
+  const query = new URLSearchParams({from,category:gameCategory});
+  const cards = gameProjects.filter(project=>gameCategory==="all" || project.category===gameCategory);
+  return `<section class="game-list" aria-labelledby="games-title">
+    <${heading} id="games-title">趣味运动</${heading}>
+    <div class="game-categories" role="group" aria-label="趣味运动分类">${filters}</div>
+    <div class="open-cards">${cards.map(project=>`
+      <a class="open-card demo-game-link" href="${project.path}?${query}">
+        <span class="card-icon" aria-hidden="true">${project.icon}</span>
+        <span><strong>${project.title}</strong><small>${project.detail}</small></span><span aria-hidden="true">›</span>
+      </a>`).join("")}</div>
+  </section>`;
 }
 const pages = {
   home, hub, intro, returning,
   senior:()=>panel("全民健身机",`<h2>康乐银发</h2><div class="open-cards">
     <button type="button" class="open-card" data-action="hub"><span class="card-icon" aria-hidden="true">◎</span><span><strong>运动测评</strong><small>了解体态，看看今天适合怎么活动</small></span><span aria-hidden="true">›</span></button>
     </div>
-    <section class="senior-games" aria-labelledby="senior-games-title">
-      <h3 id="senior-games-title">趣味运动</h3>
-      <div class="open-cards">
-        <a class="open-card demo-game-link" href="sandbag.html"><span class="card-icon" aria-hidden="true">◈</span><span><strong>接沙包</strong><small>等沙包亮起来，伸手接住</small></span><span aria-hidden="true">›</span></a>
-        ${reactionCard(true)}
-      </div>
-    </section>`),
-  games:()=>panel("全民健身机",`<section aria-labelledby="games-title"><h2 id="games-title">趣味运动</h2>
-    <div class="open-cards">${reactionCard()}</div></section>`),
+    ${gameList("senior")}`),
+  games:()=>panel("全民健身机",gameList("games")),
   posture:()=>panel("体态检测",`<h2>请站到检测框内</h2><p>正对屏幕，双脚站稳。站到指定位置后，按提示完成检测。</p>
     <div class="posture-position" aria-hidden="true"><img src="体态检测_人体主视觉.png" alt=""><i></i></div>`,
     button("返回介绍","back","secondary")),
@@ -612,6 +626,12 @@ function act(target){
       if (session.page==="lesson") return requestStop();
       return startOver();
     case "back": return goBack();
+    case "gameCategory":
+      if (!Object.hasOwn(gameCategories,value) || value===gameCategory) return;
+      gameCategory = value;
+      paint(false);
+      screen.querySelector('.game-category[aria-pressed="true"]')?.focus({preventScroll:true});
+      return;
     case "showPosture": if (session.page!=="hub") return showAssessmentEntry("hub"); return;
     case "enterAssessment": if (session.page==="hub") return enterAssessment(); return;
     case "retest": return openRetest();
@@ -842,6 +862,9 @@ function drawSample(canvas){
   draw(starts);
 }
 
-const view = new URLSearchParams(location.search).get("view");
+const initialList = new URLSearchParams(location.search);
+const view = initialList.get("view");
+const category = initialList.get("category");
+if (Object.hasOwn(gameCategories,category)) gameCategory = category;
 if (view==="games" || view==="senior") setPage(view);
 else paint();
