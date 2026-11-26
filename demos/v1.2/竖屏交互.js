@@ -464,28 +464,53 @@ function training(){
     <p class="caption">不适加重或出现新的不适时，选「结束跟练」。</p>`,`
     ${button("结束跟练","stop","danger")}`,false);
 }
-const gameCategories = {all:"全部", play:"互动游戏", fitness:"国民体测"};
-const gameProjects = [
-  {category:"play", title:"接沙包", detail:"等沙包亮起来，伸手接住", icon:"◈", path:"sandbag.html"},
-  {category:"fitness", title:"选择反应时", detail:"双手复位，按亮靶提示触靶", icon:"◉", path:"reaction.html"}
-];
+// Review order follows known version groups, then the reference card order within each group.
+const gameProjects = {
+  sandbag:{title:"接沙包", mark:"🐆", path:"sandbag.html", tone:"sandbag"},
+  reaction:{title:"选择反应时", mark:"◉", path:"reaction.html", label:"国民体测", tone:"reaction"},
+  fruit:{title:"水果达人", mark:"🍉", tone:"fruit"},
+  duel:{title:"元气对决", mark:"⚡", tone:"duel"},
+  pose:{title:"Pose 打卡", cover:"pose_icon.webp"},
+  punches:{title:"拳脚快打", cover:"quanjiaokuaida_icon.webp"},
+  words:{title:"单词大作战", cover:"word_icon.webp"},
+  flags:{title:"国旗收藏家", cover:"guoqi_icon.webp"},
+  tetris:{title:"俄罗斯方块", cover:"fangkuai_icon.webp"},
+  rhythm:{title:"节奏跳跃", cover:"jiezoutiaoyue_icon.webp"},
+  poems:{title:"诗词大会", cover:"shici_icon.webp"},
+  order:{title:"顺序摸球", cover:"shunxumoqiu_icon.webp"},
+  wooden:{title:"123 木头人", cover:"mutouren_icon.webp"},
+  numbers:{title:"数字王国", cover:"shuziwangguo_icon.webp"},
+  relay:{title:"飞毛腿作战", cover:"feimaotu_icon.webp"},
+  rock:{title:"石头剪刀布", cover:"shitoujiandaobu_icon.webp"}
+};
+const gameCategories = {
+  all:{label:"全部", projects:Object.keys(gameProjects)},
+  hands:{label:"手眼灵敏", projects:["sandbag","reaction","fruit","order"]},
+  body:{label:"全身协调", projects:["duel","pose","punches","rhythm","tetris","wooden","relay"]},
+  culture:{label:"文体双修", projects:["words","flags","poems","numbers"]}
+};
 let gameCategory = "all";
 
 function gameList(from){
   const heading = from==="senior" ? "h3" : "h2";
-  const filters = Object.entries(gameCategories).map(([value,label])=>
+  const filters = Object.entries(gameCategories).map(([value,{label}])=>
     button(label,"gameCategory","game-category",`data-value="${value}" aria-pressed="${gameCategory===value}"`)
   ).join("");
   const query = new URLSearchParams({from,category:gameCategory});
-  const cards = gameProjects.filter(project=>gameCategory==="all" || project.category===gameCategory);
+  const cards = gameCategories[gameCategory].projects.map(id=>{
+    const {title,cover,mark,path,label,tone} = gameProjects[id];
+    const tag = path ? "a" : "div";
+    const artwork = cover
+      ? `<img class="game-cover" src="game-list-art/${cover}" alt="" loading="lazy">`
+      : `<span class="game-mark" aria-hidden="true">${mark}</span>`;
+    return `<li><${tag} class="game-tile${tone?" game-tile--"+tone:""}"${path?` href="${path}?${query}"`:""}>
+      ${artwork}<strong>${title}</strong>${label?`<span class="game-label">${label}</span>`:""}
+    </${tag}></li>`;
+  }).join("");
   return `<section class="game-list" aria-labelledby="games-title">
-    <${heading} id="games-title">趣味运动</${heading}>
+    <div class="games-hero"><${heading} id="games-title">趣味运动</${heading}></div>
     <div class="game-categories" role="group" aria-label="趣味运动分类">${filters}</div>
-    <div class="open-cards">${cards.map(project=>`
-      <a class="open-card demo-game-link" href="${project.path}?${query}">
-        <span class="card-icon" aria-hidden="true">${project.icon}</span>
-        <span><strong>${project.title}</strong><small>${project.detail}</small></span><span aria-hidden="true">›</span>
-      </a>`).join("")}</div>
+    <ul class="game-grid">${cards}</ul>
   </section>`;
 }
 const pages = {
@@ -864,7 +889,8 @@ function drawSample(canvas){
 
 const initialList = new URLSearchParams(location.search);
 const view = initialList.get("view");
-const category = initialList.get("category");
+const requestedCategory = initialList.get("category");
+const category = ["play","fitness"].includes(requestedCategory) ? "hands" : requestedCategory;
 if (Object.hasOwn(gameCategories,category)) gameCategory = category;
 if (view==="games" || view==="senior") setPage(view);
 else paint();
