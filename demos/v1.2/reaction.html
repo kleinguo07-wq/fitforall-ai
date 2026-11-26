@@ -192,11 +192,13 @@
 
 const get = id => document.getElementById(id);
 const device = get('device');
-if (new URLSearchParams(location.search).get('from') === 'senior') {
-  const back = get('project-back');
-  back.href = 'assessment.html?view=senior';
-  back.setAttribute('aria-label', '返回康乐银发趣味运动列表');
-}
+const listOrigin = new URLSearchParams(location.search);
+const listView = listOrigin.get('from') === 'senior' ? 'senior' : 'games';
+const listParams = new URLSearchParams({view:listView});
+if (listOrigin.has('category')) listParams.set('category',listOrigin.get('category'));
+const listBack = document.getElementById('project-back');
+listBack.href = 'assessment.html?' + listParams;
+if (listView === 'senior') listBack.setAttribute('aria-label','返回康乐银发趣味运动列表');
 const targets = Array.from(document.querySelectorAll('[data-target]'));
 const zones = Array.from(document.querySelectorAll('.zone'));
 const toggles = Array.from(document.querySelectorAll('[data-toggle]'));

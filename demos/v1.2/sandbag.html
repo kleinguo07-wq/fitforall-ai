@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f2e9">
   <title>接沙包 · 全民健身机 v1.2</title>
-  <link rel="stylesheet" href="接沙包_样式.css">
+  <link rel="stylesheet" href="接沙包_样式.css?v=24d76895ec">
   <script defer src="接沙包_摄像头.js"></script>
   <script defer src="接沙包_交互.js"></script>
 </head>
@@ -13,6 +13,7 @@
   <main class="workspace">
     <section class="device" id="device" data-phase="intro" aria-label="接沙包竖屏游戏">
       <header class="device-header">
+        <a id="project-back" class="game-list-back" href="assessment.html?view=games" aria-label="返回趣味运动列表">‹ 返回列表</a>
         <span class="section-name">康乐银发<span aria-hidden="true"> / </span>趣味运动</span>
         <h2 id="heading">接沙包</h2>
         <p id="hint">等沙包亮起来，再伸手接住。</p>
@@ -117,5 +118,14 @@
     </aside>
   </main>
   <noscript><p class="noscript">请在支持 JavaScript 的浏览器里打开试玩。</p></noscript>
+<script>
+const listOrigin = new URLSearchParams(location.search);
+const listView = listOrigin.get('from') === 'senior' ? 'senior' : 'games';
+const listParams = new URLSearchParams({view:listView});
+if (listOrigin.has('category')) listParams.set('category',listOrigin.get('category'));
+const listBack = document.getElementById('project-back');
+listBack.href = 'assessment.html?' + listParams;
+if (listView === 'senior') listBack.setAttribute('aria-label','返回康乐银发趣味运动列表');
+</script>
 </body>
 </html>
