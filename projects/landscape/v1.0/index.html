@@ -160,6 +160,74 @@
 .fruit-breakdown dd{margin:0;font-size:28px;font-weight:700;white-space:nowrap}
 .fruit-breakdown small{margin-left:5px;font-size:16px;font-weight:400;color:var(--muted)}
 .fruit-result-actions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:12px}
+.fruit-screen.main {
+  position:absolute; inset:0; width:auto; height:auto; padding:0; overflow:hidden;
+  background:radial-gradient(ellipse at 50% 60%,#e4efdf 0%,#eff3e8 48%,#dbe8df 100%);
+  color:#173f35;
+}
+.fruit-hud {position:absolute; inset:38px 44px auto; display:flex; align-items:center; gap:24px; z-index:3}
+.fruit-player,.fruit-clock,.fruit-combo {
+  display:flex; align-items:center; gap:14px; padding:14px 22px; border-radius:18px;
+  background:#f8fbf3ed; color:#173f35; font-size:27px; font-weight:650;
+}
+.fruit-avatar {display:grid; place-items:center; width:42px; height:42px; border-radius:50%; background:#dce8d1; font-size:23px}
+.fruit-player b,.fruit-clock {font-size:36px; font-variant-numeric:tabular-nums}
+.fruit-player b {padding-left:14px; border-left:1px solid #c3d3c7}
+.fruit-clock {margin-left:auto; justify-content:center; min-width:134px}
+.fruit-combo {background:#f8f0f8; color:#8b267c}
+.fruit-combo[hidden] {display:none}
+.fruit-review {display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin:0 0 12px}
+.fruit-review[hidden] {display:none}
+.fruit-review strong {font-size:13px; margin-right:4px}
+.fruit-review .tool {min-height:36px; padding:5px 10px}
+.fruit-review .tool[aria-pressed="true"] {color:white; background:#23674e; border-color:#23674e}
+.fruit-review-options {flex:1 1 100%; display:flex; flex-wrap:wrap; gap:6px}
+.fruit-range {position:absolute; left:50%; bottom:12%; width:31%; height:20%; transform:translateX(-50%);
+  border:4px dashed #7f9c8e; border-radius:50%; background:#b7cbbc4d}
+.fruit-range.detecting {border-color:#488663}
+.fruit-range.detecting::after {content:''; position:absolute; inset:27% 29%; background:#81c984; border-radius:50%}
+.fruit-range.confirmed {border:4px solid #5fa664; background:#aada9e}
+.fruit-silhouette {
+  position:absolute; left:50%; top:57%; width:240px; height:365px;
+  transform:translate(-50%,-50%); display:grid; place-items:center; opacity:.42;
+}
+.fruit-silhouette::before {content:''; position:absolute; width:68px; height:68px; top:0; border-radius:50%; background:#41635a}
+.fruit-silhouette::after {content:''; position:absolute; inset:77px 0 0; background:#41635a;
+  clip-path:polygon(35% 0,65% 0,72% 6%,94% 36%,84% 43%,69% 24%,68% 53%,75% 100%,57% 100%,50% 66%,43% 100%,25% 100%,32% 53%,31% 24%,16% 43%,6% 36%,28% 6%)}
+.fruit-silhouette.outside {left:56%; top:40%; opacity:.27}
+.fruit-guide-word {position:absolute; top:47%; margin:0; font-size:76px; line-height:1.15; font-weight:720; text-align:center}
+.fruit-guide-word.left {left:17%}
+.fruit-guide-word.right {right:17%}
+.fruit-stand-status {position:absolute; left:50%; bottom:5%; transform:translateX(-50%); font-size:27px; font-weight:650}
+.fruit-start-overlay,.fruit-lost-overlay {
+  position:absolute; inset:0; display:grid; place-content:center; text-align:center;
+  background:#163b31a6; color:white; z-index:2;
+}
+.fruit-start-overlay {font-size:168px; font-weight:750; font-variant-numeric:tabular-nums; line-height:1}
+.fruit-lost-overlay {gap:10px; font-size:32px}
+.fruit-lost-overlay strong {font-size:57px}
+.fruit-exit {position:absolute; left:44px; bottom:36px; z-index:3; min-width:126px; min-height:60px; background:#f8fbf3; border-radius:14px}
+.fruit-target-layer {position:absolute; inset:0; z-index:1; pointer-events:none}
+.fruit-target {position:absolute; transform:translate(-50%,-50%); display:grid; place-items:center;
+  width:116px; height:116px; border-radius:50%; font-size:76px; line-height:1;
+  background:#fcfcf36b; border:2px solid #fffc; pointer-events:auto}
+.fruit-target:hover {background:#fff9}
+.fruit-target:disabled {pointer-events:none}
+.fruit-hand-light {position:absolute; width:23px; height:23px; border-radius:50%; background:#d8fff5; box-shadow:0 0 0 7px #59b59b44,0 0 26px #68d5bb; top:48%}
+.fruit-hand-light.left {left:40%}
+.fruit-hand-light.right {right:40%}
+.fruit-pop {position:absolute; transform:translate(-50%,-50%); text-align:center; font-size:46px; font-weight:800}
+.fruit-pop b {display:block; margin-bottom:4px; color:#173f35; animation:fruit-pop-in 1.5s both}
+.fruit-pop .center {color:#983577}
+.fruit-halves {position:relative; width:92px; height:92px; margin:auto; font-size:62px; line-height:92px}
+.fruit-halves i {position:absolute; inset:0; font-style:normal; clip-path:polygon(0 0,100% 0,0 100%); animation:fruit-split 550ms ease-out both}
+.fruit-halves i+i {clip-path:polygon(100% 0,100% 100%,0 100%); --split-x:25px; --split-y:16px}
+.fruit-pop.is-preview b,.fruit-pop.is-preview i {animation:none}
+.fruit-pop.is-preview i {transform:translate(var(--split-x,-14px),var(--split-y,-10px))}
+.fruit-pop.is-preview i+i {--split-x:14px; --split-y:10px}
+@keyframes fruit-split {to {transform:translate(var(--split-x,-25px),var(--split-y,-16px)); opacity:0}}
+@keyframes fruit-pop-in {0% {opacity:0; transform:translateY(12px)} 12%,75% {opacity:1} 100% {opacity:0;transform:translateY(-18px)}}
+@media (prefers-reduced-motion:reduce) {.fruit-pop b,.fruit-halves i {animation:none}}
 </style></head><body>
 <header class="review"><div class="review-left"><div class="review-brand"><b>公园横屏 / 交互原型</b><small>v1.0方案定版 · 公开评审原型 · 2026.11.04</small></div><nav class="review-secondary" aria-label="项目与说明"><a class="tool" href="../">返回横屏项目</a><a class="tool" href="../../../">项目总览</a></nav></div><div class="review-actions"><button class="tool" id="map-toggle">页面总览</button><button class="tool" id="help-toggle" aria-expanded="false" aria-controls="prototype-help-panel">原型说明</button><button class="tool" id="fullscreen">全屏查看</button></div></header>
 <main class="workspace"><div class="meta"><b id="screen-label">01 / 首页</b><span>身份、上报、运动、环境与小程序均为模拟 · 未接入真实服务</span></div><div class="prototype-review-layout" id="prototype-review-layout"><div class="device"><div class="viewport"><div class="screen" id="app"></div><div class="prototype-help-layer" id="prototype-help-layer" hidden></div></div></div><aside class="prototype-help-panel" id="prototype-help-panel" aria-label="当前页面原型说明" hidden><div class="prototype-help-heading"><div><span>逐项功能说明</span><h2 id="prototype-help-title"></h2></div><button class="help-close" id="help-close" aria-label="关闭原型说明">×</button></div><p class="prototype-help-intro">点击画面编号或下方条目，对照查看操作与规则。阅读期间，推荐轮换和运动计时暂缓。</p><div class="prototype-help-list" id="prototype-help-list"></div></aside></div><div class="underbar"><span>16:9 设备界面 · 点击按钮体验流程 · 设备外控件仅用于评审</span><div class="scenario"><label for="scenario">演示状态</label><select id="scenario"></select><button class="tool" id="reset">重置演示</button></div></div></main><div class="review-modal" id="map"><section class="screen-map"><div class="row between"><h2>页面总览 / 点击进入</h2><button class="tool" id="map-close">关闭</button></div><div class="map-grid" id="map-grid"></div></section></div>
@@ -180,7 +248,7 @@ let timer,toastTimer,homeRecommendationTimer;
 let homeQuickPressed=false,homeQuickElapsed=0,homeQuickLastTick=null;
 const HOME_ROTATION_MS=20000,homeQuickIndices=[0,0,0];
 const btn=(label,action,cls='',extra='')=>`<button class="button ${cls}" data-action="${action}" ${extra}>${label}</button>`;
-function nav(page,resetScene=true){if(['library','resourceDetail','resourcePlaying','resourceResult'].includes(page)&&(state.resourceCategory==='warmup'||resource().category==='warmup')){state.resourceCategory='fitness';state.resourceId='fitness-1';page='library';}const previousScene=state.scene;if(page==='fitnessReport'&&resource().category!=='fitness'){state.resourceCategory='fitness';state.resourceId='fitness-1';state.resourceReturn='library';}if(['prepare','training','results','video'].includes(page))page='detail';if(page==='resourcePrepare'){state.resourceCategory='fitness';if(resource().category!=='fitness')state.resourceId='fitness-1';page='resourceDetail';}if(['resourcePlaying','resourceResult'].includes(page)&&resource().category!=='media')page='resourceDetail';if(!pages.some(p=>p[0]===page))page='home';if(page==='rankings'&&state.page!==page)state.rankingMetric='duration';if(state.page==='gamePlaying'&&page!=='gamePlaying')completeDemoGameSession();if(page==='gamePrepare'){state.gameSession=null;state.gameReport=null;}state.page=page;state.modal=null;if(resetScene)state.scene=page==='followReport'&&state.followMode==='multi'?'multi8':'normal';if(page==='gamePlaying')initializeGame(previousScene);if(page==='resourcePlaying')state.paused=false;if(page==='home'){state.gameSession=null;state.resourceElapsed=0;state.paused=false;state.ready=1;state.followMode='single';}history.replaceState(null,'','#'+page);render();}
+function nav(page,resetScene=true){if(['library','resourceDetail','resourcePlaying','resourceResult'].includes(page)&&(state.resourceCategory==='warmup'||resource().category==='warmup')){state.resourceCategory='fitness';state.resourceId='fitness-1';page='library';}const previousScene=state.scene;if(page==='fitnessReport'&&resource().category!=='fitness'){state.resourceCategory='fitness';state.resourceId='fitness-1';state.resourceReturn='library';}if(['prepare','training','results','video'].includes(page))page='detail';if(page==='resourcePrepare'){state.resourceCategory='fitness';if(resource().category!=='fitness')state.resourceId='fitness-1';page='resourceDetail';}if(['resourcePlaying','resourceResult'].includes(page)&&resource().category!=='media')page='resourceDetail';if(!pages.some(p=>p[0]===page))page='home';if(page==='rankings'&&state.page!==page)state.rankingMetric='duration';if(state.page==='gamePlaying'&&page!=='gamePlaying')completeDemoGameSession();if(page==='gamePrepare'){state.gameSession=null;state.gameReport=null;state.fruitPrepareRunning=false;}state.page=page;state.modal=null;if(resetScene)state.scene=page==='followReport'&&state.followMode==='multi'?'multi8':'normal';if(page==='gamePrepare'&&game().id==='fruit-solo'){if(resetScene)state.scene='outside';state.paused=false;}if(page==='gamePlaying')initializeGame(previousScene);if(page==='resourcePlaying')state.paused=false;if(page==='home'){state.gameSession=null;state.resourceElapsed=0;state.paused=false;state.ready=1;state.followMode='single';}history.replaceState(null,'','#'+page);render();}
 
 function chapterName(seg){return seg.title.replace(/[（(]示例[）)]/g,'')}
 
@@ -255,9 +323,9 @@ function filteredGames(){return Object.values(gameDefinitions).filter(g=>g.id===
 function gameArt(kind){let content='';const circle=(x,y,r,fill)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}"/>`;if(kind==='slice'){content=circle(52,69,25,'#ce6f42')+circle(108,52,22,'#8aa663')+'<path d="M49 43q8-15 21-11M106 28q2-13 15-13" fill="none" stroke="#4c6f42" stroke-width="6"/><path d="M23 96 132 18" stroke="#fff" stroke-width="5"/>';}else if(kind==='collect'){content='<path d="M25 22h34v30h42v-30h31M25 94h34V70h42v24h31" fill="none" stroke="#b1c19f" stroke-width="10"/>'+[25,50,77,104,131].map(x=>circle(x,60,5,'#bd863a')).join('')+circle(24,60,12,'#295e48');}else if(kind==='goal'){content='<path d="M28 98V26h104v72M28 50h104M28 74h104M54 26v72M80 26v72M106 26v72" fill="none" stroke="#9aac8b" stroke-width="3"/>'+circle(99,55,19,'#fcfdf8')+'<path d="m99 40 13 9-5 15H92l-5-15Z" fill="#3c6249"/>';}else if(kind==='pose'){content=circle(80,24,12,'#708d59')+'<path d="M80 43v32M80 47 45 28M80 47l35-19M80 75l-25 31M80 75l25 31" fill="none" stroke="#3d6c4b" stroke-width="9" stroke-linecap="round"/>';}else if(kind==='rhythm'){content='<path d="M30 100V20M80 100V20M130 100V20" stroke="#bdcba9" stroke-width="4"/>'+circle(30,62,14,'#547c4a')+circle(80,35,14,'#bc7b3c')+circle(130,84,14,'#547c4a')+'<path d="M10 92h140" stroke="#315c43" stroke-width="4"/>';}else if(kind==='dodge'){content='<rect x="94" y="20" width="40" height="78" rx="5" fill="#c48a5c"/><path d="M70 55H26m0 0 15-15M26 55l15 15" stroke="#3f6e4b" stroke-width="7" fill="none"/>';}else if(kind==='mole'){content='<ellipse cx="80" cy="94" rx="52" ry="13" fill="#b8c6a4"/><path d="M47 91V63a33 33 0 0 1 66 0v28Z" fill="#9f7b55"/>'+circle(67,61,4,'#f8f8ed')+circle(94,61,4,'#f8f8ed');}else{content=[40,80,120].map((x,i)=>circle(x,45+i%2*33,17,i===1?'#bf8544':'#6e9758')).join('')+'<path d="M35 102h90" stroke="#c0cdae" stroke-width="5"/>';}return `<svg viewBox="0 0 160 120" aria-hidden="true">${content}</svg>`}
 function games(){const g=gameDefinitions['fruit-solo'];return heading('趣味运动','')+`<div class="launch-games"><button class="single-game-card game-library-card" data-game="${g.id}"><span class="single-game-art">${gameArt(g.kind)}</span><span class="single-game-copy"><small>单人 · 反应挑战</small><b>${g.title}</b><span>挥臂切果 · ${g.seconds}秒</span></span><span class="single-game-action">查看玩法 <span aria-hidden="true">→</span></span></button></div>`}
 function gameRules(){const g=game(),players=g.minPlayers===g.maxPlayers?g.count:g.minPlayers+'–'+g.maxPlayers,pk=g.mode==='双人PK'||g.mode==='分队PK';return heading(g.title,'','games')+`<div class="lesson-layout activity-detail"><div class="lesson-visual activity-media"><div class="lesson-preview activity-preview"><div class="game-rule-art">${gameArt(g.kind)}</div><b>${g.title}</b></div><div class="lesson-meta"><span>${g.motion}</span><span>${g.seconds}秒</span></div></div><section class="lesson-content activity-info" aria-label="玩法说明与操作"><div class="activity-info-scroll"><div class="row detail-tags"><span class="tag">${g.category}</span><span class="tag gray">${g.mode}</span>${g.category==='多人'?`<span class="tag gray">${players}人</span>`:''}</div><h2>玩法说明</h2><ol class="activity-steps">${g.rules.map(r=>`<li>${r}</li>`).join('')}</ol>${pk?`<div class="detail-fact"><span>计分方式</span><b>${g.mode==='分队PK'?'1、2号为A队 / 3、4号为B队':'比较双方完成次数'}</b></div>`:''}</div><div class="lesson-start activity-primary">${btn('去站位准备 →','gamePrepare','primary')}</div></section></div>`}
-function gamePrepare(){const g=game(),n=gameCount(),bound=['none','identityPending'].includes(state.scene)?0:state.scene==='partial'?Math.max(0,n-1):n,method=state.scene==='registered'?'新用户已注册':'人脸登录完成';return heading('运动准备',g.title,'gameRules')+`<div class="game-ready-layout"><div class="game-ready-zones" style="--n:${n}">${Array.from({length:n},(_,i)=>`<section class="game-ready-slot ${i<bound?'ready':''}"><span>${i+1}号活动区</span><b>${i<bound?'身份已关联':state.scene==='none'?'等待进入':'待登录 / 注册'}</b><small>${i<bound?method:'请面向屏幕'}${g.mode==='分队PK'?(i<2?' · A队':' · B队'):''}</small></section>`).join('')}</div><section class="panel game-ready-info"><h2>${bound} / ${n} 人身份已关联</h2>${g.minPlayers!==g.maxPlayers?`<div class="game-number-picks"><span>本场人数</span>${Array.from({length:g.maxPlayers-g.minPlayers+1},(_,i)=>i+g.minPlayers).map(v=>`<button data-game-count="${v}" class="${v===n?'active':''}">${v}人</button>`).join('')}</div>`:''}<p>面向屏幕完成人脸登录。<br>新用户注册后，即可关联本次运动。</p>${btn('开始本局 →','startGame','primary',bound===n?'':'disabled')}</section></div>`}
+function gamePrepare(){if(game().id==='fruit-solo')return fruitPrepare();const g=game(),n=gameCount(),bound=['none','identityPending'].includes(state.scene)?0:state.scene==='partial'?Math.max(0,n-1):n,method=state.scene==='registered'?'新用户已注册':'人脸登录完成';return heading('运动准备',g.title,'gameRules')+`<div class="game-ready-layout"><div class="game-ready-zones" style="--n:${n}">${Array.from({length:n},(_,i)=>`<section class="game-ready-slot ${i<bound?'ready':''}"><span>${i+1}号活动区</span><b>${i<bound?'身份已关联':state.scene==='none'?'等待进入':'待登录 / 注册'}</b><small>${i<bound?method:'请面向屏幕'}${g.mode==='分队PK'?(i<2?' · A队':' · B队'):''}</small></section>`).join('')}</div><section class="panel game-ready-info"><h2>${bound} / ${n} 人身份已关联</h2>${g.minPlayers!==g.maxPlayers?`<div class="game-number-picks"><span>本场人数</span>${Array.from({length:g.maxPlayers-g.minPlayers+1},(_,i)=>i+g.minPlayers).map(v=>`<button data-game-count="${v}" class="${v===n?'active':''}">${v}人</button>`).join('')}</div>`:''}<p>面向屏幕完成人脸登录。<br>新用户注册后，即可关联本次运动。</p>${btn('开始本局 →','startGame','primary',bound===n?'':'disabled')}</section></div>`}
 
-function gamePlaying(){const g=game(),n=gameCount();return `<div class="row between" style="margin-bottom:22px"><div class="row"><h2 style="margin:0">${g.title}</h2><span class="tag">${g.mode}</span></div><span class="hint">${state.scene==='lost'?'有参与者离开区域 · 本场暂停':state.paused?'已暂停 · 不计时、不计分':g.kind==='rhythm'?'看准拍点，再挥动手臂':g.kind==='pose'?'跟随提示，保持动作':'保持在自己的区域'}</span></div><section class="playfield"><div class="game-scorebar"><span>${g.mode==='双人PK'||g.mode==='分队PK'?'本局累计':n===1?'本轮完成':'共同完成'} <b id="game-score">${state.gameScore}</b> 次</span><span>剩余 <b id="game-time">${state.gameTime}</b> 秒</span><span>${n}人 · ${g.mode==='分队PK'?'2对2':g.mode}</span></div><div class="play-lanes" id="play-lanes" style="--players:${n}">${Array.from({length:n},(_,i)=>gameLane(i)).join('')}</div></section>`}
+function gamePlaying(){if(game().id==='fruit-solo')return fruitPlaying();const g=game(),n=gameCount();return `<div class="row between" style="margin-bottom:22px"><div class="row"><h2 style="margin:0">${g.title}</h2><span class="tag">${g.mode}</span></div><span class="hint">${state.scene==='lost'?'有参与者离开区域 · 本场暂停':state.paused?'已暂停 · 不计时、不计分':g.kind==='rhythm'?'看准拍点，再挥动手臂':g.kind==='pose'?'跟随提示，保持动作':'保持在自己的区域'}</span></div><section class="playfield"><div class="game-scorebar"><span>${g.mode==='双人PK'||g.mode==='分队PK'?'本局累计':n===1?'本轮完成':'共同完成'} <b id="game-score">${state.gameScore}</b> 次</span><span>剩余 <b id="game-time">${state.gameTime}</b> 秒</span><span>${n}人 · ${g.mode==='分队PK'?'2对2':g.mode}</span></div><div class="play-lanes" id="play-lanes" style="--players:${n}">${Array.from({length:n},(_,i)=>gameLane(i)).join('')}</div></section>`}
 function gameLane(i){const g=game(),score=state.gameScores[i]||0,seq=state.gameTurns[i]||0,disabled=state.paused||state.scene==='lost'?'disabled':'',header=`<div class="lane-label"><span>${i+1}号 ${g.mode==='分队PK'?(i<2?'· A队':'· B队'):''}</span><b id="lane-score-${i}">${score}次</b></div>`;let body='';const positions=[[22,22],[63,45],[42,66],[71,23],[18,66]];if(g.kind==='collect'){const dots=state.mazeDots[i]||[],pos=state.mazePos[i]||[0,0];body=`<div class="maze-board">${Array.from({length:35},(_,cell)=>{const x=cell%7,y=Math.floor(cell/7),wall=mazeWall(x,y),dot=dots.includes(cell),player=x===pos[0]&&y===pos[1];return `<span class="maze-cell ${wall?'wall':''}">${player?'<i class="maze-explorer"></i>':dot?'<i class="maze-dot"></i>':''}</span>`}).join('')}</div><div class="lane-instruction">小幅侧移，带角色收集星点</div>`;}else if(g.kind==='pose'){const hold=state.poseRemaining[i]||0;body=`<div class="pose-figure">${gameArt('pose')}</div><div class="lane-instruction">双臂抬起，舒展站立</div><button class="pose-trigger" data-pose="${i}" ${disabled}>${hold?'保持中 · '+hold+'秒':'保持3秒'}</button>`;}else if(g.kind==='dodge'){const safe=seq%2===0?'left':'right';body=`<div class="dodge-board"><div class="obstacle ${safe==='left'?'right':'left'}">障碍</div><button class="dodge-safe ${safe}" data-game-hit="${i}" ${disabled}>${safe==='left'?'← 向左':'向右 →'}</button></div><div class="lane-instruction">向空的一侧小幅侧移</div>`;}else if(g.kind==='rhythm'){const relayTurn=Math.floor((g.seconds-state.gameTime)/2)%gameCount(),allowed=g.id!=='beat-team'||i===relayTurn,open=state.gameTime%2===0&&allowed;body=`<div class="rhythm-pulse ${open?'open':''}"><span>${!allowed?'等待接力':open?'现在击拍':'等待拍点'}</span></div><button class="beat-trigger" data-game-hit="${i}" ${disabled||(!allowed?'disabled':'')}>挥拍</button><div class="lane-instruction">绿圈亮起时命中</div>`;}else{let targets=g.kind==='slice'?3:1;body=`<div class="target-court ${g.kind==='goal'?'goal-court':''}">${Array.from({length:targets},(_,j)=>{const [x,y]=positions[(seq+j)%positions.length];return `<button class="motion-target ${g.kind}" data-game-hit="${i}" data-target="${j}" style="left:${x}%;top:${y}%" ${disabled} aria-label="${i+1}号${g.kind==='slice'?'切水果':g.kind==='goal'?'挡球':g.kind==='mole'?'打地鼠':'触达目标'}">${g.kind==='slice'?'<span class="fruit-leaf"></span><span class="fruit-cut"></span>':g.kind==='goal'?'<span class="ball-center"></span>':g.kind==='mole'?'<span class="mole-eyes">··</span>':'触达'}</button>`}).join('')}</div><div class="lane-instruction">${g.kind==='slice'?'挥臂切果，连续命中':g.kind==='goal'?'伸手挡球，不必跳跃':g.kind==='mole'?'伸手击中冒出的目标':'伸手触达亮起的目标'}</div>`;}return `<section class="play-lane ${i===state.gameActivePlayer?'selected':''}" data-lane="${i}">${header}<div class="lane-body">${body}</div><div class="lane-feedback" id="lane-feedback-${i}">${state.gameFeedback[i]||'等待动作'}</div></section>`}
 function gameResult(){const g=game();if(g.id==='fruit-solo')return fruitSettlement();const n=gameCount(),scores=state.gameScores.slice(0,n),pk=g.mode==='双人PK'||g.mode==='分队PK',a=g.mode==='分队PK'?(scores[0]+scores[1]):scores[0],b=g.mode==='分队PK'?(scores[2]+scores[3]):scores[1],outcome=pk?(a===b?'这一局，双方打平':(a>b?(g.mode==='分队PK'?'A队':'1号'):(g.mode==='分队PK'?'B队':'2号'))+'领先'):state.gameScore>=g.goal?(n===1?'本轮完成':'共同挑战完成'):'完成一局，继续加油';return heading(outcome,g.title+' · '+g.mode,'games')+`<div class="game-result-layout"><section class="panel"><span class="eyebrow">${pk?'对局结果':'本场结果'}</span><h2>${state.gameScore} 次有效完成</h2><div class="game-results-people">${scores.map((v,i)=>`<div><span>${i+1}号${g.mode==='分队PK'?' / '+(i<2?'A队':'B队'):''}</span><b>${v}次</b></div>`).join('')}</div><p class="hint">${pk?'只比较本局同规则的结果，不与其他项目混排。':(n===1?'':'共同结果为各参与者之和。')}<br></p><p class="result-report-status ${demoReportState().status}" data-report-status="${demoReportState().status}">${demoReportState().text}</p></section><section class="panel game-result-actions"><div class="result-records"><h2>我的运动记录</h2>${qrMarkup()}<b>微信扫码查看</b><p class="hint">登录小程序，查看自己的运动记录</p></div><div class="result-replay-actions">${btn(n===1?'再玩一次':'同组再玩','gamePrepare','primary')}${btn('更多'+g.category+'项目','games')}</div></section></div>`}
 function settlementMetrics(metrics){
@@ -447,19 +515,124 @@ function followReport(){
     </div>`;
 }
 
+const fruitPrepareOptions=[
+  ['outside','站位不正确'],['detecting','已进框 · 确认中'],['confirmed','区域已确认'],
+  ['count3','倒计时 · 3'],['count2','倒计时 · 2'],['count1','倒计时 · 1'],['go','GO!']
+];
+const fruitCountdown={count3:'3',count2:'2',count1:'1',go:'GO!'};
+const fruitFeedbackOptions=[
+  ['ordinary','普通切中'],['center','切中果心'],['combo','普通切中 + 连切'],['comboCenter','果心 + 连切']
+];
+const fruitTargets=[
+  {icon:'🍎',name:'苹果',x:27,y:39},
+  {icon:'🍊',name:'橙子',x:70,y:34},
+  {icon:'🍉',name:'西瓜',x:77,y:62},
+  {icon:'🍐',name:'梨',x:23,y:66},
+  {icon:'🍊',name:'橙子',x:33,y:30},
+  {icon:'🍎',name:'苹果',x:65,y:60}
+];
+function isFruitStage(){
+  return game().id==='fruit-solo'&&['gamePrepare','gamePlaying'].includes(state.page);
+}
+function fruitPlayer(score=null){
+  return `<div class="fruit-player"><span class="fruit-avatar" aria-hidden="true">晨</span><span>晨光漫步</span>${score===null?'':'<b id="game-score" aria-label="本局总分">'+score+'</b>'}</div>`;
+}
+function fruitPrepare(){
+  const step=state.scene, outside=step==='outside', countdown=fruitCountdown[step];
+  return `<div class="fruit-hud">${outside?'':fruitPlayer()}</div>
+    <div class="fruit-range ${outside?'':step==='detecting'?'detecting':'confirmed'}" aria-hidden="true"></div>
+    <div class="fruit-silhouette ${outside?'outside':''}" aria-hidden="true"></div>
+    ${outside?'<div class="fruit-standing-guide" aria-label="站进框内，开始运动"><p class="fruit-guide-word left">站进<br>框内</p><p class="fruit-guide-word right">开始<br>运动</p></div>':''}
+    ${countdown?`<div class="fruit-start-overlay" role="status">${countdown}</div>`:
+      outside?'':`<div class="fruit-stand-status" role="status">${step==='detecting'?'请站稳，正在确认区域':'区域已确认'}</div>`}
+    ${btn('退出','gameRules','fruit-exit')}`;
+}
+function advanceFruitPrepare(){
+  const step=fruitPrepareOptions.findIndex(([id])=>id===state.scene);
+  if(state.scene==='go'){nav('gamePlaying');return;}
+  state.scene=fruitPrepareOptions[step+1][0];
+  render();
+}
+function fruitTimerText(){
+  return fmt(state.gameTime).replace(/^0/,'');
+}
+function visibleFruitTargets(wave=state.gameSession.fruitSwings.length){
+  const offset=(wave%2)*3;
+  return fruitTargets.slice(offset,offset+3);
+}
+function isFruitFeedback(scene=state.scene){
+  return fruitFeedbackOptions.some(([value])=>value===scene);
+}
+function fruitTargetMarkup(pops=[],preview=false){
+  return visibleFruitTargets(preview?1:undefined).map(({icon,name,x,y},index)=>
+    `<button class="fruit-target" data-fruit-target="${index}" aria-label="切中${name}" style="left:${x}%;top:${y}%" ${state.paused||preview?'disabled':''}>${icon}</button>`).join('')+
+    pops.map(({icon,x,y,points,center})=>`<div class="fruit-pop${preview?' is-preview':''}" style="left:${x}%;top:${y}%" aria-hidden="true">
+      <b class="${center?'center':''}">${center?'♥ ':''}+${points}</b>
+      <div class="fruit-halves"><i>${icon}</i><i>${icon}</i></div>
+    </div>`).join('');
+}
+function fruitPlaying(){
+  const preview=isFruitFeedback()?fruitDemoSwing(state.scene,visibleFruitTargets(0)):null;
+  const combo=preview?.hits.length>1;
+  return `<div class="fruit-hud">${fruitPlayer(preview?.score??state.gameScore)}<div class="fruit-combo" role="status" ${combo?'':'hidden'}>${combo?'COMBO ×'+preview.hits.length:''}</div>
+      <time class="fruit-clock" id="game-time" aria-label="剩余时间">${preview?'0:59':fruitTimerText()}</time></div>
+    <div class="fruit-silhouette" aria-hidden="true"></div>
+    <div class="fruit-hand-light left" aria-hidden="true"></div><div class="fruit-hand-light right" aria-hidden="true"></div>
+    <div class="fruit-target-layer">${fruitTargetMarkup(preview?.pops,Boolean(preview))}</div>
+    ${state.paused?'<div class="fruit-lost-overlay" role="status"><strong>请回到活动区</strong><span>本局已暂停</span></div>':''}
+    ${btn('退出','fruitExit','fruit-exit')}`;
+}
+function fruitHitScore(hit,index){
+  return {base:hit.strawberry?20:10,center:hit.center?5:0,combo:index>0?10:0};
+}
+function fruitDemoSwing(kind,targets,targetIndex=0){
+  const combo=kind==='combo'||kind==='comboCenter';
+  const center=kind==='center'||kind==='comboCenter';
+  const hits=combo?[{center:false},{center}]:[{center}];
+  const pops=hits.map((hit,index)=>{
+    const points=fruitHitScore(hit,index);
+    return {...targets[(targetIndex+index)%targets.length],center:hit.center,
+      points:points.base+points.center+points.combo};
+  });
+  return {hits,pops,score:pops.reduce((sum,pop)=>sum+pop.points,0)};
+}
+function playFruitDemo(kind, targetIndex=0){
+  if(state.page!=='gamePlaying'||game().id!=='fruit-solo'||!state.gameSession||
+    state.paused||state.modal||isFruitFeedback()||prototypeHelpState.open||$('#map').classList.contains('open'))return;
+  const {hits,pops,score}=fruitDemoSwing(kind,visibleFruitTargets(),targetIndex);
+  state.gameSession.fruitSwings.push(hits);
+  state.gameScores[0]+=hits.length;
+  state.gameTurns[0]+=hits.length;
+  state.gameScore+=score;
+  $('#game-score').textContent=state.gameScore;
+  const layer=$('.fruit-target-layer');
+  layer.innerHTML=fruitTargetMarkup(pops);
+  const badge=$('.fruit-combo');
+  const combo=hits.length>1;
+  badge.textContent=combo?`COMBO ×${hits.length}`:'';
+  badge.hidden=!combo;
+  clearTimeout(fruitFeedbackTimer);
+  fruitFeedbackTimer=setTimeout(()=>{
+    badge.hidden=true;
+    layer.querySelectorAll('.fruit-pop').forEach(pop=>pop.remove());
+  },1500);
+}
+let fruitFeedbackTimer;
+
 function summarizeFruitRound(swings, remainingSeconds, effectiveSwingMs){
-  let cut=0, centers=0, longest=0, baseScore=0, comboScore=0;
+  let cut=0, centers=0, longest=0, baseScore=0, centerScore=0, comboScore=0;
   // Each group contains the fruits cut by one hand in one swing.
   for(const hits of swings){
     cut+=hits.length;
     longest=Math.max(longest,hits.length);
-    comboScore+=Math.max(0,hits.length-1)*10;
-    for(const hit of hits){
-      baseScore+=hit.strawberry?20:10;
+    for(const [index,hit] of hits.entries()){
+      const points=fruitHitScore(hit,index);
+      baseScore+=points.base;
       centers+=Number(hit.center);
+      centerScore+=points.center;
+      comboScore+=points.combo;
     }
   }
-  const centerScore=centers*5;
   const title=fruitResultTitle(remainingSeconds,cut,centers,longest);
   return Object.freeze({title,cut,centers,longest,baseScore,centerScore,comboScore,
     total:baseScore+centerScore+comboScore,effectiveSwingMs});
@@ -517,8 +690,7 @@ function completeDemoGameSession(){
     const records=session.participants.map(p=>({userId:p.userId,slot:p.slot,count:state.gameScores[p.slot-1]||0,status:'reported'}));
     report={sessionId:session.sessionId,status:'reported',records};
     if(game().id==='fruit-solo'){
-      // Each prototype tap stands for an isolated ordinary hit, without tracked swing time.
-      report.fruitResult=fruitResultFromSwingSizes(Array(records[0].count).fill(1),0,state.gameTime,0);
+      report.fruitResult=summarizeFruitRound(session.fruitSwings,state.gameTime,0);
     }
     state.reportQueue.push(report);
   }
@@ -526,11 +698,71 @@ function completeDemoGameSession(){
   state.gameSession=null;
 }
 function demoReportState(){const n=gameCount();if(state.scene==='reportPending')return {status:'pending',text:'运动数据上报中'};if(state.scene==='reportFailed')return {status:'retrying',text:'运动数据暂未上报，系统正在自动重试'};if(state.scene==='reportPartial'&&n>1)return {status:'partial',text:(n-1)+'人数据已上报，1人正在自动重试'};return {status:'reported',text:'运动数据已自动上报'};}
-function initializeGame(identityScene='normal'){const g=game();state.sessionSequence++;state.gameReport=null;state.gameSession={sessionId:'demo-session-'+state.sessionSequence,participants:Array.from({length:gameCount()},(_,i)=>({slot:i+1,userId:(identityScene==='registered'?'demo-new-'+state.sessionSequence+'-':'demo-user-')+(i+1),method:identityScene==='registered'?'registration':'face'}))};state.gamePlayers=gameCount();state.gameTime=g.seconds;state.gameScore=0;state.gameScores=[0,0,0,0];state.gameTurns=[0,0,0,0];state.poseRemaining=[0,0,0,0];state.gameFeedback=['','','',''];state.mazePos=Array.from({length:4},()=>[0,0]);state.mazeDots=Array.from({length:4},()=>[3,6,13,20,27,34]);state.gameActivePlayer=0;state.lastBeat=[-1,-1,-1,-1];state.paused=false;state.ready=gameCount();}
+function initializeGame(identityScene='normal'){const g=game();state.sessionSequence++;state.gameReport=null;state.gameSession={sessionId:'demo-session-'+state.sessionSequence,fruitSwings:[],participants:Array.from({length:gameCount()},(_,i)=>({slot:i+1,userId:(identityScene==='registered'?'demo-new-'+state.sessionSequence+'-':'demo-user-')+(i+1),method:identityScene==='registered'?'registration':'face'}))};state.gamePlayers=gameCount();state.gameTime=g.seconds;state.gameScore=0;state.gameScores=[0,0,0,0];state.gameTurns=[0,0,0,0];state.poseRemaining=[0,0,0,0];state.gameFeedback=['','','',''];state.mazePos=Array.from({length:4},()=>[0,0]);state.mazeDots=Array.from({length:4},()=>[3,6,13,20,27,34]);state.gameActivePlayer=0;state.lastBeat=[-1,-1,-1,-1];state.paused=false;state.ready=gameCount();}
 function addGamePoint(i,label='命中 +1'){if(prototypeHelpState.open||state.paused||state.scene==='lost'||state.page!=='gamePlaying')return;state.gameScores[i]++;state.gameScore=state.gameScores.slice(0,gameCount()).reduce((a,b)=>a+b,0);state.gameTurns[i]++;state.gameFeedback[i]=label;}
-function gameHit(i){if(prototypeHelpState.open||state.paused||state.scene==='lost'||state.page!=='gamePlaying'||i>=gameCount())return;if(game().id==='beat-team'&&i!==Math.floor((game().seconds-state.gameTime)/2)%gameCount()){state.gameFeedback[i]='等待轮到本区域';refreshGameLanes();return;}if(game().kind==='rhythm'&&state.gameTime%2!==0){state.gameFeedback[i]='稍等，下一拍再试';refreshGameLanes();return;}if(game().kind==='rhythm'){const beat=Math.floor((game().seconds-state.gameTime)/2);if(state.lastBeat[i]===beat){state.gameFeedback[i]='本拍已完成，等待下一拍';refreshGameLanes();return;}state.lastBeat[i]=beat;}addGamePoint(i,game().kind==='slice'?'切中 +1':game().kind==='goal'?'扑救成功 +1':game().kind==='dodge'?'避开障碍 +1':'命中 +1');refreshGameLanes()}
+function gameHit(i){if(game().id==='fruit-solo'){playFruitDemo('ordinary');return;}if(prototypeHelpState.open||state.paused||state.scene==='lost'||state.page!=='gamePlaying'||i>=gameCount())return;if(game().id==='beat-team'&&i!==Math.floor((game().seconds-state.gameTime)/2)%gameCount()){state.gameFeedback[i]='等待轮到本区域';refreshGameLanes();return;}if(game().kind==='rhythm'&&state.gameTime%2!==0){state.gameFeedback[i]='稍等，下一拍再试';refreshGameLanes();return;}if(game().kind==='rhythm'){const beat=Math.floor((game().seconds-state.gameTime)/2);if(state.lastBeat[i]===beat){state.gameFeedback[i]='本拍已完成，等待下一拍';refreshGameLanes();return;}state.lastBeat[i]=beat;}addGamePoint(i,game().kind==='slice'?'切中 +1':game().kind==='goal'?'扑救成功 +1':game().kind==='dodge'?'避开障碍 +1':'命中 +1');refreshGameLanes()}
 function refreshGameLanes(){if(state.page!=='gamePlaying')return;$('#game-score').textContent=state.gameScore;$('#play-lanes').innerHTML=Array.from({length:gameCount()},(_,i)=>gameLane(i)).join('');refreshPrototypeHelp()}
-function renderGameControls(){let panel=$('#game-controls');if(!panel){$('.underbar').insertAdjacentHTML('afterend','<div class="game-controls" id="game-controls"></div>');panel=$('#game-controls')}if(state.page!=='gamePlaying'){panel.hidden=true;return;}panel.hidden=false;panel.innerHTML=`<span>模拟体感输入 · 摄像头未接入</span><label>当前角色 <select id="game-player">${Array.from({length:gameCount()},(_,i)=>`<option value="${i}" ${i===state.gameActivePlayer?'selected':''}>${i+1}号</option>`).join('')}</select></label>${game().kind==='collect'?'<button class="tool" data-move="left">← 左</button><button class="tool" data-move="up">↑ 上</button><button class="tool" data-move="down">↓ 下</button><button class="tool" data-move="right">→ 右</button>':'<span>点击各区域目标模拟动作；暂停和离区时不计次。</span>'}`;panel.onchange=e=>{if(e.target.id==='game-player'){state.gameActivePlayer=Number(e.target.value);refreshGameLanes()}};panel.onclick=e=>{const key=e.target.closest('[data-move]')?.dataset.move;if(key)mazeMove(key==='left'?-1:key==='right'?1:0,key==='up'?-1:key==='down'?1:0)}}
+function renderFruitReview(){
+  let bar=$('#fruit-review');
+  if(!bar){
+    $('#prototype-review-layout').insertAdjacentHTML('beforebegin','<section class="fruit-review" id="fruit-review" aria-label="水果切切乐评审状态" hidden></section>');
+    bar=$('#fruit-review');
+  }
+  const prepare=state.page==='gamePrepare',playing=state.page==='gamePlaying';
+  bar.hidden=game().id!=='fruit-solo'||!(prepare||playing||state.page==='gameRules');
+  if(bar.hidden)return;
+  const options=prepare?fruitPrepareOptions:
+    playing?[['normal','实时试玩'],...fruitFeedbackOptions,['lost','离区暂停']]:[];
+  bar.innerHTML=`<strong>水果切切乐评审</strong>
+    <button class="tool" data-fruit-stage="gamePrepare" aria-pressed="${prepare}">站位准备</button>
+    <button class="tool" data-fruit-stage="gamePlaying" aria-pressed="${playing}">游戏过程</button>
+    ${prepare?'<button class="tool" data-fruit-run>连贯演示</button>':''}
+    ${options.length?`<div class="fruit-review-options" role="group" aria-label="${prepare?'站位状态':'游戏过程状态'}">
+      ${options.map(([value,label])=>`<button class="tool" data-fruit-scene="${value}" aria-pressed="${value===state.scene}">${label}</button>`).join('')}
+    </div>`:''}`;
+  bar.onclick=e=>{
+    const button=e.target.closest('button');
+    if(!button||state.modal||prototypeHelpState.open)return;
+    const stage=button.dataset.fruitStage;
+    if(stage&&stage!==state.page){
+      if(stage==='gamePlaying'){
+        state.scene=fruitFeedbackOptions[0][0];
+        nav(stage,false);
+      }else nav(stage);
+    }else if(button.hasAttribute('data-fruit-run')){
+      startFruitPrepare('detecting');
+    }else if(button.dataset.fruitScene){
+      applyScenario(button.dataset.fruitScene);
+      bar.querySelector('[aria-pressed="true"][data-fruit-scene]')?.focus();
+    }
+  };
+}
+function startFruitPrepare(scene){
+  state.scene=scene;
+  state.fruitPrepareRunning=scene==='detecting';
+  render();
+}
+function renderFruitControls(panel){
+  panel.hidden=false;
+  panel.onchange=null;
+  const prepare=state.page==='gamePrepare';
+  panel.innerHTML=prepare?
+    `<span>模拟站位 · 摄像头未接入</span>
+      <button class="tool" data-fruit-stand="detecting">模拟进框</button>
+      <button class="tool" data-fruit-stand="outside" ${state.scene==='outside'?'disabled':''}>模拟离框</button>`:
+    `<span>模拟挥切</span>${fruitFeedbackOptions.map(([id,label])=>
+      `<button class="tool" data-fruit-demo="${id}" ${state.paused||isFruitFeedback()?'disabled':''}>${label}</button>`).join('')}`;
+  panel.onclick=e=>{
+    const stand=e.target.closest('[data-fruit-stand]')?.dataset.fruitStand;
+    if(prepare&&stand){
+      startFruitPrepare(stand);
+      return;
+    }
+    const demo=e.target.closest('[data-fruit-demo]')?.dataset.fruitDemo;
+    if(!prepare&&demo)playFruitDemo(demo);
+  };
+}
+function renderGameControls(){let panel=$('#game-controls');if(!panel){$('.underbar').insertAdjacentHTML('afterend','<div class="game-controls" id="game-controls"></div>');panel=$('#game-controls')}if(isFruitStage()){renderFruitControls(panel);return;}if(state.page!=='gamePlaying'){panel.hidden=true;return;}panel.hidden=false;panel.innerHTML=`<span>模拟体感输入 · 摄像头未接入</span><label>当前角色 <select id="game-player">${Array.from({length:gameCount()},(_,i)=>`<option value="${i}" ${i===state.gameActivePlayer?'selected':''}>${i+1}号</option>`).join('')}</select></label>${game().kind==='collect'?'<button class="tool" data-move="left">← 左</button><button class="tool" data-move="up">↑ 上</button><button class="tool" data-move="down">↓ 下</button><button class="tool" data-move="right">→ 右</button>':'<span>点击各区域目标模拟动作；暂停和离区时不计次。</span>'}`;panel.onchange=e=>{if(e.target.id==='game-player'){state.gameActivePlayer=Number(e.target.value);refreshGameLanes()}};panel.onclick=e=>{const key=e.target.closest('[data-move]')?.dataset.move;if(key)mazeMove(key==='left'?-1:key==='right'?1:0,key==='up'?-1:key==='down'?1:0)}}
 
 function board(){const users=rankedUsers();return heading('本站服务','','',`<button class="device-settings-icon" data-action="systemSettings" aria-label="设备设置" title="设备设置"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M10 2h4l.7 3 2 .9 2.8-1.2 2 3.5-2.1 2.1v2.4l2.1 2.1-2 3.5-2.8-1.2-2 .9-.7 3h-4l-.7-3-2-.9-2.8 1.2-2-3.5 2.1-2.1v-2.4L2.5 8.2l2-3.5 2.8 1.2 2-.9z"/><circle cx="12" cy="11.5" r="3.2"/></svg></button>`)+`<div class="station-services"><section class="leaderboard-main"><div class="leaderboard-heading"><div><h2>今日运动榜</h2></div><button class="text-link" data-action="rankings">完整榜单 →</button></div>${state.scene==='empty'?'<div class="rank-empty"><h2>今天还没有上榜记录</h2><p>完成运动并保存记录后再来看看。</p></div>':podium()+`<table class="leaderboard-table"><thead><tr><th>排名</th><th>运动伙伴</th><th>有效运动时长</th></tr></thead><tbody>${rankRows(users.slice(3,8))}</tbody></table>`}<div class="leaderboard-foot"><span>今日 · 本站 · 按有效运动时长排名</span><span>同秒并列</span></div></section><aside class="station-aside">${recordsModule()}<div class="park-service-note"><span>运动站开放时间</span><b>${park.hours}</b></div></aside></div>`}
 
@@ -575,7 +807,7 @@ $('#app').addEventListener('click',e=>{const b=e.target.closest('[data-module]')
 
 function renderStationReview(){let el=$('#station-review');if(!el){$('.underbar').insertAdjacentHTML('afterend','<div class="game-controls" id="station-review"></div>');el=$('#station-review')}el.hidden=!['home','board','rankings','records'].includes(state.page);if(!el.hidden)el.textContent='评审示意：公园环境、开放安排及榜单昵称/时长/消耗均为模拟；小程序码不可扫码。两榜依赖统一计量、身份绑定、有效片段去重与公开展示授权，未接真实数据。'}
 const views={library,resourceDetail,resourcePlaying,resourceResult,home,courses,detail,games,gameRules,gamePrepare,gamePlaying,gameResult,board,rankings,records,fitnessReport,followReport};
-function render(){clearInterval(timer);clearInterval(homeRecommendationTimer);homeRecommendationTimer=null;homeQuickPressed=false;homeQuickElapsed=0;homeQuickLastTick=null;const i=pages.findIndex(p=>p[0]===state.page);$('#screen-label').textContent=String(i+1).padStart(2,'0')+' / '+pages[i][1];let actions='',hint='请根据自身状态运动；如有不适，请停止。';if(state.page==='resourcePlaying'){actions=btn(state.paused?'继续':'暂停','pause','',state.scene!=='normal'?'disabled':'')+btn('结束观看','resourceEnd','danger');hint='观看进度不作为个人有效运动时长。'}else if(state.page==='gamePlaying'){actions=btn(state.paused?'继续体验':'暂停','pause','',state.scene==='lost'?'disabled':'')+btn('结束本局','endGame','danger');hint='保持在自己的活动区内。'}else if(state.page==='gameResult'){hint=game().id==='fruit-solo'?'':'微信扫码查看运动记录。'}$('#app').innerHTML=header()+`<main class="main">${views[state.page]()}</main>`+footer(hint,actions)+moduleDock();const notice=$('.notice-copy');if(notice)notice.classList.toggle('is-long',notice.scrollWidth>$('.notice-window').clientWidth);renderScenario();renderGameControls();renderReuseReview();renderSettlementReview();if(state.modal)renderModal();scale();renderResourceControl();renderStationReview();renderIdentityReportReview();if(state.page==='home')bindHomeRecommendationInteraction();if(['gamePlaying','resourcePlaying'].includes(state.page))timer=setInterval(tick,1000);refreshPrototypeHelp();}
+function render(){clearInterval(timer);clearInterval(homeRecommendationTimer);homeRecommendationTimer=null;homeQuickPressed=false;homeQuickElapsed=0;homeQuickLastTick=null;const i=pages.findIndex(p=>p[0]===state.page);$('#screen-label').textContent=String(i+1).padStart(2,'0')+' / '+pages[i][1];let actions='',hint='请根据自身状态运动；如有不适，请停止。';if(state.page==='resourcePlaying'){actions=btn(state.paused?'继续':'暂停','pause','',state.scene!=='normal'?'disabled':'')+btn('结束观看','resourceEnd','danger');hint='观看进度不作为个人有效运动时长。'}else if(state.page==='gamePlaying'){actions=btn(state.paused?'继续体验':'暂停','pause','',state.scene==='lost'?'disabled':'')+btn('结束本局','endGame','danger');hint='保持在自己的活动区内。'}else if(state.page==='gameResult'){hint=game().id==='fruit-solo'?'':'微信扫码查看运动记录。'}$('#app').innerHTML=isFruitStage()?`<main class="main fruit-screen" aria-label="水果切切乐 · ${state.page==='gamePrepare'?'站位准备':'正在互动'}">${views[state.page]()}</main>`:header()+`<main class="main">${views[state.page]()}</main>`+footer(hint,actions)+moduleDock();const notice=$('.notice-copy');if(notice)notice.classList.toggle('is-long',notice.scrollWidth>$('.notice-window').clientWidth);renderScenario();renderFruitReview();renderGameControls();renderReuseReview();renderSettlementReview();if(state.modal)renderModal();scale();renderResourceControl();renderStationReview();renderIdentityReportReview();if(state.page==='home')bindHomeRecommendationInteraction();if(['gamePlaying','resourcePlaying'].includes(state.page)||(state.page==='gamePrepare'&&state.fruitPrepareRunning))timer=setInterval(tick,1000);refreshPrototypeHelp();}
 
 
 function renderSettlementReview(){
@@ -611,7 +843,7 @@ function renderResourceControl(){let el=$('#resource-controls');if(!el){$('.unde
 
 
 function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
-function tick(){if(state.paused||state.modal||prototypeHelpState.open)return;if(state.page==='resourcePlaying'){if(state.scene!=='normal')return;state.resourceElapsed++;if(state.resourceElapsed>=resource().duration){nav('resourceResult');return;}$('#resource-time').textContent=fmt(state.resourceElapsed);$('.progress i').style.width=state.resourceElapsed/resource().duration*100+'%';return;}if(state.page==='gamePlaying'){state.gameTime--;$('#game-time').textContent=state.gameTime;if(game().kind==='pose'){for(let i=0;i<gameCount();i++){if(state.poseRemaining[i]>0){state.poseRemaining[i]--;if(state.poseRemaining[i]===0)addGamePoint(i,'保持完成 +1');}}refreshGameLanes();}else if(game().kind==='rhythm')refreshGameLanes();if(state.gameTime<=0)nav('gameResult')}}
+function tick(){if(state.paused||state.modal||prototypeHelpState.open)return;if(isFruitStage()&&($('#map').classList.contains('open')||(state.page==='gamePlaying'&&isFruitFeedback())))return;if(state.page==='gamePrepare'&&state.fruitPrepareRunning){advanceFruitPrepare();return;}if(state.page==='resourcePlaying'){if(state.scene!=='normal')return;state.resourceElapsed++;if(state.resourceElapsed>=resource().duration){nav('resourceResult');return;}$('#resource-time').textContent=fmt(state.resourceElapsed);$('.progress i').style.width=state.resourceElapsed/resource().duration*100+'%';return;}if(state.page==='gamePlaying'){state.gameTime--;$('#game-time').textContent=isFruitStage()?fruitTimerText():state.gameTime;if(game().kind==='pose'){for(let i=0;i<gameCount();i++){if(state.poseRemaining[i]>0){state.poseRemaining[i]--;if(state.poseRemaining[i]===0)addGamePoint(i,'保持完成 +1');}}refreshGameLanes();}else if(game().kind==='rhythm')refreshGameLanes();if(state.gameTime<=0)nav('gameResult')}}
 function scale(){const v=$('.viewport');$('#app').style.transform=`scale(${v.clientWidth/1600})`;schedulePrototypeHelpPosition()}
 const scenes={fitnessReport:[['normal','示例成绩'],['noHistory','暂无近期成绩']],followReport:[['normal','很好／不错 · 70分'],['perfect','完美／真棒 · 95分'],['noEvaluation','无评价 · 10分']],board:[['normal','今日榜单'],['empty','今日暂无记录']],library:[['normal','有内容'],['empty','本分类暂无内容']],resourcePlaying:[['normal','正常播放'],['lost','播放中断'],['loading','视频加载中'],['failed','视频加载失败']],gamePrepare:[['normal','全员人脸登录完成（模拟）'],['registered','新用户注册完成（模拟）'],['identityPending','身份待关联 · 不能开始'],['partial','部分人未关联 · 不能开始'],['none','无人进入 · 不能开始']],gameResult:[['normal','已自动上报（模拟）'],['reportPending','自动上报中（模拟）'],['reportFailed','上报失败自动重试（模拟）'],['reportPartial','多人部分失败重试（模拟）']],gamePlaying:[['normal','正常互动'],['lost','有人离区 · 本场暂停'],['lostTimeout','离区超时 · 提前结束']],rankings:[['normal','有符合条件的成绩'],['empty','暂无上榜记录']]};
 const fruitResultOptions=[['full','打满 · 350 分'],['zero','打满 · 0 分'],['early','提前结束 · 45 分'],['wide','长数字 · 1280 分']];
@@ -622,7 +854,9 @@ function supportsGroupSettlement(page){
   return page==='followReport'||(page==='fitnessReport'&&resource().id==='fitness-1');
 }
 function renderScenario(){
-  const options=state.page==='gameResult'&&game().id==='fruit-solo'?
+  const options=state.page==='gamePrepare'&&game().id==='fruit-solo'?fruitPrepareOptions:
+    state.page==='gamePlaying'&&game().id==='fruit-solo'?[scenes.gamePlaying[0],...fruitFeedbackOptions,...scenes.gamePlaying.slice(1)]:
+    state.page==='gameResult'&&game().id==='fruit-solo'?
     [...(state.gameReport?.fruitResult?[['normal','本局试玩结果'],...scenes.gameResult.slice(1,3)]:[]),...fruitResultOptions]:
     (scenes[state.page]||[['normal','本页默认状态']]).filter(([v])=>v!=='reportPartial'||gameCount()>1);
   if(supportsGroupSettlement(state.page))options.push(...groupReportScenes);
@@ -643,6 +877,10 @@ function closeModal(){
 function modalShell(body,label=''){$('.modal-shade')?.remove();$('#app').insertAdjacentHTML('beforeend',`<div class="modal-shade"><section class="modal" role="dialog" aria-modal="true"${label?` aria-label="${esc(label)}"`:''}>${body}</section></div>`);$('.modal-shade button')?.focus();refreshPrototypeHelp()}
 function renderModal(){
   const m=state.modal;
+  if(m==='fruitExit'){
+    modalShell(`<h2>结束本局？</h2><p>已获得的分数将计入本局结算。</p><div class="actions">${btn('继续游戏','closeModal')}${btn('结束本局','endGame','primary')}</div>`,'结束本局');
+    return;
+  }
   if(m==='groupFitnessPrepare'){
     const title=resource().title+'·多人训练准备';
     modalShell(`<h2>${esc(title)}</h2>
@@ -654,17 +892,23 @@ function renderModal(){
 function toast(text){$('.floating-note')?.remove();$('#app').insertAdjacentHTML('beforeend',`<div class="floating-note">${esc(text)}</div>`);clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('.floating-note')?.remove(),2200)}
 function hit(){gameHit(state.gameActivePlayer)}
 function action(a){
+  if(a==='fruitExit'){if(isFruitFeedback())applyScenario('normal');else openModal('fruitExit');return;}
   if(a==='replayGroupFitness'){
     if(state.page==='fitnessReport'&&groupReportSize())openModal('groupFitnessPrepare');
     return;
   }
   if(a==='openRecordQr'){openModal('recordQr');pauseHomeRecommendationTimer();return;}if(a==='systemSettings'){openModal('settings');return;}if(a==='resourceStart'){if(resource().category!=='media')return;state.resourceCategory='media';state.resourceElapsed=0;state.paused=false;nav('resourcePlaying');return;}if(a==='resourceRetry'){state.scene='normal';state.paused=false;render();return;}if(a==='resourceEnd'){openModal('resourceEnd');return;}if(a==='confirmResourceEnd'){nav('resourceResult');return;}if(a==='confirmLeaveActive'){if(state.page==='gamePlaying')completeDemoGameSession();if(state.pendingModule){const id=state.pendingModule;activateModule(id)}else nav(state.pendingNav);return;}if(pages.some(p=>p[0]===a)){if(['gamePlaying','resourcePlaying'].includes(state.page)&&a!==state.page){state.pendingModule=null;state.pendingNav=a;openModal('leaveActive');return;}nav(a);return;}switch(a){case'startGame':if(['none','partial','identityPending'].includes(state.scene))return;nav('gamePlaying');break;case'pause':state.paused=!state.paused;render();break;case'endGame':nav('gameResult');break;case'closeModal':closeModal();break;case'hit':hit();break;}}
-$('#app').addEventListener('click',e=>{const target=e.target.closest('button');if(!target||target.disabled)return;if(target.dataset.rankingMetric){state.rankingMetric=target.dataset.rankingMetric;render();return;}if(target.dataset.resourcePage){state.resourcePage+=Number(target.dataset.resourcePage);render();return;}if(target.dataset.homeCourseId){openCourse(target.dataset.homeCourseId);return;}if(target.dataset.action){action(target.dataset.action);return;}if(target.dataset.category){state.category=target.dataset.category;state.course=catalogue[state.category][0]?.id||'';state.filter='全部';state.catalogPage=0;state.playback='full';state.chapter=0;render()}if(target.dataset.course!==undefined){state.course=target.dataset.course;state.playback='full';state.chapter=0;state.followMode='single';nav('detail')}if(target.dataset.filter){state.filter=target.dataset.filter;state.catalogPage=0;render()}if(target.dataset.pageStep){state.catalogPage+=Number(target.dataset.pageStep);render()}if(target.dataset.playback){state.playback=target.dataset.playback;state.chapter=0;render()}if(target.dataset.followMode){state.followMode=target.dataset.followMode;state.scene='normal';render()}if(target.dataset.followChapter!==undefined){state.playback='chapter';state.chapter=Number(target.dataset.followChapter);render()}if(target.dataset.gameCategory){state.gameCategory=target.dataset.gameCategory;state.gameFilter='全部';state.gameCatalogPage=0;render()}if(target.dataset.gameFilter){state.gameFilter=target.dataset.gameFilter;state.gameCatalogPage=0;render()}if(target.dataset.gamePage){state.gameCatalogPage+=Number(target.dataset.gamePage);render()}if(target.dataset.gameCount){state.gamePlayers=Number(target.dataset.gameCount);state.scene='identityPending';render()}if(target.dataset.gameHit!==undefined){gameHit(Number(target.dataset.gameHit));return;}if(target.dataset.pose!==undefined){const i=Number(target.dataset.pose);if(!prototypeHelpState.open&&!state.paused&&state.scene!=='lost'&&!state.poseRemaining[i]){state.poseRemaining[i]=3;state.gameFeedback[i]='保持中';refreshGameLanes()}return;}if(target.dataset.game){state.game=target.dataset.game;state.gamePlayers=game().count;nav('gameRules')}});
-$('#scenario').addEventListener('change',e=>{state.scene=e.target.value;
+$('#app').addEventListener('click',e=>{const target=e.target.closest('button');if(!target||target.disabled)return;if(target.dataset.fruitTarget!==undefined){playFruitDemo('ordinary',Number(target.dataset.fruitTarget));return;}if(target.dataset.rankingMetric){state.rankingMetric=target.dataset.rankingMetric;render();return;}if(target.dataset.resourcePage){state.resourcePage+=Number(target.dataset.resourcePage);render();return;}if(target.dataset.homeCourseId){openCourse(target.dataset.homeCourseId);return;}if(target.dataset.action){action(target.dataset.action);return;}if(target.dataset.category){state.category=target.dataset.category;state.course=catalogue[state.category][0]?.id||'';state.filter='全部';state.catalogPage=0;state.playback='full';state.chapter=0;render()}if(target.dataset.course!==undefined){state.course=target.dataset.course;state.playback='full';state.chapter=0;state.followMode='single';nav('detail')}if(target.dataset.filter){state.filter=target.dataset.filter;state.catalogPage=0;render()}if(target.dataset.pageStep){state.catalogPage+=Number(target.dataset.pageStep);render()}if(target.dataset.playback){state.playback=target.dataset.playback;state.chapter=0;render()}if(target.dataset.followMode){state.followMode=target.dataset.followMode;state.scene='normal';render()}if(target.dataset.followChapter!==undefined){state.playback='chapter';state.chapter=Number(target.dataset.followChapter);render()}if(target.dataset.gameCategory){state.gameCategory=target.dataset.gameCategory;state.gameFilter='全部';state.gameCatalogPage=0;render()}if(target.dataset.gameFilter){state.gameFilter=target.dataset.gameFilter;state.gameCatalogPage=0;render()}if(target.dataset.gamePage){state.gameCatalogPage+=Number(target.dataset.gamePage);render()}if(target.dataset.gameCount){state.gamePlayers=Number(target.dataset.gameCount);state.scene='identityPending';render()}if(target.dataset.gameHit!==undefined){gameHit(Number(target.dataset.gameHit));return;}if(target.dataset.pose!==undefined){const i=Number(target.dataset.pose);if(!prototypeHelpState.open&&!state.paused&&state.scene!=='lost'&&!state.poseRemaining[i]){state.poseRemaining[i]=3;state.gameFeedback[i]='保持中';refreshGameLanes()}return;}if(target.dataset.game){state.game=target.dataset.game;state.gamePlayers=game().count;nav('gameRules')}});
+function applyScenario(scene){
+  state.scene=scene;
+  if(state.page==='gamePrepare'&&game().id==='fruit-solo')state.fruitPrepareRunning=false;
   if(state.modal==='groupFitnessPrepare')state.modal=null;
   if(state.page==='followReport')state.followMode=groupReportSize()?'multi':'single';if(state.page==='gamePlaying'&&state.scene==='lostTimeout'){nav('gameResult');return;}
   if(state.page==='gamePlaying'||state.page==='resourcePlaying')state.paused=state.scene==='lost';
-  if(state.page==='gameResult'&&state.gameReport&&!Object.hasOwn(fruitResultExamples,state.scene)){const report=state.gameReport;report.status=demoReportState().status;report.records.forEach((r,i)=>r.status=state.scene==='reportPartial'?(i===report.records.length-1?'retrying':'reported'):report.status)}render()});
+  if(state.page==='gameResult'&&state.gameReport&&!Object.hasOwn(fruitResultExamples,state.scene)){const report=state.gameReport;report.status=demoReportState().status;report.records.forEach((r,i)=>r.status=state.scene==='reportPartial'?(i===report.records.length-1?'retrying':'reported'):report.status)}
+  render();
+}
+$('#scenario').addEventListener('change',e=>applyScenario(e.target.value));
 $('#reset').onclick=()=>{homeQuickIndices.fill(0);Object.assign(state,{gameSession:null,gameReport:null,reportQueue:[],sessionSequence:0,rankingMetric:'duration',resourceCategory:'fitness',resourceId:'fitness-1',resourcePage:0,resourceReturn:'home',resourceElapsed:0,followMode:'single',mediaFilter:'全部',fitnessFilter:'全部',page:'home',category:'健身气功',course:'baduan-standard',filter:'全部',catalogPage:0,playback:'full',chapter:0,ready:1,scene:'normal',paused:false,gameScore:0,gameTime:60,modal:null,game:'fruit-solo',gameCategory:'单人',gameFilter:'全部',gameCatalogPage:0,gamePlayers:1});nav('home')};
 function renderPageMap(){
   const cards={web:[],native:[]};
@@ -704,7 +948,10 @@ function prototypeHelpItems(){
       add('dialog-record-qr','.modal .mini-qr','运动记录查询码','展示通用微信小程序码。','使用微信扫码，在小程序里查询本人记录。','原型码为示意。');
       modalButton('closeModal','关闭','关闭浮窗并留在首页。');
     }
-    if(state.modal==='resourceEnd'){
+    if(state.modal==='fruitExit'){
+      modalButton('closeModal','继续游戏','关闭退出确认，保留当前分数与剩余时间。');
+      modalButton('endGame','结束本局','冻结本局分数并查看结算。','未打满60秒显示「本局提前结束」。');
+    }else if(state.modal==='resourceEnd'){
       modalButton('closeModal','继续观看','关闭结束确认，回到当前视频播放状态。','保留当前观看进度。');
       modalButton('confirmResourceEnd','结束观看','进入观看结束页，可重新观看或返回视频列表。','纯视频观看不计入今日运动榜。');
     }else if(state.modal==='leaveActive'){
@@ -833,9 +1080,24 @@ function prototypeHelpItems(){
     add('game-detail-media','.activity-preview','玩法多媒体区域','左侧展示玩法示意，正式内容可替换为说明动画或视频。','当前为静态玩法图示，无独立播放操作。','玩法展示不是实际摄像头识别效果。');
     add('game-detail-meta','.lesson-meta','动作与每局时长','展示当前项目的主要动作及每局'+g.seconds+'秒。','信息展示，开始入口在右下角。','时长用于候选玩法演示，正式首发参数另行确认。');
     add('game-detail-tags','.detail-tags','人数与玩法标签','显示'+g.category+'及“'+g.mode+'”'+(g.category==='多人'?'和可选人数范围':'')+'。','用于确认当前项目类型，无点击操作。','单人、双人不再重复展示相同含义的数字标签。');
-    add('game-detail-rules','.activity-steps','玩法步骤','按顺序说明站位、主要动作和玩法反馈。','阅读后进入站位准备。',g.kind==='slice'?'水果切切乐保留连续切中和中心切过额外加分要求；连击窗口、中心范围及分值尚未定案，原型仍仅模拟切中+1。':'保持各自活动区域，不以交叉跑动和追逐作为当前玩法。');
+    add('game-detail-rules','.activity-steps','玩法步骤','按顺序说明站位、主要动作和玩法反馈。','阅读后进入站位准备。',g.id==='fruit-solo'?'可模拟普通切中、果心、连切及果心与连切叠加。':'保持各自活动区域，不以交叉跑动和追逐作为当前玩法。');
     add('game-detail-score','.detail-fact','PK计分方式',g.mode==='分队PK'?'1、2号组成A队，3、4号组成B队，按队伍完成次数比较。':'比较双方在同一局、同一规则下的完成次数。','开始后各区域独立计数，结束页显示本局领先或打平。','只在PK项目显示；不与其他项目的成绩混排行。');
     add('game-detail-prepare','[data-action="gamePrepare"]','去站位准备','确认玩法后进入本局活动区域准备页。','点击后按当前项目显示所需站位。','尚未开始计时或计分。');
+  }
+
+  if(isFruitStage()){
+    const preparing=state.page==='gamePrepare';
+    if(preparing){
+      add('fruit-stand','.fruit-range','站位区','未进框时显示站位指引，进框后逐步点亮站位区。','点画面上方「连贯演示」体验自动确认，或点选任一站位状态单独查看。','倒计时前离框回到站位指引，尚未开始计时或计分。');
+      add('fruit-stand-status','.fruit-stand-status,.fruit-start-overlay','区域确认与开局倒计时','站稳后依次展示区域已确认、3、2、1、GO!','倒计时完成后自动进入60秒游戏。','头像昵称为原型的模拟身份。');
+    }else{
+      add('fruit-live-score','.fruit-player','玩家与本局总分','左上角显示本次关联的模拟玩家和实时总分。','切中后立即增加对应分数。','普通 +10，果心另加 +5，同手同次挥切从第二果起每果另加 +10。');
+      add('fruit-live-timer','.fruit-clock','本局剩余时间','右上显示这局的剩余时间。','到零自动结算；结束确认和离区暂停时保留当前时间。');
+      add('fruit-live-targets','.fruit-target','水果目标与命中反馈','切中时展示水果分离与单果加分，果心带心形；连切显示 COMBO。','画面上方可切换四种定格反馈；实时试玩中，可点击水果或使用画面下方模拟控件。','定格状态不改变本局时间和成绩；模拟输入不计有效挥切时间。');
+      add('fruit-live-lost','.fruit-lost-overlay','离区暂停','暂停计时和加分，提示回到活动区。','通过演示状态恢复，或选择离区超时进入提前结算。');
+    }
+    add('fruit-stage-exit','.fruit-exit','退出',preparing?'结束站位准备，回到玩法说明。':'打开结束确认。',preparing?'点击后直接返回，不生成本局成绩。':'确认后将当前成绩冻结为本局结算。');
+    return items;
   }
 
   if(state.page==='gamePrepare'){
@@ -850,7 +1112,7 @@ function prototypeHelpItems(){
   if(state.page==='gamePlaying'){
     const g=game();
     add('game-live-status','.main>.row.between .hint','互动状态提示','提示保持区域、当前节拍、暂停或有人离区。','状态随本局演示状态更新。','离区状态暂停全场；当前并未接入真实检测。');
-    add('game-live-score','.game-scorebar>span:nth-child(1)','本局完成累计','展示当前参与者完成次数之和。','符合当前模拟规则的动作输入增加相应区域次数，同时更新累计。','不是跨项目综合得分；水果额外加分尚未实现。');
+    add('game-live-score','.game-scorebar>span:nth-child(1)','本局完成累计','展示当前参与者完成次数之和。','符合当前模拟规则的动作输入增加相应区域次数，同时更新累计。','本区域完成次数仅用于当前项目。');
     add('game-live-countdown','.game-scorebar>span:nth-child(2)','本局倒计时','显示本局剩余秒数。','计时到零后自动进入本局结果。','暂停、确认弹窗打开或离区时不继续计时。');
     add('game-live-mode','.game-scorebar>span:nth-child(3)','人数与协作方式','显示本场人数及协作、PK或分队方式。','用于理解各活动区的关系，无点击交互。','与准备页所选人数一致，不在进行中改变参与人数。');
     add('game-live-lanes','#play-lanes','每人活动区域','每个参与者有独立的站位编号、本人完成次数、动作提示和即时反馈。','在自己的区域内响应当前玩法；原型通过点击或外部模拟控件输入动作。','暂停或离区时不计次；区域号不是永久身份。');
@@ -968,6 +1230,12 @@ function openLocation(page){
       state.resourceCategory='fitness';
       state.resourceId='fitness-1';
     }
+    nav(page,false);
+    return;
+  }
+  if((page==='gamePrepare'&&fruitPrepareOptions.some(([id])=>id===sample))||
+    (page==='gamePlaying'&&isFruitFeedback(sample))){
+    state.scene=sample;
     nav(page,false);
     return;
   }
