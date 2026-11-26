@@ -349,7 +349,7 @@ function groupSettlement(title,kind,count){
             <th scope="row"><button type="button" class="group-person" data-select-curve="${person.id}" aria-pressed="false">
               <span class="group-series-key" aria-hidden="true"></span><span class="rank-avatar" aria-hidden="true">${esc(person.name.slice(0,1))}</span><span class="group-person-name">${esc(person.name)}</span>
             </button></th>
-            ${follow?`<td>${followReportValue(person.score)}</td><td>${followReportValue(person.perfect)}</td><td>${followReportValue(person.great)}</td>`:`<td>${person.completed}</td><td>${person.kcal}</td>`}
+            ${follow?`<td>${followReportValue(person.score)}</td><td>${person.perfect??0}</td><td>${person.great??0}</td>`:`<td>${person.completed}</td><td>${person.kcal}</td>`}
           </tr>`).join('')}</tbody>
         </table>
       </section>
@@ -431,7 +431,7 @@ function followReport(){
             </div>
             <dl class="follow-report-summary">
               <div><dt>运动时长</dt><dd class="follow-report-duration">${minutes}<small>分</small>${seconds}<small>秒</small></dd></div>
-              ${followRatingLabels.map((label,i)=>`<div><dt>${label}</dt><dd>${followReportValue(example.counts[i])}</dd></div>`).join('')}
+              ${followRatingLabels.map((label,i)=>`<div><dt>${label}</dt><dd>${example.counts[i]??0}</dd></div>`).join('')}
             </dl>
           </div>
           <section class="follow-fatigue" aria-label="运动疲劳程度">
@@ -795,7 +795,7 @@ function prototypeHelpItems(){
     if(fitness)add('settlement-charts','.settlement-charts',state.scene==='noHistory'?'运动曲线':'运动曲线与近期成绩','运动曲线展示本次运动过程。有本人同项目的可展示记录时，右侧展示近期成绩。','可切换演示状态核对无近期成绩时的布局。','无可展示的近期成绩时隐藏整张卡片，运动曲线占满该行。');
     else {
       add('settlement-follow-score','.follow-report-score','运动评分','展示本次运动评分。','通过设备外演示状态切换结算样例。','无动作评价时，已有运动评分照常显示。');
-      add('settlement-follow-metrics','.follow-report-summary','运动时长与动作评价','显示运动时长以及完美、真棒、很好、不错四项的次数。','切换报告状态时更新数字，四项位置固定。','真实0次显示0，缺失显示—。');
+      add('settlement-follow-metrics','.follow-report-summary','运动时长与动作评价','显示运动时长以及完美、真棒、很好、不错四项的次数。','切换报告状态时更新数字，四项位置固定。','没有对应评价的项目显示0次。');
       add('settlement-follow-fatigue','.follow-fatigue','运动疲劳程度','展示0～10疲劳刻度、当前1档及“很轻松，就像散步一样。”提示。','只读展示，并提供轻松、稍累、累、很累、超累五个参考标签。','三种截图样例均为1档；原型不推断疲劳算法或将该项变成额外问卷。');
     }
     add('settlement-participant','.settlement-participant','本次参与者','展示这份报告对应的用户头像和昵称。','运动开始前完成登录或注册，报告读取本场关联账号。','多人场次的身份与成绩按报告逐人对应。原型展示示例身份。');
