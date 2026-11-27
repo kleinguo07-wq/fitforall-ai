@@ -14,6 +14,13 @@ ROOT = Path(__file__).resolve().parents[1]
 DESTINATION = ROOT / "projects" / "landscape" / "v1.0"
 VERSION_DATE = "2026-11-04"
 DATA_KEYS = {"source", "itemId", "refs", "priority", "difficulty", "risks"}
+TRAINING_MEDIA_SOURCE = "设计参考/训练演示/"
+TRAINING_MEDIA_DESTINATION = "training-media/"
+TRAINING_MEDIA = {
+    "训练画面示意.jpg": "camera-preview.jpg",
+    "举右手示意.jpg": "raise-hand-preview.jpg",
+    "八段锦-示范片段.mp4": "baduanjin-preview.mp4",
+}
 
 
 def replace_once(text, old, new):
@@ -112,6 +119,14 @@ def derive(source_text):
     text = replace_once(text,
         '<a class="tool" href="趣味运动-调研与候选项目-v0.4.html">玩法调研</a>', "")
     text = text.replace("本地评审稿", "公开评审原型")
+    if TRAINING_MEDIA_SOURCE in text:
+        text = replace_once(text,
+            f"const exerciseMedia='{TRAINING_MEDIA_SOURCE}';",
+            f"const exerciseMedia='{TRAINING_MEDIA_DESTINATION}';")
+        for local_name, public_name in TRAINING_MEDIA.items():
+            text = replace_once(text,
+                f'${{exerciseMedia}}{local_name}',
+                f'${{exerciseMedia}}{public_name}')
     audit(text)
     return text
 
@@ -124,10 +139,16 @@ def main():
     try:
         source_bytes = args.source.read_bytes()
         public_html = derive(source_bytes.decode("utf-8"))
+        training_assets = {}
+        if TRAINING_MEDIA_DESTINATION in public_html:
+            training_assets = {
+                public_name: (args.source.parent / TRAINING_MEDIA_SOURCE / local_name).read_bytes()
+                for local_name, public_name in TRAINING_MEDIA.items()
+            }
         version = {
             "title": "横屏v1.0交互原型", "version": "v1.0", "date": VERSION_DATE,
             "status": "交互原型", "entry": "index.html#home",
-            "updated": "2026-11-26",
+            "updated": "2026-11-27",
             "admin_entry": "admin.html#videos",
             "admin_requirements": "admin-requirements.md",
             "tracking_entry": "tracking.html",
@@ -139,6 +160,11 @@ def main():
             "source_sha256": hashlib.sha256(source_bytes).hexdigest(),
         }
         DESTINATION.mkdir(parents=True, exist_ok=True)
+        if training_assets:
+            media_destination = DESTINATION / TRAINING_MEDIA_DESTINATION
+            media_destination.mkdir(exist_ok=True)
+            for name, contents in training_assets.items():
+                (media_destination / name).write_bytes(contents)
         (DESTINATION / "index.html").write_text(public_html, encoding="utf-8")
         (DESTINATION / "version.json").write_text(
             json.dumps(version, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

@@ -228,27 +228,153 @@
 @keyframes fruit-split {to {transform:translate(var(--split-x,-25px),var(--split-y,-16px)); opacity:0}}
 @keyframes fruit-pop-in {0% {opacity:0; transform:translateY(12px)} 12%,75% {opacity:1} 100% {opacity:0;transform:translateY(-18px)}}
 @media (prefers-reduced-motion:reduce) {.fruit-pop b,.fruit-halves i {animation:none}}
+/* Full-display training. Review controls sit outside the simulated device. */
+.exercise-screen.main{position:absolute;inset:0;width:auto;height:auto;padding:0;overflow:hidden;background:#102b35;color:#f5fafb}
+.exercise-camera{position:absolute;inset:0;overflow:hidden;background:#2e4b49}
+.exercise-scene-photo{position:absolute;inset:0;overflow:hidden;background:#3a5550}
+.exercise-scene-photo img{position:absolute;display:block;width:200%;height:100%;max-width:none;object-fit:fill}
+.exercise-camera> .exercise-scene-photo{width:min(100%,820px);height:100%;left:50%;transform:translateX(-50%);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.exercise-scene-photo.is-camera img{right:0}
+.exercise-gesture-frame{opacity:0}
+.exercise-group-calibration.is-raising .exercise-gesture-frame{opacity:1}
+.exercise-scene-photo.is-instructor img{left:0}
+.exercise-camera-tint{position:absolute;inset:0;background:linear-gradient(180deg,#071b25ad 0%,#112a310a 27%,#102b3405 58%,#071b25db 100%)}
+.exercise-live-header{position:absolute;inset:38px 46px auto;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;z-index:2}
+.exercise-live-title{font-size:40px;line-height:1.1;margin:12px 0 0;color:inherit}
+.exercise-mode{font-size:22px;font-weight:650;letter-spacing:.04em;color:#cef3ea}
+.exercise-chip{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:100px;background:#102b35dc;color:#f7fafb;font-size:23px;font-weight:600}
+.exercise-stand-frame{position:absolute;left:50%;bottom:16%;width:340px;height:600px;transform:translateX(-50%);border:4px dashed #d4e9e7;border-radius:32px;background:#b9fded09;box-shadow:0 0 0 1px #132f3980}
+.exercise-stand-frame[data-status="charging"],.exercise-stand-frame[data-status="ready"]{border-color:#8bffb8;background:#43eb9a14}
+.exercise-stand-mark{position:absolute;bottom:5px;left:50%;width:180px;height:47px;transform:translateX(-50%);border:2px solid #deffefac;border-radius:50%;background:#0f282f4a}
+.exercise-stand-mark i{display:block;height:100%;width:var(--fill,0%);background:#78e9a9;border-radius:inherit;transition:width .12s linear}
+.exercise-calibration-copy{position:absolute;left:50%;bottom:37px;transform:translateX(-50%);width:max-content;max-width:1050px;text-align:center;text-shadow:0 2px 9px #09202c}
+.exercise-calibration-copy h2{color:white;font-size:45px;line-height:1.15;margin:0}
+.exercise-calibration-copy p{font-size:24px;margin:12px 0 0;color:#def3f2}
+.exercise-countdown{position:absolute;inset:0;z-index:3;display:grid;place-items:center;color:#fff;background:#091e2b80;font-size:180px;font-weight:760;font-variant-numeric:tabular-nums}
+.exercise-countdown[hidden],.exercise-overlay[hidden],.exercise-review[hidden]{display:none}
+.exercise-back{position:absolute;bottom:39px;left:46px;z-index:4}
+.exercise-screen .exercise-button{min-width:112px;min-height:58px;border:1px solid #ffffff65;background:#122c36dd;color:#f9ffff;font-size:23px;border-radius:12px}
+.exercise-screen .exercise-button:hover{background:#24505d}
+.exercise-camera-label{display:inline-flex;align-items:center;gap:10px}
+.exercise-pip{display:inline-block;width:11px;height:11px;background:#8df2b6;border-radius:50%;flex:none}
+.exercise-roster{position:absolute;z-index:2;top:151px;left:46px;width:258px;padding:15px 18px;border-radius:19px;background:#092834e8;border:1px solid #ffffff26}
+.exercise-roster h2{margin:0 0 11px;color:white;font-size:26px}
+.exercise-roster ol{list-style:none;padding:0;margin:0;display:grid;gap:7px}
+.exercise-roster li{display:grid;grid-template-columns:37px 1fr;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;background:#ffffff0e;font-size:20px;min-height:45px}
+.exercise-roster li i{font-style:normal;text-align:center;color:#a3d3dc;font-weight:700}
+.exercise-roster li[data-status="ready"],.exercise-roster li[data-status="charging"]{background:#245b4c;color:#ddfff1}
+.exercise-zones{position:absolute;z-index:1;left:22%;right:7%;top:49%;bottom:167px}
+.exercise-zone{position:absolute;display:grid;place-content:center;justify-items:center;gap:6px;width:var(--w);height:var(--h);left:var(--x);top:var(--y);transform:translateX(-50%);color:white;font-variant-numeric:tabular-nums}
+.exercise-zone::before,.exercise-zone::after{content:'';position:absolute;inset:0;clip-path:polygon(9% 0,91% 0,100% 100%,0 100%);background:#b1e6ebd9;z-index:-2}
+.exercise-zone::after{inset:3px;background:#194854de;z-index:-1}
+.exercise-zone[data-status="charging"]::before,.exercise-zone[data-status="ready"]::before{background:#a6ffbf}
+.exercise-zone[data-status="charging"]::after,.exercise-zone[data-status="ready"]::after{background:#24664fe8}
+.exercise-zone b{font-size:29px;line-height:1}
+.exercise-zone .exercise-zone-status{font-size:17px;white-space:nowrap}
+.exercise-progress{height:7px;width:72px;background:#0b302c8a;border-radius:10px;overflow:hidden}
+.exercise-progress i{display:block;height:100%;width:var(--fill,0%);background:#abffc7;transition:width .12s linear}
+.exercise-group-calibration .exercise-camera> .exercise-scene-photo{width:950px;left:56%}
+.exercise-group-calibration .exercise-calibration-copy{left:58%}
+.exercise-group-training .exercise-live-header{right:530px}
+.exercise-group-training .exercise-workout-metrics{padding:10px 16px;border:1px solid #a6dcd03d;border-radius:12px;background:#102b35dc}
+.exercise-group-training .exercise-overlay{inset:0 0 85px;z-index:3}
+.exercise-group-training .exercise-bottom{z-index:4}
+.exercise-group-training .exercise-roster{width:276px;padding-inline:12px}
+.exercise-group-training .exercise-roster li.has-score{grid-template-columns:20px minmax(0,1fr) auto 40px;gap:5px}
+.exercise-group-training .exercise-roster li[data-status="away"]{background:#ffffff0e;color:#d1deec}
+.exercise-group-training .exercise-roster li.has-score .rank-avatar{width:22px;height:22px;font-size:13px;flex:none}
+.exercise-group-training .exercise-roster li.has-score>span{display:flex;align-items:center;gap:5px;min-width:0;font-size:16px;white-space:nowrap}
+.exercise-group-training .exercise-roster li.has-score strong{font-size:20px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.exercise-group-training .exercise-roster li.has-score strong small{margin-left:2px;font-size:15px}
+.exercise-group-training .exercise-roster li.has-score>.exercise-motion-feedback{display:block;text-align:center;font-size:15px}
+.exercise-zone[data-status="away"]::before{background:#c9baa0}
+.exercise-zone[data-status="away"]::after{background:#544a3ce8}
+.exercise-group-windows{position:absolute;inset:0}
+.exercise-group-pane{position:absolute;inset:0;overflow:hidden}
+.exercise-group-pane>header{display:none;justify-content:space-between;gap:10px;align-items:center;height:42px;padding:0 15px;color:#cde6e4;font-size:20px}
+.exercise-group-pane>header b{color:white}
+.exercise-group-window-body{position:absolute;inset:0;overflow:hidden}
+.exercise-group-camera-stage{position:absolute;inset:0}
+.exercise-group-windows[data-main-view="demo"] .exercise-group-camera,
+.exercise-group-windows[data-main-view="camera"] .exercise-group-video{inset:38px 46px auto auto;width:420px;height:280px;z-index:2;border:1px solid #bddfdd60;border-radius:15px;background:#102b35}
+.exercise-group-windows[data-main-view="demo"] .exercise-group-camera>header,
+.exercise-group-windows[data-main-view="camera"] .exercise-group-video>header{display:flex}
+.exercise-group-windows[data-main-view="demo"] .exercise-group-camera .exercise-group-window-body,
+.exercise-group-windows[data-main-view="camera"] .exercise-group-video .exercise-group-window-body{top:42px}
+.exercise-group-windows[data-main-view="demo"] .exercise-group-camera-stage{width:1600px;height:900px;transform:scale(.26125);transform-origin:top left}
+.exercise-group-windows[data-main-view="demo"] .exercise-group-camera-stage .exercise-zone b{font-size:44px}
+.exercise-group-windows[data-main-view="demo"] .exercise-group-camera-stage .exercise-zone-status{display:none}
+.exercise-group-video .exercise-workout-media{inset:326px 46px 85px 328px;background:#102b35}
+.exercise-group-windows[data-main-view="camera"] .exercise-group-video .exercise-workout-media{inset:0}
+.exercise-group-video video{position:absolute;inset:0}
+.exercise-group-video .exercise-workout-media>.exercise-scene-photo{width:44%}
+.exercise-screen .exercise-swap{position:absolute;top:264px;right:344px;z-index:4;min-width:110px;min-height:42px;padding:7px 13px;font-size:21px;background:#102b35ed}
+.exercise-group-training .exercise-zone .exercise-zone-status{font-size:18px}
+.exercise-workout{height:100%;display:grid;grid-template-columns:52fr 48fr;gap:3px;background:#1e3d49}
+.exercise-workout-pane{position:relative;overflow:hidden;min-width:0;background:#0e2832}
+.exercise-workout-head{position:absolute;inset:0 0 auto;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:15px;min-height:119px;padding:23px 32px;background:#102b35;color:#fff}
+.exercise-workout-head h1{margin:7px 0 0;font-size:34px;color:#fff;line-height:1.18}
+.exercise-workout-head p{margin:0;color:#b8ddd9;font-size:21px}
+.exercise-workout-title{flex:0 1 40%;min-width:0}
+.exercise-workout-title h1,.exercise-workout-title p{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.exercise-workout-media,.exercise-workout .exercise-camera{position:absolute;inset:119px 0 85px}
+.exercise-workout-media{display:grid;place-items:center;background:#e6e9e4;color:#244b43}
+.exercise-workout-media:has(.is-instructor){background:#e9e0da}
+.exercise-workout-media video{width:100%;height:100%;object-fit:contain;background:#0c222b}
+.exercise-workout-media> .exercise-scene-photo{inset:0 auto;width:70%;left:50%;transform:translateX(-50%)}
+.exercise-workout-media .thumb{width:46%;height:auto;aspect-ratio:5/4}
+.exercise-workout .exercise-camera> .exercise-scene-photo{width:100%;mask-image:none}
+.exercise-media-label{position:absolute;z-index:1;bottom:17px;left:21px;border-radius:8px;background:#102b35e6;color:white;padding:7px 12px;font-size:18px}
+.exercise-workout-metrics{display:flex;align-items:center;gap:26px;font-variant-numeric:tabular-nums}
+.exercise-workout-metrics div{display:grid;gap:3px;min-width:104px}
+.exercise-workout-metrics dl,.exercise-workout-metrics dd{margin:0}
+.exercise-workout-metrics dt{white-space:nowrap;color:#c6dfde;font-size:19px}
+.exercise-workout-metrics dd{font-size:47px;font-weight:700;line-height:1;color:#fff}
+.exercise-workout-metrics dd small{font-size:22px;margin-left:5px;color:#aaf4cb}
+.exercise-score-card{display:flex;align-items:center;justify-content:space-between;gap:15px;flex:1;min-width:0;padding:10px 16px;border:1px solid #a6dcd03d;border-radius:13px;background:#21434b}
+.exercise-score-person{display:flex;align-items:center;gap:12px;min-width:0}
+.exercise-score-person .rank-avatar{display:grid;place-items:center;width:52px;height:52px;flex:none;font-size:23px;background:#d6eee0;color:#153e36}
+.exercise-score-name{display:grid;gap:2px;min-width:0}
+.exercise-score-name strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:28px;line-height:1.15}
+.exercise-score-card .exercise-workout-metrics{flex:none;padding-left:16px;border-left:1px solid #a6dcd052}
+.exercise-score-card .exercise-workout-metrics dd{font-size:39px}
+.exercise-score-card .exercise-motion-feedback{width:66px;padding:5px 7px;text-align:center;font-size:19px}
+.exercise-motion-feedback{color:#ccffe4;font-weight:650;line-height:1.35;border-radius:6px}
+.exercise-motion-feedback:not(:empty){background:#45756a66}
+.exercise-bottom{position:absolute;inset:auto 0 0;min-height:85px;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:#102b35;color:#deeeee;font-size:22px;z-index:3}
+.exercise-bottom-progress{position:absolute;inset:0 0 auto;height:4px;background:#ffffff20}
+.exercise-bottom-progress i{display:block;width:var(--fill,0%);height:100%;background:#76dba7}
+.exercise-bottom .exercise-button{min-height:52px}
+.exercise-overlay{position:absolute;inset:119px 0 85px;display:grid;place-content:center;text-align:center;gap:10px;z-index:2;background:#092530c9;color:#fff;font-size:27px}
+.exercise-overlay b{font-size:45px}
+.exercise-review{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 12px;margin:0 0 12px;background:#f8faf5;border:1px solid #d2ddcf;border-radius:9px;font-size:13px;color:#315245}
+.exercise-review .tool,.exercise-review select{min-height:34px;padding:4px 10px}
+.exercise-report-duration{font-variant-numeric:tabular-nums}
+@media(prefers-reduced-motion:reduce){.exercise-progress i,.exercise-stand-mark i{transition:none}}
 </style></head><body>
 <header class="review"><div class="review-left"><div class="review-brand"><b>公园横屏 / 交互原型</b><small>v1.0方案定版 · 公开评审原型 · 2026.11.04</small></div><nav class="review-secondary" aria-label="项目与说明"><a class="tool" href="../">返回横屏项目</a><a class="tool" href="../../../">项目总览</a></nav></div><div class="review-actions"><button class="tool" id="map-toggle">页面总览</button><button class="tool" id="help-toggle" aria-expanded="false" aria-controls="prototype-help-panel">原型说明</button><button class="tool" id="fullscreen">全屏查看</button></div></header>
 <main class="workspace"><div class="meta"><b id="screen-label">01 / 首页</b><span>身份、上报、运动、环境与小程序均为模拟 · 未接入真实服务</span></div><div class="prototype-review-layout" id="prototype-review-layout"><div class="device"><div class="viewport"><div class="screen" id="app"></div><div class="prototype-help-layer" id="prototype-help-layer" hidden></div></div></div><aside class="prototype-help-panel" id="prototype-help-panel" aria-label="当前页面原型说明" hidden><div class="prototype-help-heading"><div><span>逐项功能说明</span><h2 id="prototype-help-title"></h2></div><button class="help-close" id="help-close" aria-label="关闭原型说明">×</button></div><p class="prototype-help-intro">点击画面编号或下方条目，对照查看操作与规则。阅读期间，推荐轮换和运动计时暂缓。</p><div class="prototype-help-list" id="prototype-help-list"></div></aside></div><div class="underbar"><span>16:9 设备界面 · 点击按钮体验流程 · 设备外控件仅用于评审</span><div class="scenario"><label for="scenario">演示状态</label><select id="scenario"></select><button class="tool" id="reset">重置演示</button></div></div></main><div class="review-modal" id="map"><section class="screen-map"><div class="row between"><h2>页面总览 / 点击进入</h2><button class="tool" id="map-close">关闭</button></div><div class="map-grid" id="map-grid"></div></section></div>
 <script>
 'use strict';
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const pages=[['home','首页'],['library','内容 · 分类目录'],['resourceDetail','内容 · 项目详情'],['resourcePlaying','运动视频 · 播放中'],['resourceResult','运动视频 · 观看结束'],['courses','跟练 · 选择课程'],['detail','跟练 · 课程详情与模式'],['games','趣味运动 · 选择玩法'],['gameRules','趣味运动 · 玩法说明'],['gamePrepare','趣味运动 · 运动准备'],['gamePlaying','趣味运动 · 正在互动'],['gameResult','趣味运动 · 本局结果','web'],['board','本站服务'],['rankings','本站服务 · 排行榜'],['records','本站服务 · 运动记录'],['fitnessReport','体能单项 · 结算示例','web'],['followReport','AI跟练 · 结算示例','web']];
+const pages=[['home','首页'],['library','内容 · 分类目录'],['resourceDetail','内容 · 项目详情'],['resourcePlaying','运动视频 · 播放中'],['resourceResult','运动视频 · 观看结束'],['courses','跟练 · 选择课程'],['detail','跟练 · 课程详情与模式'],['games','趣味运动 · 选择玩法'],['gameRules','趣味运动 · 玩法说明'],['gamePrepare','趣味运动 · 运动准备'],['gamePlaying','趣味运动 · 正在互动'],['gameResult','趣味运动 · 本局结果','web'],['board','本站服务'],['rankings','本站服务 · 排行榜'],['records','本站服务 · 运动记录'],['fitnessReport','体能单项 · 结算示例','web'],['followReport','AI跟练 · 结算示例','web'],
+  ['fitnessCalibration','体能单项 · 全屏校准'],['fitnessTraining','体能单项 · 训练中'],
+  ['followCalibration','AI跟练 · 单人全屏校准'],['followTraining','AI跟练 · 跟练中'],
+  ['followGroupCalibration','AI跟练 · 多人站位'],['fitnessGroupCalibration','体能训练 · 多人站位']];
 const categories=["健身气功", "健身体操", "专项提升"];
 const catalogue={"健身气功":[{"id":"baduan-easy","title":"八段锦 简易版","family":"八段锦","duration":null,"label":"健身气功","segments":[]},{"id":"baduan-standard","title":"八段锦","family":"八段锦","duration":null,"label":"健身气功","segments":[]},{"id":"taiji-eight","title":"八式太极拳","family":"太极拳","duration":null,"label":"健身气功","segments":[]},{"id":"wuqin-standard","title":"五禽戏","family":"五禽戏","duration":null,"label":"健身气功","segments":[{"title":"预备势（起势调息）","description":"自然站立，放松肩颈，调整呼吸，为整套练习做好准备。","duration":null},{"title":"第一式·虎举","description":"双手上举，撑掌握拳，伸展肩臂与躯干，感受全身向上舒展。","duration":null},{"title":"第二式·虎扑","description":"引腰伸背，双手前扑，配合身体起伏，活动腰背与肩臂。","duration":null},{"title":"第三式·鹿抵","description":"转腰回望，双手呈鹿角状伸展，活动腰部，练习转体协调。","duration":null},{"title":"第四式·鹿奔","description":"双臂前伸，拱背后坐，舒展肩背，感受躯干的屈伸变化。","duration":null},{"title":"第五式·熊运","description":"双手置于腹前，随腰腹缓缓转动，动作圆活连贯。","duration":null},{"title":"第六式·熊晃","description":"左右迈步，身体随重心转换自然晃动，练习步伐与躯干协调。","duration":null},{"title":"第七式·猿提","description":"提踵耸肩，收腹提手，再缓缓放松，练习身体提起与落下的控制。","duration":null},{"title":"第八式·猿摘","description":"转头顾盼，上步摘果，配合手眼与步伐变化，练习动作协调。","duration":null},{"title":"第九式·鸟伸","description":"双臂后伸，一腿向后抬起，舒展肩胸，练习单腿支撑。","duration":null},{"title":"第十式·鸟飞","description":"双臂如展翅般起落，配合交替提腿，练习身体平衡与动作协调。","duration":null},{"title":"收势（引气归元）","description":"双手缓缓上举、下落，呼吸自然，放松身体，平稳结束练习。","duration":null}]},{"id":"yijin-standard","title":"易筋经","family":"易筋经","duration":null,"label":"健身气功","segments":[{"title":"韦驮献杵","description":"双手由胸前合掌，逐步向两侧伸展、向上托举，舒展肩胸与全身。","duration":null},{"title":"摘星换斗势","description":"一手上托，一手置于背后，配合转头回望，伸展躯干，活动肩背。","duration":null},{"title":"倒拽九牛尾势","description":"两脚前后站立，双臂随转体交替牵拉，活动肩臂与腰背。","duration":null},{"title":"出爪亮翅势","description":"双掌向前推出，再缓缓收回，配合展肩扩胸，练习肩臂伸展与控制。","duration":null},{"title":"九鬼拔马刀势","description":"双手分别置于颈后与背后，配合转体俯身，伸展肩背与腰部。","duration":null},{"title":"三盘落地势","description":"两脚开立，屈膝下蹲，双掌下按再翻掌托起，练习下肢支撑与身体起落。","duration":null},{"title":"青龙探爪势","description":"单手向侧方探出，随转腰俯身划弧，活动腰背，练习上下肢协调。","duration":null},{"title":"卧虎扑食势","description":"前腿屈膝，后腿伸展，双手向前下方探按，配合身体起伏，练习四肢支撑。","duration":null},{"title":"打躬势","description":"双手扶于脑后，缓缓俯身，再逐节起身，感受腰背的屈伸与舒展。","duration":null},{"title":"掉尾势","description":"俯身垂手，配合抬头与左右回望，轻摆臀部，活动躯干，动作柔和连贯。","duration":null},{"title":"收势","description":"身体缓缓直立，双臂随动作抬起、落下，呼吸自然，放松全身，平稳结束练习。","duration":null}]}],"专项提升":[{"id":"special-0","title":"跳绳初级训练","family":"跳绳","duration":null,"label":"专项提升","segments":[]},{"id":"special-1","title":"仰卧起坐初级训练","family":"仰卧起坐","duration":null,"label":"专项提升","segments":[]},{"id":"special-2","title":"俯卧撑初级训练","family":"俯卧撑","duration":null,"label":"专项提升","segments":[]},{"id":"special-3","title":"引体向上初级训练","family":"引体向上","duration":null,"label":"专项提升","segments":[]},{"id":"special-4","title":"跳绳中级训练","family":"跳绳","duration":null,"label":"专项提升","segments":[]},{"id":"special-5","title":"跳绳高级训练","family":"跳绳","duration":null,"label":"专项提升","segments":[]},{"id":"special-6","title":"立定跳远初级训练","family":"立定跳远","duration":null,"label":"专项提升","segments":[]},{"id":"special-7","title":"立定跳远中级训练","family":"立定跳远","duration":null,"label":"专项提升","segments":[]}],"健身体操":[{"id":"gym-0","title":"舞动青春","family":"广播体操","duration":null,"label":"健身体操","segments":[]},{"id":"gym-1","title":"希望风帆","family":"广播体操","duration":null,"label":"健身体操","segments":[]},{"id":"gym-2","title":"旭日东升","family":"广播体操","duration":null,"label":"健身体操","segments":[]},{"id":"gym-3","title":"英雄少年","family":"广播体操","duration":null,"label":"健身体操","segments":[]}]};
 const pageSize=6;
 
 const gameDefinitions={"fruit-solo":{"id":"fruit-solo","title":"水果切切乐","category":"单人","kind":"slice","mode":"反应挑战","count":1,"minPlayers":1,"maxPlayers":1,"motion":"挥臂触达","desc":"挥动双手切开果实，体验连续命中的反馈。","seconds":60,"goal":12,"rules":["进入指定活动区，面向屏幕站好。","挥动手臂，切开屏幕上的果实。","连续切中果实，或从果实中心切过，可获得额外加分。"]},"star-maze":{"id":"star-maze","title":"迷宫采星","category":"单人","kind":"collect","mode":"收集闯关","count":1,"minPlayers":1,"maxPlayers":1,"motion":"小幅侧移","desc":"在原地小范围移动，带角色沿路线收集星点。","seconds":60,"goal":12,"rules":["进入指定活动区，面向屏幕站好。","通过小范围侧移控制角色，沿路线收集星点。","记录本人的有效完成次数，局末查看结果。"]},"light-solo":{"id":"light-solo","title":"反应追光","category":"单人","kind":"reaction","mode":"反应挑战","count":1,"minPlayers":1,"maxPlayers":1,"motion":"伸手触达","desc":"看准亮起的目标，用手快速触达。","seconds":60,"goal":12,"rules":["进入指定活动区，面向屏幕站好。","伸手触碰亮起的目标，命中后出现新的目标。","记录本人的有效完成次数，局末查看结果。"]},"beat-solo":{"id":"beat-solo","title":"节奏挥拍","category":"单人","kind":"rhythm","mode":"节奏互动","count":1,"minPlayers":1,"maxPlayers":1,"motion":"节拍挥臂","desc":"跟着可见节拍挥臂，连续完成节奏点。","seconds":60,"goal":12,"rules":["进入指定活动区，面向屏幕站好。","跟随可见节拍挥动手臂，在拍点窗口命中。","记录本人的有效完成次数，局末查看结果。"]},"dodge-solo":{"id":"dodge-solo","title":"左右闪避","category":"单人","kind":"dodge","mode":"收集闯关","count":1,"minPlayers":1,"maxPlayers":1,"motion":"小幅侧移","desc":"看清障碍方向，向空的一侧小幅移动。","seconds":60,"goal":12,"rules":["进入指定活动区，面向屏幕站好。","按提示向空的一侧小幅侧移，不跨出活动区。","记录本人的有效完成次数，局末查看结果。"]},"keeper-solo":{"id":"keeper-solo","title":"趣味守门","category":"单人","kind":"goal","mode":"反应挑战","count":1,"minPlayers":1,"maxPlayers":1,"motion":"伸手挡球","desc":"伸手拦住来球，不需要跳起或扑地。","seconds":60,"goal":12,"rules":["进入指定活动区，面向屏幕站好。","面向屏幕伸手挡球，球路限制在可触达范围。","记录本人的有效完成次数，局末查看结果。"]},"fruit-duo":{"id":"fruit-duo","title":"双人切果赛","category":"双人","kind":"slice","mode":"双人PK","count":2,"minPlayers":2,"maxPlayers":2,"motion":"挥臂触达","desc":"左右分区切果，比较本局各自完成次数。","seconds":60,"goal":12,"rules":["2人进入各自活动区，面向屏幕，保持间距。","挥动手臂触达果实，连续命中累计次数。","分别累计触达次数，局末比较双方结果。"]},"keeper-duo":{"id":"keeper-duo","title":"默契守门","category":"双人","kind":"goal","mode":"双人协作","count":2,"minPlayers":2,"maxPlayers":2,"motion":"伸手挡球","desc":"两人各守一侧，共同挡住来球。","seconds":60,"goal":12,"rules":["2人进入各自活动区，面向屏幕，保持间距。","面向屏幕伸手挡球，球路限制在可触达范围。","合计所有人的有效完成次数，局末查看共同结果。"]},"reaction-duo":{"id":"reaction-duo","title":"反应对决","category":"双人","kind":"reaction","mode":"双人PK","count":2,"minPlayers":2,"maxPlayers":2,"motion":"伸手触达","desc":"相同节奏、独立区域，比较双方命中次数。","seconds":60,"goal":12,"rules":["2人进入各自活动区，面向屏幕，保持间距。","伸手触碰亮起的目标，命中后出现新的目标。","分别累计触达次数，局末比较双方结果。"]},"pose-duo":{"id":"pose-duo","title":"镜像搭档","category":"双人","kind":"pose","mode":"双人协作","count":2,"minPlayers":2,"maxPlayers":2,"motion":"动作保持","desc":"两人一起摆出提示姿势，稳定保持后过关。","seconds":60,"goal":12,"rules":["2人进入各自活动区，面向屏幕，保持间距。","模仿提示姿势并保持片刻，稳定完成一轮。","合计所有人的有效完成次数，局末查看共同结果。"]},"beat-duo":{"id":"beat-duo","title":"节奏同拍","category":"双人","kind":"rhythm","mode":"双人协作","count":2,"minPlayers":2,"maxPlayers":2,"motion":"节拍挥臂","desc":"两人按节拍一起挥臂，累积共同完成次数。","seconds":60,"goal":12,"rules":["2人进入各自活动区，面向屏幕，保持间距。","跟随可见节拍挥动手臂，在拍点窗口命中。","合计所有人的有效完成次数，局末查看共同结果。"]},"mole-duo":{"id":"mole-duo","title":"双人打地鼠","category":"双人","kind":"mole","mode":"双人协作","count":2,"minPlayers":2,"maxPlayers":2,"motion":"伸手触达","desc":"两人各自击中冒出的目标，共同累计结果。","seconds":60,"goal":12,"rules":["2人进入各自活动区，面向屏幕，保持间距。","伸手触达出现的目标，在指定区域内连续命中。","合计所有人的有效完成次数，局末查看共同结果。"]},"light-team":{"id":"light-team","title":"一起点亮","category":"多人","kind":"reaction","mode":"共同挑战","count":4,"minPlayers":3,"maxPlayers":4,"motion":"伸手触达","desc":"每人在自己的区域触达，合力点亮进度。","seconds":60,"goal":24,"rules":["3–4人进入各自活动区，面向屏幕，保持间距。","伸手触碰亮起的目标，命中后出现新的目标。","合计所有人的有效完成次数，局末查看共同结果。"]},"keeper-team":{"id":"keeper-team","title":"团队守门","category":"多人","kind":"goal","mode":"共同挑战","count":4,"minPlayers":3,"maxPlayers":4,"motion":"伸手挡球","desc":"分区防守多条球路，共同拦截来球。","seconds":60,"goal":24,"rules":["3–4人进入各自活动区，面向屏幕，保持间距。","面向屏幕伸手挡球，球路限制在可触达范围。","合计所有人的有效完成次数，局末查看共同结果。"]},"pose-team":{"id":"pose-team","title":"动作定格","category":"多人","kind":"pose","mode":"共同挑战","count":4,"minPlayers":3,"maxPlayers":4,"motion":"动作保持","desc":"大家模仿同一姿势，保持后一起过关。","seconds":60,"goal":24,"rules":["3–4人进入各自活动区，面向屏幕，保持间距。","模仿提示姿势并保持片刻，稳定完成一轮。","合计所有人的有效完成次数，局末查看共同结果。"]},"beat-team":{"id":"beat-team","title":"节奏接力","category":"多人","kind":"rhythm","mode":"共同挑战","count":4,"minPlayers":3,"maxPlayers":4,"motion":"节拍挥臂","desc":"按区轮流接拍，完成整组节奏任务。","seconds":60,"goal":24,"rules":["3–4人进入各自活动区，面向屏幕，保持间距。","跟随可见节拍挥动手臂，在拍点窗口命中。","合计所有人的有效完成次数，局末查看共同结果。"]},"collect-team":{"id":"collect-team","title":"分区采集","category":"多人","kind":"collect","mode":"共同挑战","count":4,"minPlayers":3,"maxPlayers":4,"motion":"小幅侧移","desc":"各自在小范围区域收集星点，合计全组结果。","seconds":60,"goal":24,"rules":["3–4人进入各自活动区，面向屏幕，保持间距。","通过小范围侧移控制角色，沿路线收集星点。","合计所有人的有效完成次数，局末查看共同结果。"]},"reaction-team":{"id":"reaction-team","title":"分队反应赛","category":"多人","kind":"reaction","mode":"分队PK","count":4,"minPlayers":4,"maxPlayers":4,"motion":"伸手触达","desc":"4人分为两队，在独立区域触达并比较队分。","seconds":60,"goal":24,"rules":["3–4人进入各自活动区，面向屏幕，保持间距。","伸手触碰亮起的目标，命中后出现新的目标。","分别累计触达次数，局末比较双方结果。"]}};
 const siteNotice={enabled:true,label:"公告",text:"运动站每日06:00—22:00开放。周六09:00健身广场开展八段锦集体跟练，欢迎参加。"};
-const state={gameSession:null,gameReport:null,reportQueue:[],sessionSequence:0,rankingMetric:'duration',resourcePage:0,followMode:'single',mediaFilter:'全部',fitnessFilter:'全部',resourceCategory:'fitness',resourceId:'fitness-1',resourceElapsed:0,resourceReturn:'home',pendingNav:'home',pendingModule:null,page:'home',category:'健身气功',course:'baduan-standard',filter:'全部',catalogPage:0,playback:'full',chapter:0,ready:1,scene:'normal',paused:false,game:'fruit-solo',gameCategory:'单人',gameFilter:'全部',gameCatalogPage:0,gamePlayers:1,gameScores:[0,0,0,0],gameTurns:[0,0,0,0],poseRemaining:[0,0,0,0],gameFeedback:['','','',''],gameActivePlayer:0,mazePos:[[0,0],[0,0],[0,0],[0,0]],mazeDots:[[],[],[],[]],gameScore:0,gameTime:60,modal:null};
+const state={gameSession:null,gameReport:null,reportQueue:[],sessionSequence:0,rankingMetric:'duration',resourcePage:0,followMode:'single',fitnessMode:'single',mediaFilter:'全部',fitnessFilter:'全部',resourceCategory:'fitness',resourceId:'fitness-1',resourceElapsed:0,resourceReturn:'home',pendingNav:'home',pendingModule:null,page:'home',category:'健身气功',course:'baduan-standard',filter:'全部',catalogPage:0,playback:'full',chapter:0,ready:1,scene:'normal',paused:false,game:'fruit-solo',gameCategory:'单人',gameFilter:'全部',gameCatalogPage:0,gamePlayers:1,gameScores:[0,0,0,0],gameTurns:[0,0,0,0],poseRemaining:[0,0,0,0],gameFeedback:['','','',''],gameActivePlayer:0,mazePos:[[0,0],[0,0],[0,0],[0,0]],mazeDots:[[],[],[],[]],gameScore:0,gameTime:60,modal:null};
 const prototypeHelpState={open:false,selected:null,items:[],signature:'',returnFocus:null};
 let prototypeHelpFrame=null;
 let timer,toastTimer,homeRecommendationTimer;
 let homeQuickPressed=false,homeQuickElapsed=0,homeQuickLastTick=null;
 const HOME_ROTATION_MS=20000,homeQuickIndices=[0,0,0];
 const btn=(label,action,cls='',extra='')=>`<button class="button ${cls}" data-action="${action}" ${extra}>${label}</button>`;
-function nav(page,resetScene=true){if(['library','resourceDetail','resourcePlaying','resourceResult'].includes(page)&&(state.resourceCategory==='warmup'||resource().category==='warmup')){state.resourceCategory='fitness';state.resourceId='fitness-1';page='library';}const previousScene=state.scene;if(page==='fitnessReport'&&resource().category!=='fitness'){state.resourceCategory='fitness';state.resourceId='fitness-1';state.resourceReturn='library';}if(['prepare','training','results','video'].includes(page))page='detail';if(page==='resourcePrepare'){state.resourceCategory='fitness';if(resource().category!=='fitness')state.resourceId='fitness-1';page='resourceDetail';}if(['resourcePlaying','resourceResult'].includes(page)&&resource().category!=='media')page='resourceDetail';if(!pages.some(p=>p[0]===page))page='home';if(page==='rankings'&&state.page!==page)state.rankingMetric='duration';if(state.page==='gamePlaying'&&page!=='gamePlaying')completeDemoGameSession();if(page==='gamePrepare'){state.gameSession=null;state.gameReport=null;state.fruitPrepareRunning=false;}state.page=page;state.modal=null;if(resetScene)state.scene=page==='followReport'&&state.followMode==='multi'?'multi8':'normal';if(page==='gamePrepare'&&game().id==='fruit-solo'){if(resetScene)state.scene='outside';state.paused=false;}if(page==='gamePlaying')initializeGame(previousScene);if(page==='resourcePlaying')state.paused=false;if(page==='home'){state.gameSession=null;state.resourceElapsed=0;state.paused=false;state.ready=1;state.followMode='single';}history.replaceState(null,'','#'+page);render();}
+function nav(page,resetScene=true){if(['library','resourceDetail','resourcePlaying','resourceResult'].includes(page)&&(state.resourceCategory==='warmup'||resource().category==='warmup')){state.resourceCategory='fitness';state.resourceId='fitness-1';page='library';}const previousScene=state.scene;if(page==='fitnessReport'&&resource().category!=='fitness'){state.resourceCategory='fitness';state.resourceId='fitness-1';state.resourceReturn='library';}if(['prepare','training','results','video'].includes(page))page='detail';if(page==='resourcePrepare'){state.resourceCategory='fitness';if(resource().category!=='fitness')state.resourceId='fitness-1';page='resourceDetail';}if(['resourcePlaying','resourceResult'].includes(page)&&resource().category!=='media')page='resourceDetail';if(!pages.some(p=>p[0]===page))page='home';if(page==='rankings'&&state.page!==page)state.rankingMetric='duration';if(state.page==='gamePlaying'&&page!=='gamePlaying')completeDemoGameSession();if(page==='gamePrepare'){state.gameSession=null;state.gameReport=null;state.fruitPrepareRunning=false;}prepareExerciseRoute(page);state.page=page;state.modal=null;if(resetScene)state.scene=page==='followReport'&&state.followMode==='multi'?'multi8':'normal';if(page==='gamePrepare'&&game().id==='fruit-solo'){if(resetScene)state.scene='outside';state.paused=false;}if(page==='gamePlaying')initializeGame(previousScene);if(page==='resourcePlaying')state.paused=false;if(page==='home'){state.gameSession=null;state.resourceElapsed=0;state.paused=false;state.ready=1;state.followMode='single';}history.replaceState(null,'','#'+page);render();}
 
 function chapterName(seg){return seg.title.replace(/[（(]示例[）)]/g,'')}
 
@@ -315,7 +441,15 @@ taiji:head(33,12)+'<path d="m32 21-4 17-13 17h-8M28 38l17 6 7 11M31 24 17 27l-6-
 
 function courses(){const items=filteredCourses(),count=Math.max(1,Math.ceil(items.length/pageSize));state.catalogPage=Math.min(state.catalogPage,count-1);const visible=items.slice(state.catalogPage*pageSize,(state.catalogPage+1)*pageSize),filters=['全部',...new Set(catalogue[state.category].map(c=>c.family))];return heading('AI跟练','')+`<div class="catalogue-shell"><nav class="catalogue-categories" aria-label="课程大类">${categories.map(c=>`<button data-category="${c}" class="${state.category===c?'active':''}"><b>${c}</b><span>→</span></button>`).join('')}</nav><section class="catalogue-content"><div class="catalogue-toolbar"><div><b>${state.category}</b><span>${items.length}门课程</span></div></div><div class="catalogue-filters" aria-label="课程筛选">${filters.length>2?filters.map(f=>`<button data-filter="${f}" class="${state.filter===f?'active':''}" aria-pressed="${state.filter===f}">${f}</button>`).join(''):''}</div><div class="catalogue-grid">${visible.length?visible.map(c=>`<button class="library-card" data-course="${c.id}"><span class="library-card-top">${movementThumbnail(c.title,'course')}<span class="library-course-info"><small>${c.family}</small><b>${c.title}</b>${c.duration?`<span>${c.duration}</span>`:''}</span></span><span class="library-card-bottom"><span>${c.segments.length?'整套 / 分节':'整套跟练'}</span><span>查看课程 →</span></span></button>`).join(''):`<div class="catalogue-empty"><h2>课程准备中</h2></div>`}</div>${items.length>pageSize?`<div class="catalogue-pagination"><span></span><div><button data-page-step="-1" ${state.catalogPage===0?'disabled':''}>← 上一页</button><span>${state.catalogPage+1} / ${count}</span><button data-page-step="1" ${state.catalogPage>=count-1?'disabled':''}>下一页 →</button></div></div>`:''}</section></div>`}
 
-function detail(){const c=selectedCourse();return heading(c.title,'','courses',`<div class="follow-people"><span>跟练模式</span><div role="group" aria-label="跟练模式"><button data-follow-mode="single" class="${state.followMode==='single'?'active':''}" aria-pressed="${state.followMode==='single'}">单人</button><button data-follow-mode="multi" class="${state.followMode==='multi'?'active':''}" aria-pressed="${state.followMode==='multi'}">多人</button></div></div>`,c.label)+`<div class="lesson-layout activity-detail"><div class="lesson-visual activity-media"><div class="lesson-preview"><span class="lesson-play">▷</span><b>${c.title}</b></div>${c.duration?`<div class="lesson-meta"><span>${c.duration}</span></div>`:''}</div><section class="lesson-content activity-info" aria-label="整套与分节"><button class="lesson-whole ${state.playback==='full'?'active':''}" data-playback="full" aria-pressed="${state.playback==='full'}"><span><b>整套跟练</b><small>${c.title}</small></span>${c.duration?`<time>${c.duration}</time>`:''}<i>${state.playback==='full'?'✓':'▷'}</i></button>${c.segments.length?`<div class="lesson-chapter-heading"><h2>分节练习</h2><span>${c.segments.length}节</span></div><div class="lesson-chapters">${c.segments.map((seg,i)=>`<button class="lesson-chapter ${state.playback==='chapter'&&state.chapter===i?'active':''}" data-follow-chapter="${i}" aria-pressed="${state.playback==='chapter'&&state.chapter===i}"><span class="chapter-number">${String(i+1).padStart(2,'0')}</span><b>${chapterName(seg)}</b>${seg.duration?`<time>${seg.duration}</time>`:''}<i>${state.playback==='chapter'&&state.chapter===i?'✓':'▷'}</i></button>`).join('')}</div>`:''}<div class="lesson-start activity-primary">${btn('开始跟练 →','existingFollow','primary','disabled')}</div></section></div>`}
+function exerciseModePicker(kind){
+  const label=kind==='fitness'?'训练模式':'跟练模式';
+  const active=state[kind+'Mode'];
+  return `<div class="follow-people"><span>${label}</span><div role="group" aria-label="${label}">
+    ${[['single','单人'],['multi','多人']].map(([mode,name])=>
+      `<button data-${kind}-mode="${mode}" class="${active===mode?'active':''}" aria-pressed="${active===mode}">${name}</button>`).join('')}
+  </div></div>`;
+}
+function detail(){const c=selectedCourse();return heading(c.title,'','courses',exerciseModePicker('follow'),c.label)+`<div class="lesson-layout activity-detail"><div class="lesson-visual activity-media"><div class="lesson-preview"><span class="lesson-play">▷</span><b>${c.title}</b></div>${c.duration?`<div class="lesson-meta"><span>${c.duration}</span></div>`:''}</div><section class="lesson-content activity-info" aria-label="整套与分节"><button class="lesson-whole ${state.playback==='full'?'active':''}" data-playback="full" aria-pressed="${state.playback==='full'}"><span><b>整套跟练</b><small>${c.title}</small></span>${c.duration?`<time>${c.duration}</time>`:''}<i>${state.playback==='full'?'✓':'▷'}</i></button>${c.segments.length?`<div class="lesson-chapter-heading"><h2>分节练习</h2><span>${c.segments.length}节</span></div><div class="lesson-chapters">${c.segments.map((seg,i)=>`<button class="lesson-chapter ${state.playback==='chapter'&&state.chapter===i?'active':''}" data-follow-chapter="${i}" aria-pressed="${state.playback==='chapter'&&state.chapter===i}"><span class="chapter-number">${String(i+1).padStart(2,'0')}</span><b>${chapterName(seg)}</b>${seg.duration?`<time>${seg.duration}</time>`:''}<i>${state.playback==='chapter'&&state.chapter===i?'✓':'▷'}</i></button>`).join('')}</div>`:''}<div class="lesson-start activity-primary">${btn('开始跟练 →',state.followMode==='multi'?'followGroupCalibration':'followCalibration','primary')}</div></section></div>`}
 
 function game(){return gameDefinitions[state.game]||gameDefinitions['fruit-solo']}
 function gameCount(){return Math.max(game().minPlayers,Math.min(game().maxPlayers,state.gamePlayers||game().count))}
@@ -335,8 +469,7 @@ function settlementMetrics(metrics){
     </div>`).join('')}</dl>`;
 }
 
-function settlementParticipant(){
-  const nickname='晨光漫步';
+function settlementParticipant(nickname='晨光漫步'){
   return `<section class="panel settlement-participant" aria-label="本次参与者">
     <span class="settlement-participant-label">本次参与者</span>
     <span class="rank-avatar settlement-avatar" aria-hidden="true">${nickname.slice(0,1)}</span>
@@ -365,25 +498,28 @@ const groupReportPeople=[
 const groupReportTimes={fitness:[0,10,20,30,40],follow:[0,50,100,150,205]};
 
 function groupReportSize(){
-  return supportsGroupSettlement(state.page)&&/^multi[2-8]$/.test(state.scene)?Number(state.scene.slice(5)):0;
+  const result=currentExerciseResult();
+  if(result)return result.people.length>1?result.people.length:0;
+  return isExerciseSettlement(state.page)&&/^multi[2-8]$/.test(state.scene)?Number(state.scene.slice(5)):0;
 }
 
-function groupReportChart(people,times){
-  const left=56,right=680,top=28,bottom=292;
+function groupReportChart(people,times,compact=false){
+  const width=compact?1000:710,height=compact?173:337;
+  const left=56,right=width-30,top=28,bottom=height-45;
   const maxCount=Math.max(10,Math.ceil(Math.max(...people.map(person=>person.counts.at(-1)))/10)*10);
-  const x=seconds=>left+(right-left)*seconds/times.at(-1);
+  const x=seconds=>left+(right-left)*seconds/Math.max(1,times.at(-1));
   const y=count=>bottom-(bottom-top)*count/maxCount;
   const ticks=Array.from({length:maxCount/10+1},(_,index)=>index*10);
-  return `<svg viewBox="0 0 710 337" role="img" aria-label="各参与者随项目时间变化的累计完成次数，曲线颜色与参与者列表对应">
+  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${compact?'本次运动随时间变化的累计完成次数':'各参与者随项目时间变化的累计完成次数，曲线颜色与参与者列表对应'}">
     ${ticks.map(value=>`<line class="group-chart-grid" x1="${left}" x2="${right}" y1="${y(value)}" y2="${y(value)}"/><text x="42" y="${y(value)}" dy=".3em" text-anchor="end">${value}</text>`).join('')}
-    ${times.map(seconds=>`<text x="${x(seconds)}" y="323" text-anchor="middle">${fmt(seconds)}</text>`).join('')}
+    ${times.map(seconds=>`<text x="${x(seconds)}" y="${height-14}" text-anchor="middle">${fmt(seconds)}</text>`).join('')}
     <path class="group-chart-axis" fill="none" d="M${left},${top}V${bottom}H${right}"/>
     ${people.map(person=>{
       const path=person.counts.map((count,index)=>`${index===0?'M':'L'}${x(times[index])},${y(count)}`).join(' ');
       return `<g class="group-curve" data-group-curve="${person.id}" style="color:${person.color}">
         <title>${esc(person.name)}</title>
         <path d="${path}" stroke-dasharray="${person.dash||'none'}"/>
-        <circle cx="${right}" cy="${y(person.counts.at(-1))}" r="4.5"/>
+        <circle cx="${x(times.at(-1))}" cy="${y(person.counts.at(-1))}" r="4.5"/>
       </g>`;
     }).join('')}
   </svg>`;
@@ -397,8 +533,12 @@ function rankGroupResults(people){
 
 function groupSettlement(title,kind,count){
   const follow=kind==='follow',back=follow?'detail':'resourceDetail';
-  const times=groupReportTimes[kind];
-  const people=groupReportPeople.slice(0,count).map((person,index)=>({id:index+1,...person,...person[kind]}));
+  const result=currentExerciseResult();
+  const times=result?exerciseReportTimes(result.seconds):groupReportTimes[kind];
+  const people=result?result.people.map(person=>({...groupReportPeople[person.id-1],...person,
+    perfect:person.counts[0],great:person.counts[1],kcal:Math.round(person.count/3),
+    counts:times.map(t=>person.timeline[t]??0)})):
+    groupReportPeople.slice(0,count).map((person,index)=>({id:index+1,...person,...person[kind]}));
   const ranked=rankGroupResults(people);
   const medals=['gold','silver','bronze'];
   const meta=`<div class="group-report-meta"><span class="tag">多人 · ${count} 人</span><div class="group-report-duration"><span>项目时长</span><strong>${fmt(times.at(-1))}</strong></div></div>`;
@@ -421,7 +561,7 @@ function groupSettlement(title,kind,count){
           </tr>`).join('')}</tbody>
         </table>
       </section>
-      <div class="settlement-actions">${btn('返回首页','home')}${btn('再来一次',follow?'detail':'replayGroupFitness','primary')}</div>
+      <div class="settlement-actions">${btn('返回首页','home')}${btn('再来一次',follow?'followGroupCalibration':'fitnessGroupCalibration','primary')}</div>
     </div>`;
 }
 
@@ -439,37 +579,45 @@ $('#app').addEventListener('click',event=>{
   report.querySelectorAll('[data-group-curve]').forEach(curve=>curve.classList.toggle('selected',curve.dataset.groupCurve===id));
 });
 
+function exerciseReportTimes(seconds){
+  const intervals=Array.from({length:5},(_,i)=>Math.round(seconds*i/4));
+  return [...new Set(intervals)];
+}
 function fitnessReport(){
   const item=resource();
+  const result=currentExerciseResult(),person=result?.people[0];
   const count=groupReportSize();
   if(count)return groupSettlement(item.title,'fitness',count);
-  const recentScores=state.scene==='noHistory'?[]:[18,21,24];
+  const times=result?exerciseReportTimes(result.seconds):[];
+  const recentScores=result||state.scene==='noHistory'?[]:[18,21,24];
   return heading(esc(item.title),'','resourceDetail')+`
     <div class="settlement-layout">
       <div class="settlement-content">
         <section class="panel"><h2>本次运动</h2>
-          ${settlementMetrics([['运动成绩',24,'次'],['运动消耗',8,'千卡'],['运动耗时','00:40','']])}
+          ${settlementMetrics([['运动成绩',person?.count??24,'次'],['运动消耗',person?Math.round(person.count/3):8,'千卡'],['运动耗时',result?fmt(result.seconds):'00:40','']])}
         </section>
         <div class="settlement-charts">
           <section class="panel">
             <h2>运动曲线 <small class="settlement-unit">累计次数</small></h2>
-            <div class="settlement-trend" role="img" aria-label="10秒5次，20秒11次，30秒17次，40秒24次">
+            ${result?`<div class="group-chart">${groupReportChart([{
+              ...groupReportPeople[person.id-1],id:person.id,counts:times.map(t=>person.timeline[t]??0)
+            }],times,true)}</div>`:`<div class="settlement-trend" role="img" aria-label="10秒5次，20秒11次，30秒17次，40秒24次">
               <b></b>
               <i style="left:0;bottom:18%"></i><span style="left:0;bottom:23%">5</span>
               <i style="left:33%;bottom:33%"></i><span style="left:33%;bottom:38%">11</span>
               <i style="left:66%;bottom:48%"></i><span style="left:66%;bottom:53%">17</span>
               <i style="left:100%;bottom:66%"></i><span style="left:100%;bottom:71%">24</span>
             </div>
-            <div class="settlement-times" aria-hidden="true"><span>10秒</span><span>20秒</span><span>30秒</span><span>40秒</span></div>
+            <div class="settlement-times" aria-hidden="true"><span>10秒</span><span>20秒</span><span>30秒</span><span>40秒</span></div>`}
           </section>
           ${recentScores.length?`<section class="panel">
             <h2>近期成绩</h2>
             <div class="settlement-recent">${recentScores.map((value,index)=>`<div><span>${index===2?'本次':'前'+(2-index)+'次'}</span><i style="width:${value/24*100}%"></i><b>${value} 次</b></div>`).join('')}</div>
           </section>`:''}
         </div>
-        ${settlementActions('resourceDetail')}
+        ${result?`<div class="settlement-actions">${btn('返回首页','home')}${btn('再来一次',state.exerciseResult.group?'fitnessGroupCalibration':'fitnessCalibration','primary')}</div>`:settlementActions('resourceDetail')}
       </div>
-      ${settlementParticipant()}
+      ${settlementParticipant(person?.name)}
     </div>`;
 }
 
@@ -487,7 +635,8 @@ function followReport(){
   const title=`${course.title}·${section?chapterName(section):'整套跟练'}`;
   const count=groupReportSize();
   if(count)return groupSettlement(title,'follow',count);
-  const example=followReportExample();
+  const result=currentExerciseResult(),person=result?.people[0];
+  const example=result?{score:person.score,counts:person.counts,seconds:result.seconds,fatigue:1}:followReportExample();
   const minutes=Math.floor(example.seconds/60),seconds=example.seconds%60;
   return heading(esc(title),'','detail')+`
     <div class="settlement-layout follow-report" data-follow-report-state="${esc(state.scene)}">
@@ -509,10 +658,380 @@ function followReport(){
             <div class="follow-fatigue-labels" aria-hidden="true"><span>轻松</span><span>稍累</span><span>累</span><span>很累</span><span>超累</span></div>
           </section>
         </section>
-        <div class="settlement-actions">${btn('返回首页','home')}${btn('再来一次','detail','primary')}</div>
+        <div class="settlement-actions">${btn('返回首页','home')}${btn('再来一次',result?.group?'followGroupCalibration':'followCalibration','primary')}</div>
       </div>
-      ${settlementParticipant()}
+      ${settlementParticipant(person?.name)}
     </div>`;
+}
+
+const exercisePages={
+  fitnessCalibration:{kind:'fitness'},fitnessGroupCalibration:{kind:'fitness',group:true},
+  followCalibration:{kind:'follow'},followGroupCalibration:{kind:'follow',group:true},
+  fitnessTraining:{kind:'fitness',live:true},followTraining:{kind:'follow',live:true}
+};
+const exerciseMedia='training-media/';
+const exerciseHoldMs=3000;
+const exerciseZoneLayout=[
+  [70,70,44,31],[24,70,44,31],
+  [79,37,33,29],[46,37,31,29],[13,37,31,29],
+  [21,7,26,25],[46,7,24,25],[71,7,25,25]
+];
+function prepareExerciseRoute(page){
+  const route=exercisePages[page];
+  if(!route){
+    state.exercise=null;
+    if(!isExerciseSettlement(page))state.exerciseResult=null;
+    return;
+  }
+  if(route.kind==='fitness'&&resource().category!=='fitness'){
+    Object.assign(state,{resourceId:'fitness-1',resourceCategory:'fitness',resourceReturn:'library'});
+  }
+  state.paused=false;
+  if(route.live&&state.exercise?.kind===route.kind&&state.exercise.people.length)return;
+  state.exerciseResult=null;
+  state[route.kind+'Mode']=route.group?'multi':'single';
+  state.exercise={
+    kind:route.kind,group:Boolean(route.group),elapsed:0,countdown:0,
+    duration:route.kind==='fitness'?40:205,
+    slots:Array.from({length:route.group?8:1},()=>({present:false,stand:0,raised:false,hand:0})),
+    selected:0,people:[],last:0
+  };
+  if(route.live)state.exercise.people=[exercisePerson(0)];
+}
+function exercisePerson(index){
+  return {id:index+1,name:groupReportPeople[index].name,present:true,feedback:'',count:0,score:0,counts:[0,0,0,0],timeline:[]};
+}
+function exerciseTitle(kind){
+  return kind==='fitness'?resource().title:selectedCourse().title;
+}
+function exerciseSubtitle(kind,group){
+  if(kind==='fitness')return group?'多人训练':'单项训练';
+  const course=selectedCourse();
+  const section=state.playback==='chapter'?course.segments[state.chapter]:null;
+  return section?chapterName(section):'整套跟练';
+}
+function exerciseDetailPage(kind){return kind==='fitness'?'resourceDetail':'detail'}
+function photoPane(type,showGesture=false){
+  return `<div class="exercise-scene-photo is-${type}" aria-hidden="true">
+    <img src="${exerciseMedia}camera-preview.jpg" alt="">
+    ${showGesture?`<img class="exercise-gesture-frame" src="${exerciseMedia}raise-hand-preview.jpg" alt="">`:''}
+  </div>`;
+}
+function cameraPane(group=false){
+  return `<div class="exercise-camera" role="img" aria-label="${group?'模拟活动区镜头':'模拟本人镜头'}">${photoPane('camera',group)}<div class="exercise-camera-tint"></div></div>`;
+}
+function slotReady(slot){return slot.stand>=exerciseHoldMs}
+function slotStatus(slot){return !slot.present?'empty':slotReady(slot)?'ready':'charging'}
+function slotCopy(slot){
+  if(!slot.present)return '待加入';
+  if(!slotReady(slot))return `站位确认 ${(slot.stand/1000).toFixed(1)}s`;
+  if(slot.raised)return `右手确认 ${(slot.hand/1000).toFixed(1)}s`;
+  return '已确认';
+}
+function slotProgress(slot){return Math.min(100,100*(slot.raised?slot.hand:slot.stand)/exerciseHoldMs)}
+
+function exerciseZones(people=null){
+  return `<div class="exercise-zones" aria-label="8 个站位区">${exerciseZoneLayout.map(([x,y,w,h],i)=>{
+    const active=people?.some(person=>person.id===i+1);
+    return `<div class="exercise-zone" data-zone="${i}" data-status="${active?'ready':'empty'}" style="--x:${x}%;--y:${y}%;--w:${w}%;--h:${h}%">
+      <b>${i+1}</b><span class="exercise-zone-status">${people?(active?'训练中':'空位'):''}</span>
+      ${people?'':'<span class="exercise-progress"><i></i></span>'}
+    </div>`;
+  }).join('')}</div>`;
+}
+function exerciseRoster(people=null){
+  const unit=state.exercise.kind==='fitness'?'次':'分';
+  return `<section class="exercise-roster" aria-label="${people?'本场实时成绩':'八个站位状态'}"><h2>本次参与者</h2>
+    <ol>${exerciseZoneLayout.map((_,i)=>{
+      const person=people?.find(person=>person.id===i+1);
+      return `<li data-stand-row="${i}" data-status="${person?'ready':'empty'}" class="${person?'has-score':''}">
+        <i>${i+1}</i>${person?`<span><span class="rank-avatar" aria-hidden="true">${esc(person.name.slice(0,1))}</span>${esc(person.name)}</span>
+          <strong><span data-exercise-score="${person.id}">0</span><small>${unit}</small></strong>
+          ${exerciseMotionFeedback(person)}`:`<span>${people?'空位':'待加入'}</span>`}
+      </li>`;
+    }).join('')}</ol></section>`;
+}
+function exerciseCalibration(){
+  const {kind,group}=state.exercise;
+  return `<section class="exercise-calibration${group?' exercise-group-calibration':''}">
+    ${cameraPane(group)}
+    <header class="exercise-live-header"><div><span class="exercise-mode">${kind==='fitness'?'体能训练':'AI 跟练'} · ${group?'多人站位':'单人校准'}</span>
+      <h1 class="exercise-live-title">${esc(exerciseTitle(kind))}</h1></div>
+      <span class="exercise-chip exercise-camera-label"><i class="exercise-pip"></i>${group?'<span id="exercise-ready-count">已确认 0 / 8 人</span>':'模拟镜头'}</span>
+    </header>
+    ${group?exerciseRoster()+exerciseZones():
+      '<div class="exercise-stand-frame" aria-label="单人站位框"><span class="exercise-stand-mark"><i></i></span></div>'}
+    <div class="exercise-calibration-copy"><h2 id="exercise-stand-title"></h2><p id="exercise-stand-help"></p></div>
+    <div class="exercise-countdown" hidden aria-label="开练倒计时"></div>
+    ${btn('← 返回',exerciseDetailPage(kind),'exercise-button exercise-back')}
+  </section>`;
+}
+
+function exerciseMediaPane(kind,showLabel=true){
+  if(kind==='follow'&&selectedCourse().id==='baduan-standard'&&state.playback==='full'){
+    return `<video class="exercise-demo-video" src="${exerciseMedia}baduanjin-preview.mp4" muted playsinline loop preload="metadata" aria-label="八段锦示范视频"></video>
+      ${showLabel?'<span class="exercise-media-label">示范片段</span>':''}`;
+  }
+  const media=kind==='fitness'&&resource().id==='fitness-1'?photoPane('instructor'):
+    movementThumbnail(exerciseTitle(kind),kind==='fitness'?'fitness':'course');
+  return media+(showLabel?'<span class="exercise-media-label">示范画面示意</span>':'');
+}
+function exerciseScore(person,kind){return kind==='fitness'?person.count:person.score}
+function exerciseMotionFeedback(person){
+  return `<span class="exercise-motion-feedback" data-exercise-feedback="${person.id}"></span>`;
+}
+function exerciseClock(){
+  return `<div class="exercise-workout-metrics"><dl><dt>剩余时间</dt><dd id="exercise-clock">${fmt(state.exercise.duration)}</dd></dl></div>`;
+}
+function exerciseTrainingControls(){
+  return `<div class="exercise-overlay" hidden><b></b><span></span></div>
+    <div class="exercise-bottom"><span class="exercise-bottom-progress"><i></i></span><span id="exercise-live-feedback" aria-live="polite"></span>
+    <div class="row">${btn('暂停','exercisePause','exercise-button')}${btn('结束','exerciseEnd','exercise-button')}</div></div>`;
+}
+function groupExerciseTraining(){
+  const {kind,people,mainView='demo'}=state.exercise;
+  return `<section class="exercise-group-calibration exercise-group-training">
+    <div class="exercise-group-windows" data-main-view="${mainView}">
+      <section class="exercise-group-pane exercise-group-camera" aria-label="参与者与站位画面">
+        <header><b>站位画面</b><span>${people.length} 人训练</span></header>
+        <div class="exercise-group-window-body"><div class="exercise-group-camera-stage">
+          ${cameraPane(true)}${exerciseZones(people)}
+        </div></div>
+      </section>
+      <section class="exercise-group-pane exercise-group-video" aria-label="示范视频区">
+        <header><b>动作示范</b><span>${esc(exerciseSubtitle(kind,true))}</span></header>
+        <div class="exercise-group-window-body"><div class="exercise-workout-media">${exerciseMediaPane(kind,false)}</div></div>
+      </section>
+    </div>
+    <header class="exercise-live-header"><div><span class="exercise-mode">${kind==='fitness'?'体能训练':'AI 跟练'} · ${people.length} 人训练</span>
+      <h1 class="exercise-live-title">${esc(exerciseTitle(kind))}</h1></div>${exerciseClock()}</header>
+    ${exerciseRoster(people)}
+    ${btn('⇄ 切换','exerciseSwapView','exercise-button exercise-swap','aria-label="切换大窗和小窗"')}
+    ${exerciseTrainingControls()}
+  </section>`;
+}
+function swapGroupExerciseView(){
+  const windows=$('.exercise-group-windows');
+  if(!windows||state.modal||prototypeHelpState.open)return;
+  const nextView=windows.dataset.mainView==='demo'?'camera':'demo';
+  state.exercise.mainView=nextView;
+  windows.dataset.mainView=nextView;
+}
+function exerciseTraining(){
+  const {kind,group,people}=state.exercise;
+  if(group)return groupExerciseTraining();
+  const follow=kind==='follow',person=people[0];
+  return `<div class="exercise-workout">
+    <section class="exercise-workout-pane" aria-label="示范视频区">
+      <header class="exercise-workout-head">
+        <div class="exercise-workout-title"><p>动作示范 · ${esc(exerciseSubtitle(kind,false))}</p><h1>${esc(exerciseTitle(kind))}</h1></div>
+        ${exerciseClock()}
+      </header>
+      <div class="exercise-workout-media">${exerciseMediaPane(kind)}</div>
+      <div class="exercise-bottom"><span>${follow?'跟随示范完成动作':'按示范节奏练习'}</span></div>
+    </section>
+    <section class="exercise-workout-pane" aria-label="训练镜头与个人成绩">
+      <header class="exercise-workout-head">
+        <div class="exercise-score-card" aria-label="本人和实时成绩">
+          <div class="exercise-score-person"><span class="rank-avatar" aria-hidden="true">${esc(person.name.slice(0,1))}</span>
+            <div class="exercise-score-name"><strong>${esc(person.name)}</strong></div>
+          </div>
+          <div class="exercise-workout-metrics"><dl><dt>${follow?'运动评分':'完成次数'}</dt><dd><span data-exercise-score="${person.id}">0</span><small>${follow?'分':'次'}</small></dd></dl>
+            ${follow?exerciseMotionFeedback(person):''}
+          </div>
+        </div>
+      </header>
+      ${cameraPane()}
+      <span class="exercise-media-label" style="bottom:103px">模拟镜头</span>
+      ${exerciseTrainingControls()}
+    </section>
+  </div>`;
+}
+
+function exerciseReview(){
+  let bar=$('#exercise-review');
+  if(!bar){
+    $('#prototype-review-layout').insertAdjacentHTML('beforebegin',
+      '<section id="exercise-review" class="exercise-review" aria-label="训练演示控件" hidden></section>');
+    bar=$('#exercise-review');
+    bar.addEventListener('change',event=>{
+      if(event.target.matches('[data-exercise-slot]'))state.exercise.selected=Number(event.target.value);
+    });
+    bar.addEventListener('click',event=>{
+      const command=event.target.closest('[data-exercise-demo]')?.dataset.exerciseDemo;
+      if(!command||!state.exercise||state.modal||prototypeHelpState.open)return;
+      const round=state.exercise;
+      if(exercisePages[state.page].live){
+        const person=round.people.find(person=>person.id===round.selected+1);
+        if(!person)return;
+        person.present=command==='recover';
+        if(!person.present)person.feedback='';
+        syncExerciseTraining();
+        return;
+      }
+      const slot=round.slots[round.selected];
+      if(command==='fill')round.slots.forEach(entry=>{entry.present=true});
+      if(command==='enter')slot.present=true;
+      if(command==='leave'){
+        Object.assign(slot,{present:false,stand:0,raised:false,hand:0});
+        round.countdown=0;
+      }
+      if(command==='raise'&&slotReady(slot))slot.raised=true;
+      if(command==='lower'){slot.raised=false;slot.hand=0;}
+      syncExerciseCalibration();
+    });
+  }
+  const route=exercisePages[state.page];
+  bar.hidden=!route;
+  if(!route)return;
+  const control=(label,command)=>`<button class="tool" data-exercise-demo="${command}">${label}</button>`;
+  bar.innerHTML=route.live?`<strong>评审演示</strong><span>成绩随模拟动作更新</span>
+    ${state.exercise.group?`<label>选择参与者 <select data-exercise-slot>
+      ${state.exercise.people.map(person=>`<option value="${person.id-1}" ${person.id-1===state.exercise.selected?'selected':''}>${person.id} 号 · ${esc(person.name)}</option>`).join('')}
+    </select></label>`:''}
+    ${control('模拟离开活动区','lose')}${control('模拟返回活动区','recover')}`:
+    `<strong>评审演示</strong>
+      ${route.group?`<label>选择站位 <select data-exercise-slot>${state.exercise.slots.map((_,i)=>`<option value="${i}" ${i===state.exercise.selected?'selected':''}>${i+1} 号</option>`).join('')}</select></label>`:''}
+      ${control('模拟进区','enter')}${control('模拟离区','leave')}
+      ${route.group?control('模拟右手举起','raise')+control('模拟放下右手','lower')+control('模拟 8 人进区','fill'):''}`;
+}
+function setExerciseText(selector,text){
+  const element=$(selector);
+  if(element&&element.textContent!==text)element.textContent=text;
+}
+function syncExerciseCalibration(){
+  const {group,slots,countdown}=state.exercise;
+  if(group){
+    const ready=slots.filter(slotReady).length;
+    const raising=slots.some(slot=>slot.raised);
+    $('.exercise-group-calibration').classList.toggle('is-raising',raising);
+    setExerciseText('#exercise-ready-count',`已确认 ${ready} / 8 人`);
+    setExerciseText('#exercise-stand-title',raising?'保持右手举起':ready?'已确认的参与者举右手开始':'请进入站位区域');
+    setExerciseText('#exercise-stand-help',raising?'举满 3 秒后按当前已确认人数开始':ready?'任一人举右手并保持 3 秒':'进入后绿色区域充能，站稳 3 秒即确认');
+    slots.forEach((slot,i)=>{
+      const zone=$(`[data-zone="${i}"]`),row=$(`[data-stand-row="${i}"]`);
+      zone.dataset.status=row.dataset.status=slotStatus(slot);
+      zone.style.setProperty('--fill',slotProgress(slot)+'%');
+      setExerciseText(`[data-zone="${i}"] .exercise-zone-status`,slotCopy(slot));
+      setExerciseText(`[data-stand-row="${i}"] span`,slotCopy(slot));
+    });
+  }else{
+    const slot=slots[0],frame=$('.exercise-stand-frame'),overlay=$('.exercise-countdown');
+    frame.dataset.status=slotStatus(slot);
+    frame.style.setProperty('--fill',slotProgress(slot)+'%');
+    overlay.hidden=!countdown;
+    if(countdown)setExerciseText('.exercise-countdown',String(Math.ceil(countdown/1000)));
+    setExerciseText('#exercise-stand-title',slotReady(slot)?'站位已确认':slot.present?'请保持站稳':'请站进框内');
+    setExerciseText('#exercise-stand-help',slotReady(slot)?'倒计时结束后自动开始':slot.present?'正在确认全身位置':'面向屏幕，确保头部和双脚都在框内');
+  }
+}
+function exerciseAreaEmpty(round){return round.people.every(person=>!person.present)}
+function syncExerciseParticipant(person,round){
+  setExerciseText(`[data-exercise-score="${person.id}"]`,String(exerciseScore(person,round.kind)));
+  setExerciseText(`[data-exercise-feedback="${person.id}"]`,person.present?person.feedback:'离区');
+  if(round.group){
+    const seat=person.id-1,status=person.present?'ready':'away';
+    $(`[data-stand-row="${seat}"]`).dataset.status=status;
+    const zone=$(`[data-zone="${seat}"]`);
+    zone.dataset.status=status;
+    setExerciseText(`[data-zone="${seat}"] .exercise-zone-status`,person.present?'训练中':'已离区');
+  }
+}
+function syncExerciseTraining(){
+  const round=state.exercise;
+  const areaEmpty=exerciseAreaEmpty(round);
+  const overlay=$('.exercise-overlay'),blocked=areaEmpty||state.paused;
+  const remaining=Math.ceil(round.duration-round.elapsed/1000);
+  setExerciseText('#exercise-clock',fmt(Math.max(0,remaining)));
+  round.people.forEach(person=>syncExerciseParticipant(person,round));
+  overlay.hidden=!blocked;
+  if(blocked){
+    setExerciseText('.exercise-overlay b',areaEmpty?'请回到活动区':'训练已暂停');
+    setExerciseText('.exercise-overlay span','倒计时和成绩同步暂停');
+  }
+  const pause=$('[data-action="exercisePause"]');
+  pause.disabled=areaEmpty;
+  setExerciseText('[data-action="exercisePause"]',state.paused?'继续':'暂停');
+  setExerciseText('#exercise-live-feedback',blocked?'已暂停':'训练中');
+  $('.exercise-bottom-progress').style.setProperty('--fill',100*round.elapsed/(round.duration*1000)+'%');
+  syncExerciseVideo(blocked||exercisePreviewBlocked());
+}
+function exercisePreviewBlocked(){
+  return document.hidden||Boolean(state.modal)||prototypeHelpState.open||$('#map').classList.contains('open');
+}
+function syncExerciseVideo(paused){
+  const video=$('.exercise-demo-video');
+  if(!video)return;
+  if(paused){if(!video.paused)video.pause();return;}
+  if(video.paused)video.play().catch(()=>{});
+}
+function startExerciseRun(){
+  const round=state.exercise;
+  round.people=round.slots.flatMap((slot,i)=>slotReady(slot)?[exercisePerson(i)]:[]);
+  if(!round.people.length)return;
+  if(!round.people.some(person=>person.id===round.selected+1))round.selected=round.people[0].id-1;
+  nav(round.kind==='fitness'?'fitnessTraining':'followTraining');
+}
+function tickExerciseCalibration(delta){
+  const round=state.exercise;
+  if(round.countdown){
+    round.countdown-=delta;
+    if(round.countdown<=0){startExerciseRun();return;}
+  }
+  for(const slot of round.slots){
+    if(!slot.present||slotReady(slot))continue;
+    slot.stand=Math.min(exerciseHoldMs,slot.stand+delta);
+    if(!round.group&&slotReady(slot))round.countdown=exerciseHoldMs;
+  }
+  for(const slot of round.slots){
+    if(slotReady(slot)&&slot.raised)slot.hand=Math.min(exerciseHoldMs,slot.hand+delta);
+  }
+  if(round.slots.some(slot=>slot.hand===exerciseHoldMs)){startExerciseRun();return;}
+  syncExerciseCalibration();
+}
+function recordExerciseSecond(second,round){
+  for(const person of round.people){
+    const offset=person.id-1,cadence=2+offset%3;
+    if(person.present&&(second+offset)%cadence===0){
+      person.count++;
+      if(round.kind==='follow'){
+        const rating=(person.count-1+offset)%followRatingLabels.length;
+        person.counts[rating]++;
+        const expected=Math.floor((round.duration+offset)/cadence)-Math.floor(offset/cadence);
+        // The prototype demonstrates scores increasing as simulated motions complete.
+        person.score=Math.round((96-offset*3)*person.count/expected);
+        person.feedback=followRatingLabels[rating];
+      }
+    }
+    person.timeline[second]=person.count;
+  }
+}
+function tickExercise(){
+  const round=state.exercise,now=performance.now(),delta=now-round.last;
+  round.last=now;
+  const route=exercisePages[state.page];
+  const blocked=exercisePreviewBlocked();
+  if(!route.live){if(!blocked)tickExerciseCalibration(delta);return;}
+  if(blocked||state.paused||exerciseAreaEmpty(round)){syncExerciseVideo(true);return;}
+  const previous=Math.floor(round.elapsed/1000);
+  round.elapsed=Math.min(round.duration*1000,round.elapsed+delta);
+  const current=Math.floor(round.elapsed/1000);
+  for(let second=previous+1;second<=current;second++)recordExerciseSecond(second,round);
+  if(round.elapsed===round.duration*1000){finishExerciseRun();return;}
+  syncExerciseTraining();
+}
+function finishExerciseRun(){
+  const round=state.exercise;
+  const seconds=Math.floor(round.elapsed/1000);
+  state.exerciseResult={kind:round.kind,group:round.group,seconds,people:round.people};
+  state.scene='session';
+  state.paused=false;
+  if(round.kind==='follow')state.followMode=round.people.length>1?'multi':'single';
+  nav(round.kind==='fitness'?'fitnessReport':'followReport',false);
+}
+function currentExerciseResult(){
+  const result=state.exerciseResult;
+  return state.scene==='session'&&result&&state.page===result.kind+'Report'?result:null;
 }
 
 const fruitPrepareOptions=[
@@ -786,14 +1305,14 @@ const resource=()=>resources.find(x=>x.id===state.resourceId)||resources[0];
 function library(){if(state.resourceCategory==='warmup')return warmupLibrary();const fitness=state.resourceCategory==='fitness',filters=fitness?fitnessFilters:mediaFilters,current=fitness?state.fitnessFilter:state.mediaFilter;const items=resources.filter(x=>x.category===state.resourceCategory&&(current==='全部'||(fitness?x.body:x.topic)===current)),n=Math.max(1,Math.ceil(items.length/6));state.resourcePage=Math.min(state.resourcePage,n-1);const shown=items.slice(state.resourcePage*6,state.resourcePage*6+6);return heading(fitness?'体能训练':'运动视频','')+`<div class="resource-catalog ${fitness?'fitness-catalog':'media-catalog'}"><nav class="resource-nav" aria-label="${fitness?'训练部位分类':'视频内容分类'}">${filters.map(t=>`<button class="${current===t?'active':''}" ${fitness?'data-fitness-filter':'data-media-filter'}="${t}" aria-pressed="${current===t}">${t}</button>`).join('')}</nav><section class="resource-content">${state.scene==='empty'||!items.length?'<div class="catalogue-empty"><h2>暂时没有可用内容</h2></div>':`<div class="fitness-results"><b>${current==='全部'?(fitness?'全部项目':'全部视频'):current}</b><span>${items.length}${fitness?'项':'段'}</span></div><div class="resource-grid">${shown.map(x=>`<button class="resource-card" data-resource="${x.id}"><div class="resource-card-top">${movementThumbnail(x.title,fitness?'fitness':'media')}<div class="resource-card-info"><span class="resource-card-category">${fitness?x.body:x.topic}</span><h2>${x.title}</h2>${x.subtitle&&x.subtitle!==(fitness?x.body:x.topic)?`<p>${x.subtitle}</p>`:''}</div></div><span class="card-action">${fitness?'查看动作':'查看视频'} →</span></button>`).join('')}</div>${n>1?`<div class="catalogue-pagination"><span></span><div><button data-resource-page="-1" ${state.resourcePage===0?'disabled':''}>← 上一页</button><span>${state.resourcePage+1} / ${n}</span><button data-resource-page="1" ${state.resourcePage>=n-1?'disabled':''}>下一页 →</button></div></div>`:''}`}</section></div>`}
 
 function warmupLibrary(){return heading('热身运动','')+`<div class="panel warmup-planning"><h2>热身内容准备中</h2><p>请选择其他运动内容，稍后再来看看。</p></div>`}
-function resourceDetail(){const r=resource(),training=r.mode==='count',warmup=r.category==='warmup';return heading(r.title,'',state.resourceReturn)+`<div class="lesson-layout activity-detail"><div class="lesson-visual activity-media"><div class="lesson-preview activity-preview"><span class="lesson-play">▷</span><b>${r.title}</b></div><div class="lesson-meta"><span>${training?'动作示范':warmup?'热身运动':r.topic}</span>${r.category==='media'?`<span>${fmt(r.duration)}</span>`:''}</div></div><section class="lesson-content activity-info" aria-label="内容说明与操作"><div class="activity-info-scroll"><div class="row detail-tags"><span class="tag">${resourceGroups[r.category]}</span>${r.body?`<span class="tag gray">${r.body}</span>`:''}</div><h2>${warmup?r.tone:training?'动作说明':'视频内容'}</h2>${warmup?`<p>${r.intro}</p><ul class="activity-topics">${r.focus.map(t=>`<li>${t}</li>`).join('')}</ul>`:training?`<p>${r.guide||'先观看动作示范，再进入活动区开始练习。'}</p>`:`<p>${r.topic}</p>`}</div><div class="lesson-start activity-primary">${btn(training?'开始训练 →':warmup?'开始热身 →':'开始观看 →',r.category==='media'?'resourceStart':'existingExercise','primary',r.category==='media'?'':'disabled')}</div></section></div>`}
+function resourceDetail(){const r=resource(),training=r.mode==='count',warmup=r.category==='warmup';return heading(r.title,'',state.resourceReturn,training?exerciseModePicker('fitness'):'')+`<div class="lesson-layout activity-detail"><div class="lesson-visual activity-media"><div class="lesson-preview activity-preview"><span class="lesson-play">▷</span><b>${r.title}</b></div><div class="lesson-meta"><span>${training?'动作示范':warmup?'热身运动':r.topic}</span>${r.category==='media'?`<span>${fmt(r.duration)}</span>`:''}</div></div><section class="lesson-content activity-info" aria-label="内容说明与操作"><div class="activity-info-scroll"><div class="row detail-tags"><span class="tag">${resourceGroups[r.category]}</span>${r.body?`<span class="tag gray">${r.body}</span>`:''}</div><h2>${warmup?r.tone:training?'动作说明':'视频内容'}</h2>${warmup?`<p>${r.intro}</p><ul class="activity-topics">${r.focus.map(t=>`<li>${t}</li>`).join('')}</ul>`:training?`<p>${r.guide||'先观看动作示范，再进入活动区开始练习。'}</p>`:`<p>${r.topic}</p>`}</div><div class="lesson-start activity-primary">${btn(training?'开始训练 →':warmup?'开始热身 →':'开始观看 →',r.category==='media'?'resourceStart':training?(state.fitnessMode==='multi'?'fitnessGroupCalibration':'fitnessCalibration'):'existingExercise','primary',warmup?'disabled':'')}</div></section></div>`}
 
 
 function resourcePlaying(){const r=resource(),blocked=['loading','failed','lost'].includes(state.scene);return heading(r.title,'')+(blocked?`<div class="resource-error"><h2>${state.scene==='loading'?'视频加载中…':'视频暂时无法播放'}</h2>${state.scene!=='loading'?btn('重试','resourceRetry','primary'):''}</div>`:`<div class="split watch-layout"><div><div class="media-placeholder"><span class="play-symbol">${state.paused?'Ⅱ':'▷'}</span><b>${state.paused?'已暂停':r.title}</b></div><div class="progress"><i style="width:${state.resourceElapsed/r.duration*100}%"></i></div><div class="time-row"><span id="resource-time">${fmt(state.resourceElapsed)}</span><span>${fmt(r.duration)}</span></div></div></div>`)}
 
 function resourceResult(){return heading('观看结束',resource().title)+`<div class="panel resource-result"><h2>感谢观看</h2><div class="row">${btn('再看一次','resourceStart','primary')}${btn('返回列表','library')}</div></div>`}
 
-function resourceAction(e){const b=e.target.closest('button');if(!b||b.disabled)return;if(b.dataset.mediaFilter){state.mediaFilter=b.dataset.mediaFilter;state.resourcePage=0;render();return;}if(b.dataset.fitnessFilter){state.fitnessFilter=b.dataset.fitnessFilter;state.resourcePage=0;render();return;}if(b.dataset.library){state.resourceCategory=b.dataset.library;state.resourcePage=0;nav('library')}if(b.dataset.resource){state.resourceId=b.dataset.resource;state.resourceCategory=resource().category;state.resourceReturn=state.page==='home'?'home':'library';nav('resourceDetail')}}
+function resourceAction(e){const b=e.target.closest('button');if(!b||b.disabled)return;if(b.dataset.mediaFilter){state.mediaFilter=b.dataset.mediaFilter;state.resourcePage=0;render();return;}if(b.dataset.fitnessFilter){state.fitnessFilter=b.dataset.fitnessFilter;state.resourcePage=0;render();return;}if(b.dataset.library){state.resourceCategory=b.dataset.library;state.resourcePage=0;nav('library')}if(b.dataset.resource){state.fitnessMode='single';state.resourceId=b.dataset.resource;state.resourceCategory=resource().category;state.resourceReturn=state.page==='home'?'home':'library';nav('resourceDetail')}}
 $('#app').addEventListener('click',resourceAction);
 
 
@@ -806,8 +1325,11 @@ function switchModule(id){if(!moduleItems.some(x=>x[0]===id))return;if(['gamePla
 $('#app').addEventListener('click',e=>{const b=e.target.closest('[data-module]');if(b&&!b.disabled)switchModule(b.dataset.module)});
 
 function renderStationReview(){let el=$('#station-review');if(!el){$('.underbar').insertAdjacentHTML('afterend','<div class="game-controls" id="station-review"></div>');el=$('#station-review')}el.hidden=!['home','board','rankings','records'].includes(state.page);if(!el.hidden)el.textContent='评审示意：公园环境、开放安排及榜单昵称/时长/消耗均为模拟；小程序码不可扫码。两榜依赖统一计量、身份绑定、有效片段去重与公开展示授权，未接真实数据。'}
-const views={library,resourceDetail,resourcePlaying,resourceResult,home,courses,detail,games,gameRules,gamePrepare,gamePlaying,gameResult,board,rankings,records,fitnessReport,followReport};
-function render(){clearInterval(timer);clearInterval(homeRecommendationTimer);homeRecommendationTimer=null;homeQuickPressed=false;homeQuickElapsed=0;homeQuickLastTick=null;const i=pages.findIndex(p=>p[0]===state.page);$('#screen-label').textContent=String(i+1).padStart(2,'0')+' / '+pages[i][1];let actions='',hint='请根据自身状态运动；如有不适，请停止。';if(state.page==='resourcePlaying'){actions=btn(state.paused?'继续':'暂停','pause','',state.scene!=='normal'?'disabled':'')+btn('结束观看','resourceEnd','danger');hint='观看进度不作为个人有效运动时长。'}else if(state.page==='gamePlaying'){actions=btn(state.paused?'继续体验':'暂停','pause','',state.scene==='lost'?'disabled':'')+btn('结束本局','endGame','danger');hint='保持在自己的活动区内。'}else if(state.page==='gameResult'){hint=game().id==='fruit-solo'?'':'微信扫码查看运动记录。'}$('#app').innerHTML=isFruitStage()?`<main class="main fruit-screen" aria-label="水果切切乐 · ${state.page==='gamePrepare'?'站位准备':'正在互动'}">${views[state.page]()}</main>`:header()+`<main class="main">${views[state.page]()}</main>`+footer(hint,actions)+moduleDock();const notice=$('.notice-copy');if(notice)notice.classList.toggle('is-long',notice.scrollWidth>$('.notice-window').clientWidth);renderScenario();renderFruitReview();renderGameControls();renderReuseReview();renderSettlementReview();if(state.modal)renderModal();scale();renderResourceControl();renderStationReview();renderIdentityReportReview();if(state.page==='home')bindHomeRecommendationInteraction();if(['gamePlaying','resourcePlaying'].includes(state.page)||(state.page==='gamePrepare'&&state.fruitPrepareRunning))timer=setInterval(tick,1000);refreshPrototypeHelp();}
+const views={library,resourceDetail,resourcePlaying,resourceResult,home,courses,detail,games,gameRules,gamePrepare,gamePlaying,gameResult,board,rankings,records,fitnessReport,followReport,
+  fitnessCalibration:exerciseCalibration,fitnessGroupCalibration:exerciseCalibration,
+  followCalibration:exerciseCalibration,followGroupCalibration:exerciseCalibration,
+  fitnessTraining:exerciseTraining,followTraining:exerciseTraining};
+function render(){clearInterval(timer);clearInterval(homeRecommendationTimer);homeRecommendationTimer=null;homeQuickPressed=false;homeQuickElapsed=0;homeQuickLastTick=null;const i=pages.findIndex(p=>p[0]===state.page);$('#screen-label').textContent=String(i+1).padStart(2,'0')+' / '+pages[i][1];let actions='',hint='请根据自身状态运动；如有不适，请停止。';if(state.page==='resourcePlaying'){actions=btn(state.paused?'继续':'暂停','pause','',state.scene!=='normal'?'disabled':'')+btn('结束观看','resourceEnd','danger');hint='观看进度不作为个人有效运动时长。'}else if(state.page==='gamePlaying'){actions=btn(state.paused?'继续体验':'暂停','pause','',state.scene==='lost'?'disabled':'')+btn('结束本局','endGame','danger');hint='保持在自己的活动区内。'}else if(state.page==='gameResult'){hint=game().id==='fruit-solo'?'':'微信扫码查看运动记录。'}$('#app').innerHTML=exercisePages[state.page]?`<main class="main exercise-screen">${views[state.page]()}</main>`:isFruitStage()?`<main class="main fruit-screen" aria-label="水果切切乐 · ${state.page==='gamePrepare'?'站位准备':'正在互动'}">${views[state.page]()}</main>`:header()+`<main class="main">${views[state.page]()}</main>`+footer(hint,actions)+moduleDock();const notice=$('.notice-copy');if(notice)notice.classList.toggle('is-long',notice.scrollWidth>$('.notice-window').clientWidth);renderScenario();renderFruitReview();exerciseReview();renderGameControls();renderReuseReview();renderSettlementReview();if(state.modal)renderModal();scale();renderResourceControl();renderStationReview();renderIdentityReportReview();if(state.page==='home')bindHomeRecommendationInteraction();if(exercisePages[state.page]){state.exercise.last=performance.now();if(exercisePages[state.page].live)syncExerciseTraining();else syncExerciseCalibration();timer=setInterval(tickExercise,100);}else if(['gamePlaying','resourcePlaying'].includes(state.page)||(state.page==='gamePrepare'&&state.fruitPrepareRunning))timer=setInterval(tick,1000);refreshPrototypeHelp();}
 
 
 function renderSettlementReview(){
@@ -827,8 +1349,8 @@ function renderSettlementReview(){
   const report=isExerciseSettlement(state.page);
   const fruit=state.page==='gameResult'&&game().id==='fruit-solo';
   panel.hidden=!(route||report||fruit);
-  panel.innerHTML=route?`<span>全民健身机竖屏报告复用</span><button class="tool" data-preview-report="${route}">查看结算报告示例</button>${route==='fitnessReport'&&supportsGroupSettlement(route)?'<button class="tool" data-preview-report="fitnessReport" data-preview-scene="multi8">查看多人结算示例</button>':''}`:
-    report?(supportsGroupSettlement(state.page)?'评审示例。可用「演示状态」切换单人报告与 2–8 人报告，身份及成绩均为模拟。':'评审示例。切换演示状态查看报告结构，数据为模拟。'):
+  panel.innerHTML=route?`<span>全民健身机竖屏报告复用</span><button class="tool" data-preview-report="${route}">查看结算报告示例</button>${route==='fitnessReport'?'<button class="tool" data-preview-report="fitnessReport" data-preview-scene="multi8">查看多人结算示例</button>':''}`:
+    report?'评审示例。可用「演示状态」切换单人报告与 2–8 人报告，身份及成绩均为模拟。':
     fruit?'四种样例由设备外「演示状态」切换。点按试玩只演示普通命中，挥切时长由真实手部轨迹提供。':'';
 }
 
@@ -850,25 +1372,21 @@ const fruitResultOptions=[['full','打满 · 350 分'],['zero','打满 · 0 分'
 function isExerciseSettlement(page){
   return page==='fitnessReport'||page==='followReport';
 }
-function supportsGroupSettlement(page){
-  return page==='followReport'||(page==='fitnessReport'&&resource().id==='fitness-1');
-}
 function renderScenario(){
   const options=state.page==='gamePrepare'&&game().id==='fruit-solo'?fruitPrepareOptions:
     state.page==='gamePlaying'&&game().id==='fruit-solo'?[scenes.gamePlaying[0],...fruitFeedbackOptions,...scenes.gamePlaying.slice(1)]:
     state.page==='gameResult'&&game().id==='fruit-solo'?
     [...(state.gameReport?.fruitResult?[['normal','本局试玩结果'],...scenes.gameResult.slice(1,3)]:[]),...fruitResultOptions]:
     (scenes[state.page]||[['normal','本页默认状态']]).filter(([v])=>v!=='reportPartial'||gameCount()>1);
-  if(supportsGroupSettlement(state.page))options.push(...groupReportScenes);
+  if(isExerciseSettlement(state.page))options.push(...groupReportScenes);
+  if(state.exerciseResult&&state.page===state.exerciseResult.kind+'Report')options.unshift(['session','本次模拟训练']);
   $('#scenario').innerHTML=options.map(([v,t])=>`<option value="${v}" ${state.scene===v?'selected':''}>${t}</option>`).join('');
   $('#scenario').disabled=options.length===1;
 }
 function openModal(name){state.modal=name;renderModal()}
 function closeModal(){
   const wasRecordQr=state.modal==='recordQr';
-  const wasGroupFitnessPrepare=state.modal==='groupFitnessPrepare';
   state.pendingModule=null;state.modal=null;$('.modal-shade')?.remove();refreshPrototypeHelp();
-  if(wasGroupFitnessPrepare)$('[data-action="replayGroupFitness"]')?.focus();
   if(wasRecordQr&&state.page==='home'){
     $('[data-action="openRecordQr"]')?.focus();
     startHomeRecommendationTimer();
@@ -877,39 +1395,36 @@ function closeModal(){
 function modalShell(body,label=''){$('.modal-shade')?.remove();$('#app').insertAdjacentHTML('beforeend',`<div class="modal-shade"><section class="modal" role="dialog" aria-modal="true"${label?` aria-label="${esc(label)}"`:''}>${body}</section></div>`);$('.modal-shade button')?.focus();refreshPrototypeHelp()}
 function renderModal(){
   const m=state.modal;
-  if(m==='fruitExit'){
-    modalShell(`<h2>结束本局？</h2><p>已获得的分数将计入本局结算。</p><div class="actions">${btn('继续游戏','closeModal')}${btn('结束本局','endGame','primary')}</div>`,'结束本局');
+  if(m==='exerciseExit'){
+    modalShell(`<h2>结束本次训练？</h2><p>已记录的成绩会显示在本次结算中。</p>
+      <div class="actions">${btn('返回训练','closeModal')}${btn('结束并结算','confirmExerciseEnd','primary')}</div>`,'结束本次训练');
     return;
   }
-  if(m==='groupFitnessPrepare'){
-    const title=resource().title+'·多人训练准备';
-    modalShell(`<h2>${esc(title)}</h2>
-      <p>请进入活动区，面向屏幕完成本轮站位和身份确认。</p>
-      <div class="actions">${btn('返回结算','closeModal')}</div>`,title);
+  if(m==='fruitExit'){
+    modalShell(`<h2>结束本局？</h2><p>已获得的分数将计入本局结算。</p><div class="actions">${btn('继续游戏','closeModal')}${btn('结束本局','endGame','primary')}</div>`,'结束本局');
     return;
   }
   let content='';if(m==='resourceEnd')content=`<h2>结束本次观看？</h2><p>可返回视频列表或重新观看。</p><div class="actions">${btn('继续观看','closeModal')}${btn('结束观看','confirmResourceEnd','primary')}</div>`;if(m==='leaveActive')content=`<h2>结束本次体验并离开？</h2><p>${state.page==='gamePlaying'?'结束后将自动上报本次运动数据。':'将结束本次视频观看。'}</p><div class="actions">${btn('继续体验','closeModal')}${btn(state.pendingNav==='home'?'结束并返回首页':'结束并离开','confirmLeaveActive','primary')}</div>`;if(m==='settings')content=`<h2>设备设置</h2><p>设备设置功能沿用教学屏。</p><div class="actions">${btn('完成','closeModal','primary')}</div>`;if(m==='recordQr')content=`<h2>运动记录查询</h2><div class="record-qr-dialog">${qrMarkup()}<p>微信扫码，在小程序中查看个人运动记录。</p></div><div class="actions">${btn('关闭','closeModal','primary')}</div>`;if(content)modalShell(content)}
 function toast(text){$('.floating-note')?.remove();$('#app').insertAdjacentHTML('beforeend',`<div class="floating-note">${esc(text)}</div>`);clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('.floating-note')?.remove(),2200)}
 function hit(){gameHit(state.gameActivePlayer)}
 function action(a){
+  if(a==='exerciseSwapView'){swapGroupExerciseView();return;}
+  if(a==='exercisePause'){state.paused=!state.paused;syncExerciseTraining();return;}
+  if(a==='exerciseEnd'){openModal('exerciseExit');syncExerciseVideo(true);return;}
+  if(a==='confirmExerciseEnd'){finishExerciseRun();return;}
   if(a==='fruitExit'){if(isFruitFeedback())applyScenario('normal');else openModal('fruitExit');return;}
-  if(a==='replayGroupFitness'){
-    if(state.page==='fitnessReport'&&groupReportSize())openModal('groupFitnessPrepare');
-    return;
-  }
   if(a==='openRecordQr'){openModal('recordQr');pauseHomeRecommendationTimer();return;}if(a==='systemSettings'){openModal('settings');return;}if(a==='resourceStart'){if(resource().category!=='media')return;state.resourceCategory='media';state.resourceElapsed=0;state.paused=false;nav('resourcePlaying');return;}if(a==='resourceRetry'){state.scene='normal';state.paused=false;render();return;}if(a==='resourceEnd'){openModal('resourceEnd');return;}if(a==='confirmResourceEnd'){nav('resourceResult');return;}if(a==='confirmLeaveActive'){if(state.page==='gamePlaying')completeDemoGameSession();if(state.pendingModule){const id=state.pendingModule;activateModule(id)}else nav(state.pendingNav);return;}if(pages.some(p=>p[0]===a)){if(['gamePlaying','resourcePlaying'].includes(state.page)&&a!==state.page){state.pendingModule=null;state.pendingNav=a;openModal('leaveActive');return;}nav(a);return;}switch(a){case'startGame':if(['none','partial','identityPending'].includes(state.scene))return;nav('gamePlaying');break;case'pause':state.paused=!state.paused;render();break;case'endGame':nav('gameResult');break;case'closeModal':closeModal();break;case'hit':hit();break;}}
-$('#app').addEventListener('click',e=>{const target=e.target.closest('button');if(!target||target.disabled)return;if(target.dataset.fruitTarget!==undefined){playFruitDemo('ordinary',Number(target.dataset.fruitTarget));return;}if(target.dataset.rankingMetric){state.rankingMetric=target.dataset.rankingMetric;render();return;}if(target.dataset.resourcePage){state.resourcePage+=Number(target.dataset.resourcePage);render();return;}if(target.dataset.homeCourseId){openCourse(target.dataset.homeCourseId);return;}if(target.dataset.action){action(target.dataset.action);return;}if(target.dataset.category){state.category=target.dataset.category;state.course=catalogue[state.category][0]?.id||'';state.filter='全部';state.catalogPage=0;state.playback='full';state.chapter=0;render()}if(target.dataset.course!==undefined){state.course=target.dataset.course;state.playback='full';state.chapter=0;state.followMode='single';nav('detail')}if(target.dataset.filter){state.filter=target.dataset.filter;state.catalogPage=0;render()}if(target.dataset.pageStep){state.catalogPage+=Number(target.dataset.pageStep);render()}if(target.dataset.playback){state.playback=target.dataset.playback;state.chapter=0;render()}if(target.dataset.followMode){state.followMode=target.dataset.followMode;state.scene='normal';render()}if(target.dataset.followChapter!==undefined){state.playback='chapter';state.chapter=Number(target.dataset.followChapter);render()}if(target.dataset.gameCategory){state.gameCategory=target.dataset.gameCategory;state.gameFilter='全部';state.gameCatalogPage=0;render()}if(target.dataset.gameFilter){state.gameFilter=target.dataset.gameFilter;state.gameCatalogPage=0;render()}if(target.dataset.gamePage){state.gameCatalogPage+=Number(target.dataset.gamePage);render()}if(target.dataset.gameCount){state.gamePlayers=Number(target.dataset.gameCount);state.scene='identityPending';render()}if(target.dataset.gameHit!==undefined){gameHit(Number(target.dataset.gameHit));return;}if(target.dataset.pose!==undefined){const i=Number(target.dataset.pose);if(!prototypeHelpState.open&&!state.paused&&state.scene!=='lost'&&!state.poseRemaining[i]){state.poseRemaining[i]=3;state.gameFeedback[i]='保持中';refreshGameLanes()}return;}if(target.dataset.game){state.game=target.dataset.game;state.gamePlayers=game().count;nav('gameRules')}});
+$('#app').addEventListener('click',e=>{const target=e.target.closest('button');if(!target||target.disabled)return;if(target.dataset.fruitTarget!==undefined){playFruitDemo('ordinary',Number(target.dataset.fruitTarget));return;}if(target.dataset.rankingMetric){state.rankingMetric=target.dataset.rankingMetric;render();return;}if(target.dataset.resourcePage){state.resourcePage+=Number(target.dataset.resourcePage);render();return;}if(target.dataset.homeCourseId){openCourse(target.dataset.homeCourseId);return;}if(target.dataset.action){action(target.dataset.action);return;}if(target.dataset.category){state.category=target.dataset.category;state.course=catalogue[state.category][0]?.id||'';state.filter='全部';state.catalogPage=0;state.playback='full';state.chapter=0;render()}if(target.dataset.course!==undefined){state.course=target.dataset.course;state.playback='full';state.chapter=0;state.followMode='single';nav('detail')}if(target.dataset.filter){state.filter=target.dataset.filter;state.catalogPage=0;render()}if(target.dataset.pageStep){state.catalogPage+=Number(target.dataset.pageStep);render()}if(target.dataset.playback){state.playback=target.dataset.playback;state.chapter=0;render()}if(target.dataset.fitnessMode){state.fitnessMode=target.dataset.fitnessMode;render();return;}if(target.dataset.followMode){state.followMode=target.dataset.followMode;state.scene='normal';render()}if(target.dataset.followChapter!==undefined){state.playback='chapter';state.chapter=Number(target.dataset.followChapter);render()}if(target.dataset.gameCategory){state.gameCategory=target.dataset.gameCategory;state.gameFilter='全部';state.gameCatalogPage=0;render()}if(target.dataset.gameFilter){state.gameFilter=target.dataset.gameFilter;state.gameCatalogPage=0;render()}if(target.dataset.gamePage){state.gameCatalogPage+=Number(target.dataset.gamePage);render()}if(target.dataset.gameCount){state.gamePlayers=Number(target.dataset.gameCount);state.scene='identityPending';render()}if(target.dataset.gameHit!==undefined){gameHit(Number(target.dataset.gameHit));return;}if(target.dataset.pose!==undefined){const i=Number(target.dataset.pose);if(!prototypeHelpState.open&&!state.paused&&state.scene!=='lost'&&!state.poseRemaining[i]){state.poseRemaining[i]=3;state.gameFeedback[i]='保持中';refreshGameLanes()}return;}if(target.dataset.game){state.game=target.dataset.game;state.gamePlayers=game().count;nav('gameRules')}});
 function applyScenario(scene){
   state.scene=scene;
   if(state.page==='gamePrepare'&&game().id==='fruit-solo')state.fruitPrepareRunning=false;
-  if(state.modal==='groupFitnessPrepare')state.modal=null;
   if(state.page==='followReport')state.followMode=groupReportSize()?'multi':'single';if(state.page==='gamePlaying'&&state.scene==='lostTimeout'){nav('gameResult');return;}
   if(state.page==='gamePlaying'||state.page==='resourcePlaying')state.paused=state.scene==='lost';
   if(state.page==='gameResult'&&state.gameReport&&!Object.hasOwn(fruitResultExamples,state.scene)){const report=state.gameReport;report.status=demoReportState().status;report.records.forEach((r,i)=>r.status=state.scene==='reportPartial'?(i===report.records.length-1?'retrying':'reported'):report.status)}
   render();
 }
 $('#scenario').addEventListener('change',e=>applyScenario(e.target.value));
-$('#reset').onclick=()=>{homeQuickIndices.fill(0);Object.assign(state,{gameSession:null,gameReport:null,reportQueue:[],sessionSequence:0,rankingMetric:'duration',resourceCategory:'fitness',resourceId:'fitness-1',resourcePage:0,resourceReturn:'home',resourceElapsed:0,followMode:'single',mediaFilter:'全部',fitnessFilter:'全部',page:'home',category:'健身气功',course:'baduan-standard',filter:'全部',catalogPage:0,playback:'full',chapter:0,ready:1,scene:'normal',paused:false,gameScore:0,gameTime:60,modal:null,game:'fruit-solo',gameCategory:'单人',gameFilter:'全部',gameCatalogPage:0,gamePlayers:1});nav('home')};
+$('#reset').onclick=()=>{homeQuickIndices.fill(0);Object.assign(state,{gameSession:null,gameReport:null,reportQueue:[],sessionSequence:0,rankingMetric:'duration',resourceCategory:'fitness',resourceId:'fitness-1',resourcePage:0,resourceReturn:'home',resourceElapsed:0,followMode:'single',fitnessMode:'single',mediaFilter:'全部',fitnessFilter:'全部',page:'home',category:'健身气功',course:'baduan-standard',filter:'全部',catalogPage:0,playback:'full',chapter:0,ready:1,scene:'normal',paused:false,gameScore:0,gameTime:60,modal:null,game:'fruit-solo',gameCategory:'单人',gameFilter:'全部',gameCatalogPage:0,gamePlayers:1});nav('home')};
 function renderPageMap(){
   const cards={web:[],native:[]};
   pages.forEach(([id,title,platform='native'],index)=>{
@@ -940,15 +1455,14 @@ function prototypeHelpItems(){
   if(state.modal){
     add('dialog-summary','.modal h2','当前弹窗','说明当前弹窗要确认的事项。','先阅读提示，再选择继续、结束或关闭。','这是评审原型的弹窗演示；身份、账号、保存服务均未实际接入。');
     if(state.modal==='settings')modalButton('closeModal','完成','关闭设备设置。');
-    if(state.modal==='groupFitnessPrepare'){
-      add('group-fitness-prepare','.modal h2','提踵多人训练准备','进入同一运动项目的新一轮准备。','提示本轮重新完成站位和身份确认。','训练准备与正式训练由设备复用流程承接。');
-      modalButton('closeModal','返回结算','返回本轮已展示的多人报告。');
-    }
     if(state.modal==='recordQr'){
       add('dialog-record-qr','.modal .mini-qr','运动记录查询码','展示通用微信小程序码。','使用微信扫码，在小程序里查询本人记录。','原型码为示意。');
       modalButton('closeModal','关闭','关闭浮窗并留在首页。');
     }
-    if(state.modal==='fruitExit'){
+    if(state.modal==='exerciseExit'){
+      modalButton('closeModal','返回训练','保留本次训练进度。');
+      modalButton('confirmExerciseEnd','结束并结算','以当前已记录的数据生成本次报告。');
+    }else if(state.modal==='fruitExit'){
       modalButton('closeModal','继续游戏','关闭退出确认，保留当前分数与剩余时间。');
       modalButton('endGame','结束本局','冻结本局分数并查看结算。','未打满60秒显示「本局提前结束」。');
     }else if(state.modal==='resourceEnd'){
@@ -999,7 +1513,7 @@ function prototypeHelpItems(){
     add('follow-multi','[data-follow-mode="multi"]','多人跟练','选择多人共同跟练的模式。','点击切换选中态。','支持人数与评分能力按对应现有产品及场地核验，不由此控件推定户外并发能力。');
     add('follow-whole','.lesson-whole','整套跟练','选择完整课程作为跟练内容。','点击后选中整套并取消分节选中态。','课程名称为'+c.title+'；未提供正式时长时不显示虚构时长。');
     add('follow-chapters','.lesson-chapters','分节练习','只列该课程已提供的分节名称，内容较多时可在章节区滚动。','点击具体章节后，开始入口对应当前所选分节。','本课程'+(c.segments.length?'共有'+c.segments.length+'个已列分节。':'没有已提供分节，不额外编造。')+'整套与分节互斥。');
-    add('follow-start','[data-action="existingFollow"]','开始跟练入口','右下角统一保留开始入口的位置。','评审可从设备画面下方查看结算报告示例。','运动过程沿用原产品。结算报告参考全民健身机竖屏。');
+    add('follow-start','.activity-primary .primary','开始跟练','进入当前课程的全屏校准。','单人进入一个站位框，多人进入 8 个站位区。','保留当前课程及整套或分节选择。');
   }
 
   if(state.page==='library'){
@@ -1027,14 +1541,32 @@ function prototypeHelpItems(){
     add('resource-media-meta','.lesson-meta','媒体关键信息',watch?'显示视频内容分类与示例时长。':warmup?'标识本项为热身内容。':'标识此处为动作示范。','信息展示，无点击跳转。','跟练和体能缺少正式时长时不虚构数值；视频时长仍是演示数据。');
     add('resource-classification','.detail-tags','当前内容分类','显示所属模块'+(r.body?'及训练部位“'+r.body+'”':'')+'。','用于理解内容，无点击操作。','训练部位用于分类，不表示运动适用条件已完成专业核验。');
     add('resource-description','.activity-info-scroll',watch?'视频内容说明':warmup?'热身方案说明':'动作说明',watch?'说明该视频的内容主题。':warmup?'展示方案定位、简短介绍和主要活动内容。':'展示已提供的动作步骤与提醒。','阅读后决定是否开始；长说明可在右侧内容区域内滚动。','说明不会挤走固定在右下角的开始入口。');
-    add('resource-start','.activity-primary button',watch?'开始观看':'开始'+(warmup?'热身':'训练')+'入口',watch?'进入当前视频的观看演示。':'保留接入现有产品运动流程的开始位置。',watch?'点击后进入播放页，从00:00开始模拟计时。':'评审可从设备画面下方查看结算报告示例。',watch?'观看可暂停和结束，纯观看不计入个人有效运动时长。':'运动过程沿用原产品。体能结算报告参考全民健身机竖屏。');
+    if(r.category==='fitness')add('fitness-mode','.follow-people','训练模式','默认单人，可切换多人。','多人进入 8 个站位，保留当前项目。');
+    add('resource-start','.activity-primary .primary',watch?'开始观看':'开始训练',watch?'进入当前视频的观看演示。':'按当前项目和模式进入全屏校准。',watch?'点击后进入播放页，从00:00开始模拟计时。':'用设备外控件模拟进区，站位确认后进入分屏训练。');
+  }
+
+  if(exercisePages[state.page]){
+    const route=exercisePages[state.page];
+    if(route.live){
+      const group=state.exercise.group;
+      add('exercise-media','.exercise-workout-media','示范视频',group?'多人模式默认在大窗播放动作示范。':'单人在左侧展示本次项目的动作示范。','训练进行时与倒计时同步，暂停时停止播放。','原型使用示范片段或画面示意。');
+      if(group)add('exercise-window-swap','.exercise-swap','切换大窗和小窗','互换示范和站位画面的位置。','点击右上小窗的「切换」。视频、计时和成绩从当前进度继续。');
+      add('exercise-live-view',group?'.exercise-zones':'.exercise-workout .exercise-camera',group?'本场站位':'本人画面',group?'保留准备时的镜头和站位编号，默认显示在右上小窗。':'右侧为模拟镜头。',group?'进入本场的站位继续显示为绿色。':'单人可对照示范观察全身动作。');
+      add('exercise-timer','#exercise-clock','剩余时间','倒计时归零后进入本次结算。','主动暂停或全员离区时停止计时。');
+      add('exercise-metrics','.exercise-score-card,.exercise-group-training .exercise-roster','实时成绩','单人卡片位于镜头上方，展示头像、昵称和实时成绩。多人在左侧名单逐人展示。','AI 动作评价在各自分数右侧。离区只暂停该参与者的计分。');
+      add('exercise-end','[data-action="exerciseEnd"]','结束训练','确认后冻结当前成绩并进入结算。','继续训练可保留当前进度。');
+    }else{
+      add('exercise-calibration-frame',route.group?'.exercise-zones':'.exercise-stand-frame','全屏站位校准',
+        route.group?'8 个独立站位区。进入后变绿，站稳 3 秒后确认。':'先用全屏画面确认人体位置。',
+        route.group?'已确认的人举右手 3 秒，按当时已确认人数开练。':'头像与站位由评审控件模拟，确认后倒计时开练。');
+    }
   }
 
   if(isExerciseSettlement(state.page)&&groupReportSize()){
     add('group-report-shared','.group-report-meta','本场人数与项目时长','本场参与者共用标题和项目时长。','信息展示。','原型展示2–8人场次。设备实测人数以联调验收为准。');
     add('group-report-chart','.group-chart','同场运动曲线','按同一时间轴和累计完成次数刻度绘制每位参与者。','点选右侧参与者可突出对应曲线，再次点选恢复全部。','各曲线末端为该参与者的本场累计完成次数，作为排名依据。');
     add('group-report-people','.group-results','个人成绩','按本场完成次数从高到低排名，前三名以金、银、铜标识突出。',state.page==='followReport'?'逐人展示评分、完美和真棒次数。点选参与者可突出同色曲线。':'逐人展示完成次数与消耗。点选参与者可突出同色曲线。','同次数并列，同名次显示同一种标识。');
-    add('settlement-return','.settlement-actions','返回或再练','返回首页，或点击「再来一次」继续当前项目。',state.page==='fitnessReport'?'直接进入提踵多人训练准备，重新确认本轮参与者。原型展示训练准备的跳转示意。':'回到当前 AI 课程，并保留已选内容和多人模式。');
+    add('settlement-return','.settlement-actions','返回或再练','返回首页，或点击「再来一次」继续当前项目。',state.page==='fitnessReport'?'直接进入当前项目的多人训练准备，重新确认本轮参与者。原型展示训练准备的跳转示意。':'重新校准当前 AI 课程的多人站位，保留已选内容。');
   }else if(isExerciseSettlement(state.page)){
     const fitness=state.page==='fitnessReport';
     add('settlement-overview','.settlement-content>section:first-child',fitness?'本次体能成绩':'本次跟练成绩',
@@ -1226,10 +1758,7 @@ function openLocation(page){
   if(isExerciseSettlement(page)&&groupReportScenes.some(([scene])=>scene===groupScene)){
     state.scene=groupScene;
     if(page==='followReport')state.followMode='multi';
-    else {
-      state.resourceCategory='fitness';
-      state.resourceId='fitness-1';
-    }
+    else state.fitnessMode='multi';
     nav(page,false);
     return;
   }
